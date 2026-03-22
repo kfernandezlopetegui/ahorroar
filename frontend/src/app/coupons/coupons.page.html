@@ -1,0 +1,171 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Cupones</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar placeholder="Buscar cupón o tienda..." [debounce]="300" (ionInput)="onSearch($event)" />
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- Filtros -->
+  <div style="display:flex; gap:8px; padding:12px 16px; overflow-x:auto; scrollbar-width:none;">
+    @for (cat of categories; track cat.value) {
+    <ion-chip [color]="selectedCategory() === cat.value ? 'primary' : 'medium'"
+      [outline]="selectedCategory() !== cat.value" (click)="selectCategory(cat.value)"
+      style="white-space:nowrap; cursor:pointer;">
+      {{ cat.label }}
+    </ion-chip>
+    }
+  </div>
+
+  @if (loading()) {
+  <div style="display:flex; justify-content:center; padding:40px;">
+    <ion-spinner name="crescent" />
+  </div>
+  }
+
+  @if (!loading()) {
+  <div style="padding: 0 12px 80px;">
+
+    @if (filteredCoupons().length === 0) {
+    <p style="text-align:center; color:var(--ion-color-medium); padding:40px 0;">
+      No hay cupones en esta categoría.
+    </p>
+    }
+
+    @for (coupon of filteredCoupons(); track coupon.id) {
+    <ion-card style="margin:8px 0; border-radius:12px;">
+      <ion-card-header style="padding-bottom:4px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <ion-card-title style="font-size:16px; font-weight:600;">
+            {{ coupon.title }}
+          </ion-card-title>
+          @if (coupon.discount_pct) {
+          <ion-badge color="success" style="font-size:15px; padding:5px 9px;">
+            {{ coupon.discount_pct }}%
+          </ion-badge>
+          }
+        </div>
+        <p style="font-size:13px; color:var(--ion-color-medium); margin:4px 0 0;">
+          {{ coupon.store }}
+        </p>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <!-- Código -->
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+          <code style="background:var(--ion-color-light); padding:6px 12px;
+                           border-radius:8px; font-size:15px; font-weight:600;
+                           letter-spacing:1px; flex:1; text-align:center;">
+                {{ coupon.code }}
+              </code>
+          <ion-button fill="clear" size="small" (click)="copyCode(coupon.code)">
+            <ion-icon name="copy-outline" />
+          </ion-button>
+        </div>
+
+        <!-- Footer -->
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+
+          <!-- Vencimiento -->
+          <div style="display:flex; align-items:center; gap:4px;">
+            <ion-icon name="time-outline" style="font-size:14px;"
+              [color]="isExpiringSoon(coupon.valid_until) ? 'warning' : 'medium'" />
+            @if (isExpiringSoon(coupon.valid_until)) {
+            <span style="font-size:12px; color:var(--ion-color-warning);">
+              Vence en {{ daysUntilExpiry(coupon.valid_until) }} día(s)
+            </span>
+            } @else {
+            <span style="font-size:12px; color:var(--ion-color-medium);">
+              Vence {{ coupon.valid_until }}
+            </span>
+            }
+          </div>
+
+          <!-- Upvote -->
+          <ion-button fill="clear" size="small" (click)="upvote(coupon.id)" [disabled]="svc.hasUpvoted(coupon.id)">
+            <ion-icon name="thumbs-up-outline" slot="start" [color]="svc.hasUpvoted(coupon.id) ? 'primary' : ''" />
+            <span style="font-size:13px;">{{ coupon.upvotes }}</span>
+          </ion-button>
+
+        </div>
+      </ion-card-content>
+    </ion-card>
+    }
+  </div>
+  }
+
+  <!-- FAB para agregar cupón -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="isModalOpen.set(true)">
+      <ion-icon name="add-outline" />
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
+
+<!-- Modal: agregar cupón -->
+<ion-modal [isOpen]="isModalOpen()" (didDismiss)="isModalOpen.set(false)">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Nuevo cupón</ion-title>
+        <ion-button slot="end" fill="clear" (click)="isModalOpen.set(false)">
+          Cerrar
+        </ion-button>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <form [formGroup]="form" (ngSubmit)="submitCoupon()">
+
+        <ion-item>
+          <ion-label position="floating">Título</ion-label>
+          <ion-input formControlName="title" placeholder="Ej: 20% en toda la web" />
+        </ion-item>
+
+        <ion-item style="margin-top:8px;">
+          <ion-label position="floating">Código</ion-label>
+          <ion-input formControlName="code" placeholder="Ej: DESCUENTO20" style="text-transform:uppercase;" />
+        </ion-item>
+
+        <ion-item style="margin-top:8px;">
+          <ion-label position="floating">Tienda</ion-label>
+          <ion-input formControlName="store" placeholder="Ej: Farmacity" />
+        </ion-item>
+
+        <ion-item style="margin-top:8px;">
+          <ion-label>Categoría</ion-label>
+          <ion-select formControlName="category">
+            @for (cat of categories; track cat.value) {
+            @if (cat.value !== 'todos') {
+            <ion-select-option [value]="cat.value">{{ cat.label }}</ion-select-option>
+            }
+            }
+          </ion-select>
+        </ion-item>
+
+        <ion-item style="margin-top:8px;">
+          <ion-label position="floating">Descuento % (opcional)</ion-label>
+          <ion-input type="number" formControlName="discount_pct" />
+        </ion-item>
+
+        <ion-item style="margin-top:8px;">
+          <ion-label position="floating">Vence el</ion-label>
+          <ion-input type="date" formControlName="valid_until" />
+        </ion-item>
+
+        <ion-button expand="block" type="submit" style="margin-top:24px;" [disabled]="form.invalid || submitting()">
+          @if (submitting()) {
+          <ion-spinner name="crescent" />
+          } @else {
+          Publicar cupón
+          }
+        </ion-button>
+
+      </form>
+    </ion-content>
+  </ng-template>
+</ion-modal>

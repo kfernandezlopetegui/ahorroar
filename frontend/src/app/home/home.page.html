@@ -1,20 +1,94 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title>AhorroAR</ion-title>
+    <ion-button slot="end" fill="clear" routerLink="/profile">
+      <ion-icon name="person-outline" />
+    </ion-button>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Buscar banco, tienda..."
+      [debounce]="300"
+      (ionInput)="onSearch($event)" />
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <!-- Filtros por categoría -->
+  <div style="display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; scrollbar-width: none;">
+    @for (cat of categories; track cat.value) {
+      <ion-chip
+        [color]="selectedCategory() === cat.value ? 'primary' : 'medium'"
+        [outline]="selectedCategory() !== cat.value"
+        (click)="selectCategory(cat.value)"
+        style="white-space: nowrap; cursor: pointer;">
+        {{ cat.label }}
+      </ion-chip>
+    }
   </div>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div style="display: flex; justify-content: center; padding: 40px;">
+      <ion-spinner name="crescent" />
+    </div>
+  }
+
+  <!-- Error -->
+  @if (error()) {
+    <ion-text color="danger">
+      <p style="text-align: center; padding: 20px;">{{ error() }}</p>
+    </ion-text>
+  }
+
+  <!-- Listado -->
+  @if (!loading()) {
+    <div style="padding: 0 12px 20px;">
+
+      @if (filteredPromotions().length === 0) {
+        <p style="text-align: center; color: var(--ion-color-medium); padding: 40px 0;">
+          No hay promociones para esta categoría.
+        </p>
+      }
+
+      @for (promo of filteredPromotions(); track promo.id) {
+        <ion-card style="margin: 8px 0; border-radius: 12px;">
+          <ion-card-header style="padding-bottom: 4px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <ion-card-title style="font-size: 16px; font-weight: 600;">
+                {{ promo.title }}
+              </ion-card-title>
+              <ion-badge color="success" style="font-size: 16px; padding: 6px 10px;">
+                {{ promo.discount_pct }}%
+              </ion-badge>
+            </div>
+            <p style="font-size: 13px; color: var(--ion-color-medium); margin: 4px 0 0;">
+              {{ promo.bank }} @if (promo.store) { · {{ promo.store }} }
+            </p>
+          </ion-card-header>
+
+          <ion-card-content>
+            <p style="font-size: 14px; margin-bottom: 8px;">{{ promo.description }}</p>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 12px; color: var(--ion-color-medium);">
+                {{ getDaysLabel(promo.days_of_week) }}
+              </span>
+              @if (promo.max_discount) {
+                <span style="font-size: 12px; color: var(--ion-color-medium);">
+                  Tope ${{ promo.max_discount | number }}
+                </span>
+              }
+            </div>
+          </ion-card-content>
+        </ion-card>
+      }
+
+    </div>
+  }
+
 </ion-content>

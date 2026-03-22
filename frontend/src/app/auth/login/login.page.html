@@ -1,0 +1,47 @@
+<ion-content class="ion-padding">
+  <div style="max-width: 400px; margin: 80px auto 0;">
+
+    <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 4px;">AhorroAR</h1>
+    <p style="color: var(--ion-color-medium); margin-bottom: 40px; font-size: 15px;">
+      Descuentos y promociones en un solo lugar
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" formControlName="email" autocomplete="email" />
+      </ion-item>
+
+      <ion-item style="margin-top: 8px;">
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input type="password" formControlName="password" autocomplete="current-password" />
+      </ion-item>
+
+      @if (errorMsg()) {
+        <ion-text color="danger">
+          <p style="font-size: 13px; margin: 8px 4px 0;">{{ errorMsg() }}</p>
+        </ion-text>
+      }
+
+      <ion-button
+        expand="block"
+        type="submit"
+        style="margin-top: 28px;"
+        [disabled]="loading() || form.invalid">
+        @if (loading()) {
+          <ion-spinner name="crescent" />
+        } @else {
+          Ingresar
+        }
+      </ion-button>
+
+    </form>
+
+    <p style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--ion-color-medium);">
+      ¿No tenés cuenta?
+      <a routerLink="/auth/register" style="color: var(--ion-color-primary);">Registrate</a>
+    </p>
+
+  </div>
+</ion-content>
