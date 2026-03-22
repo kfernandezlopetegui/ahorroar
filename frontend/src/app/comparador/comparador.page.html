@@ -1,0 +1,139 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Comparador</ion-title>
+    <ion-button slot="end" fill="clear" (click)="usarUbicacion()">
+      <ion-icon
+        name="location-outline"
+        [color]="usandoUbicacion() ? 'primary' : 'medium'" />
+    </ion-button>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Buscar producto..."
+      [debounce]="500"
+      (ionInput)="onSearch($event)" />
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- Loading búsqueda -->
+  @if (loadingProductos()) {
+    <div style="display:flex; justify-content:center; padding:40px;">
+      <ion-spinner name="crescent" />
+    </div>
+  }
+
+  <!-- Error -->
+  @if (error()) {
+    <ion-text color="danger">
+      <p style="text-align:center; padding:20px;">{{ error() }}</p>
+    </ion-text>
+  }
+
+  <!-- Lista de productos encontrados -->
+  @for (p of productos(); track p.id) {
+  <ion-card
+    style="margin:6px 0; border-radius:12px; cursor:pointer;"
+    (click)="seleccionarProducto(p)">
+    <ion-card-content style="display:flex; align-items:center; gap:12px; padding:12px;">
+      <img
+        [src]="'https://imagenes.preciosclaros.gob.ar/imagenes/productos/' + p.id + '.png'"
+        style="width:56px; height:56px; object-fit:contain; border-radius:8px;"
+        onerror="this.style.display='none'" />
+      <div style="flex:1;">
+        <p style="font-weight:600; font-size:14px; margin:0;">{{ p.nombre }}</p>
+        <p style="font-size:12px; color:var(--ion-color-medium); margin:2px 0 0;">
+          {{ p.marca }} · {{ p.presentacion }}
+        </p>
+        <p style="font-size:11px; color:var(--ion-color-medium); margin:2px 0 0;">
+          {{ p.cantSucursalesDisponible }} sucursales
+        </p>
+      </div>
+      <div style="text-align:right;">
+        <p style="font-size:12px; color:var(--ion-color-medium); margin:0;">desde</p>
+        <p style="font-weight:700; font-size:16px; color:var(--ion-color-success); margin:0;">
+          ${{ p.precioMin | number }}
+        </p>
+      </div>
+    </ion-card-content>
+  </ion-card>
+}
+
+  <!-- Detalle de precios por sucursal -->
+  @if (productoSeleccionado()) {
+    <div style="padding:12px;">
+
+      <!-- Header del producto seleccionado -->
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+        <ion-button fill="clear" size="small" (click)="volverAResultados()">
+          Volver
+        </ion-button>
+        <div>
+          <p style="font-weight:600; font-size:15px; margin:0;">
+            {{ productoSeleccionado()!.nombre }}
+          </p>
+          <p style="font-size:12px; color:var(--ion-color-medium); margin:0;">
+            {{ productoSeleccionado()!.marca }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Chip mejor precio -->
+      @if (mejorPrecio()) {
+        <ion-chip color="success" style="margin-bottom:12px;">
+          Mejor precio: ${{ mejorPrecio()!.precio | number }} en {{ mejorPrecio()!.bandera_nombre }}
+        </ion-chip>
+      }
+
+      @if (usandoUbicacion()) {
+        <ion-chip color="primary" outline style="margin-bottom:12px;">
+          <ion-icon name="location-outline" slot="start" />
+          Ordenado por distancia
+        </ion-chip>
+      }
+
+      <!-- Loading precios -->
+      @if (loadingPrecios()) {
+        <div style="display:flex; justify-content:center; padding:30px;">
+          <ion-spinner name="crescent" />
+        </div>
+      }
+
+      <!-- Lista de precios -->
+      @if (!loadingPrecios()) {
+        @for (precio of precios(); track precio.sucursal_id) {
+          <ion-card
+            style="margin:6px 0; border-radius:12px;"
+            [style.border]="precio === mejorPrecio() ? '1.5px solid var(--ion-color-success)' : ''">
+            <ion-card-content style="padding:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="flex:1;">
+                  <p style="font-weight:600; font-size:14px; margin:0;">
+                    {{ precio.bandera_nombre }}
+                  </p>
+                  <p style="font-size:12px; color:var(--ion-color-medium); margin:2px 0 0;">
+                    {{ precio.sucursal_direccion }}
+                  </p>
+                  @if (precio.distancia_km !== undefined) {
+                    <p style="font-size:11px; color:var(--ion-color-primary); margin:2px 0 0;">
+                      {{ precio.distancia_km | number:'1.1-1' }} km
+                    </p>
+                  }
+                </div>
+                <div style="text-align:right;">
+                  <p style="font-weight:700; font-size:18px; margin:0;"
+                    [style.color]="precio === mejorPrecio() ? 'var(--ion-color-success)' : ''">
+                    ${{ precio.precio | number }}
+                  </p>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        }
+      }
+
+    </div>
+  }
+
+</ion-content>

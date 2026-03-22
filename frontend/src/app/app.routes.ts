@@ -33,6 +33,10 @@ export const routes: Routes = [
         loadComponent: () => import('./coupons/coupons.page').then(m => m.CouponsPage),
       },
       {
+        path: 'comparador',
+        loadComponent: () => import('./comparador/comparador.page').then(m => m.ComparadorPage),
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full',
@@ -44,4 +48,5 @@ export const routes: Routes = [
     redirectTo: 'tabs/home',
   },
   
+
 ];
