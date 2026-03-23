@@ -13,16 +13,22 @@ export interface PCProducto {
 }
 
 export interface PCPrecio {
-  sucursal_id: string;
-  sucursal_nombre: string;
-  sucursal_direccion: string;
-  bandera_nombre: string;
-  lat: number;
-  lng: number;
-  precio: number;
+  id: string;
+  banderaDescripcion: string;
+  sucursalNombre: string;
+  direccion: string;
+  localidad: string;
+  lat: string;
+  lng: string;
+  sucursalTipo: string;
+  actualizadoHoy: boolean;
+  preciosProducto: {
+    precioLista: number;
+    promo1?: { descripcion: string; precio: string | number; };
+    promo2?: { descripcion: string; precio: string | number; };
+  };
   distancia_km?: number;
 }
-
 const BASE_URL = 'http://localhost:3000/precios-claros';
 
 @Injectable({ providedIn: 'root' })
@@ -47,6 +53,8 @@ export class PreciosClarosService {
       const res = await firstValueFrom(
         this.http.get<any>(`${BASE_URL}/productos`, { params })
       );
+      console.log('Respuesta frontend:', res);
+
       this.productos.set(res.productos ?? []);
     } catch {
       this.error.set('No se pudo conectar con Precios Claros.');
@@ -70,25 +78,40 @@ export class PreciosClarosService {
     }
   }
 
- async buscarPrecios(productoId: string, lat?: number, lng?: number): Promise<void> {
-  this.loadingPrecios.set(true);
-  this.error.set('');
-  try {
-    const params: any = { limit: 50, offset: 0 };
-    const res = await firstValueFrom(
-      this.http.get<any>(`${BASE_URL}/precios`, {
-        params: { id: productoId, ...params }
-      })
-    );
-    console.log('Respuesta precios:', res);
-    this.precios.set(res.sucursales ?? []);
-  } catch (e: any) {
-    console.error('Error detalle:', e?.status, e?.message, e);
-    this.error.set('No se pudieron cargar los precios.');
-  } finally {
-    this.loadingPrecios.set(false);
+  async buscarPrecios(productoId: string, lat?: number, lng?: number): Promise<void> {
+    this.loadingPrecios.set(true);
+    this.error.set('');
+    try {
+      const params: any = { id: productoId };
+      if (lat) params['lat'] = lat;
+      if (lng) params['lng'] = lng;
+
+      const res = await firstValueFrom(
+        this.http.get<any>(`${BASE_URL}/precios`, { params })
+      );
+
+      let sucursales: PCPrecio[] = res.sucursales ?? [];
+
+      // Calcular distancia si tenemos ubicación
+      if (lat && lng) {
+        sucursales = sucursales.map(s => ({
+          ...s,
+          distancia_km: this.calcularDistancia(lat, lng, parseFloat(s.lat), parseFloat(s.lng))
+        })).sort((a, b) => (a.distancia_km ?? 99) - (b.distancia_km ?? 99));
+      } else {
+        sucursales = sucursales.sort((a, b) =>
+          (a.preciosProducto?.precioLista ?? 99999) - (b.preciosProducto?.precioLista ?? 99999)
+        );
+      }
+
+      this.precios.set(sucursales);
+    } catch (e: any) {
+      console.error('Error detalle:', e?.status, e?.message);
+      this.error.set('No se pudieron cargar los precios.');
+    } finally {
+      this.loadingPrecios.set(false);
+    }
   }
-}
 
   private calcularDistancia(lat1: number, lng1: number, lat2: number, lng2: number): number {
     const R = 6371;

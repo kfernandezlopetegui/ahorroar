@@ -4,7 +4,7 @@ import {
   IonSearchbar, IonCard, IonCardContent,
   IonButton, IonIcon, IonSpinner, IonText, IonChip
 } from '@ionic/angular/standalone';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, TitleCasePipe } from '@angular/common';
 import { addIcons } from 'ionicons';
 import { locationOutline, scanOutline, starOutline } from 'ionicons/icons';
 import { PreciosClarosService, PCProducto } from '../core/services/precios-claros';
@@ -13,7 +13,7 @@ import { PreciosClarosService, PCProducto } from '../core/services/precios-claro
   selector: 'app-comparador',
   standalone: true,
   imports: [
-    DecimalPipe,
+    DecimalPipe, TitleCasePipe,
     IonContent, IonHeader, IonToolbar, IonTitle,
     IonSearchbar, IonCard, IonCardContent,
     IonButton, IonIcon, IonSpinner, IonText, IonChip
@@ -29,9 +29,10 @@ export class ComparadorPage {
   mejorPrecio = computed(() => {
     const precios = this.pc.precios();
     if (!precios.length) return null;
-    return [...precios].sort((a, b) => a.precio - b.precio)[0];
+    return [...precios].sort(
+      (a, b) => (a.preciosProducto?.precioLista ?? 99999) - (b.preciosProducto?.precioLista ?? 99999)
+    )[0];
   });
-
   get productos() { return this.pc.productos; }
   get precios() { return this.pc.precios; }
   get loadingProductos() { return this.pc.loadingProductos; }
