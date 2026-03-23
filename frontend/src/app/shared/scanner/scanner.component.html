@@ -9,7 +9,7 @@
 
 <ion-content color="dark" style="--background: #000;">
 
-  <!-- Cargando / esperando permiso -->
+  <!-- Cargando permiso -->
   @if (hasPermission() === null) {
     <div class="permission-box">
       <ion-spinner name="crescent" color="light" />
@@ -25,26 +25,31 @@
       <p style="font-size: 13px; opacity: 0.7; margin-top: 8px;">
         Andá a Configuración → Aplicaciones → AhorroAR → Permisos → Cámara
       </p>
-      <ion-button
-        fill="outline"
-        color="light"
-        style="margin-top: 24px;"
-        (click)="cerrar()">
+      <ion-button fill="outline" color="light" style="margin-top: 24px;" (click)="cerrar()">
         Cerrar
       </ion-button>
     </div>
   }
 
-  <!-- Escáner activo -->
+  <!-- Spinner mientras la cámara inicializa -->
+  @if (hasPermission() === true && !camaraLista()) {
+    <div class="permission-box">
+      <ion-spinner name="crescent" color="light" />
+      <p style="margin-top: 16px; color: white;">Iniciando cámara...</p>
+    </div>
+  }
+
+  <!-- Scanner: siempre en DOM cuando hay permiso pero oculto hasta estar listo -->
   @if (hasPermission() === true && scannerEnabled()) {
-    <div class="scanner-container">
+    <div class="scanner-container" [class.visible]="camaraLista()">
       <zxing-scanner
         [enable]="scannerEnabled()"
         [formats]="allowedFormats"
         (scanSuccess)="onScanSuccess($event)"
-        (permissionResponse)="onPermissionResponse($event)" />
+        (permissionResponse)="onPermissionResponse($event)"
+        (camerasFound)="onCamerasFound($event)" />
 
-      <div class="reticle-overlay">
+      <div class="reticle-overlay" [class.visible]="camaraLista()">
         <div class="reticle">
           <span class="corner tl"></span>
           <span class="corner tr"></span>

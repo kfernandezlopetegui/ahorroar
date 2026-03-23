@@ -23,8 +23,8 @@ import { closeOutline, cameraOutline } from 'ionicons/icons';
 })
 export class ScannerComponent implements OnDestroy {
   hasPermission  = signal<boolean | null>(null);
-  scannerEnabled = signal(false); // empieza en false hasta tener permiso
-  isNative       = signal(false);
+  scannerEnabled = signal(false);
+  camaraLista    = signal(false); // ← nuevo: ocultar video hasta que esté listo
 
   allowedFormats = [
     BarcodeFormat.EAN_13,
@@ -39,13 +39,11 @@ export class ScannerComponent implements OnDestroy {
     private readonly platform: Platform,
   ) {
     addIcons({ closeOutline, cameraOutline });
-    this.isNative.set(this.platform.is('capacitor'));
     this.solicitarPermiso();
   }
 
   private async solicitarPermiso() {
     if (this.platform.is('capacitor')) {
-      // Permiso nativo con Capacitor
       try {
         const status = await Camera.requestPermissions({ permissions: ['camera'] });
         const granted = status.camera === 'granted';
@@ -55,9 +53,13 @@ export class ScannerComponent implements OnDestroy {
         this.hasPermission.set(false);
       }
     } else {
-      // En web/PWA lo maneja zxing directamente
       this.scannerEnabled.set(true);
     }
+  }
+
+  onCamerasFound(cameras: MediaDeviceInfo[]) {
+    // La cámara encontró dispositivos → ya se puede mostrar
+    if (cameras?.length) this.camaraLista.set(true);
   }
 
   onPermissionResponse(permission: boolean) {
