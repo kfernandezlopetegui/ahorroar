@@ -1,0 +1,24 @@
+<div class="chart-wrapper">
+  @if (loading) {
+    <div class="chart-loading">
+      <ion-spinner name="crescent" />
+    </div>
+  }
+
+  @if (!loading && !rows.length) {
+    <p class="chart-empty">Sin datos históricos para este producto.</p>
+  }
+
+  @if (!loading && rows.length) {
+    <!-- Leyenda -->
+    <div class="legend">
+      @for (s of series; track s.cadena) {
+        <span class="legend-item">
+          <span class="legend-dot" [style.background]="s.color"></span>
+          {{ s.cadena }}
+        </span>
+      }
+    </div>
+    <canvas #canvas class="chart-canvas"></canvas>
+  }
+</div>

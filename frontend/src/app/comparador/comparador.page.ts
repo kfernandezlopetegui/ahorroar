@@ -1,10 +1,10 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, OnDestroy } from '@angular/core';
 import {
   IonContent, IonHeader, IonToolbar, IonTitle,
   IonSearchbar, IonCard, IonCardContent,
   IonButton, IonIcon, IonSpinner, IonText,
   IonChip, IonSegment, IonSegmentButton, IonLabel,
-  IonItem, IonInput, IonFab, IonFabButton,
+  IonItem, IonInput,
   ToastController, ModalController,
 } from '@ionic/angular/standalone';
 import { DecimalPipe, TitleCasePipe } from '@angular/common';
@@ -13,9 +13,14 @@ import { addIcons } from 'ionicons';
 import {
   locationOutline, scanOutline, searchOutline,
   barcodeOutline, cameraOutline, trendingDownOutline,
+  timeOutline, cartOutline,
 } from 'ionicons/icons';
+import { Geolocation } from '@capacitor/geolocation';
+import { Platform } from '@ionic/angular/standalone';
 import { PreciosClarosService, PCProducto } from '../core/services/precios-claros';
 import { ScannerComponent } from '../shared/scanner/scanner.component';
+import { PriceChartComponent } from '../shared/price-chart/price-chart.component';
+import { ListaService } from '../core/services/lista';
 
 type SearchMode = 'nombre' | 'ean';
 
@@ -29,17 +34,18 @@ type SearchMode = 'nombre' | 'ean';
     IonButton, IonIcon, IonSpinner, IonText,
     IonChip, IonSegment, IonSegmentButton,
     IonLabel, IonItem, IonInput,
-    IonFab, IonFabButton,
+    PriceChartComponent,
   ],
   templateUrl: './comparador.page.html',
 })
-export class ComparadorPage {
-  searchMode           = signal<SearchMode>('nombre');
-  eanInput             = signal('');
+export class ComparadorPage implements OnDestroy {
+  searchMode = signal<SearchMode>('nombre');
+  eanInput = signal('');
   productoSeleccionado = signal<PCProducto | null>(null);
-  userLat              = signal<number | null>(null);
-  userLng              = signal<number | null>(null);
-  usandoUbicacion      = signal(false);
+  userLat = signal<number | null>(null);
+  userLng = signal<number | null>(null);
+  usandoUbicacion = signal(false);
+  mostrarHistorial = signal(false);
 
   mejorPrecio = computed(() => {
     const lista = this.pc.precios();
@@ -51,21 +57,30 @@ export class ComparadorPage {
     )[0];
   });
 
-  get productos()        { return this.pc.productos; }
-  get precios()          { return this.pc.precios; }
+  get productos() { return this.pc.productos; }
+  get precios() { return this.pc.precios; }
+  get historial() { return this.pc.historial; }
   get loadingProductos() { return this.pc.loadingProductos; }
-  get loadingPrecios()   { return this.pc.loadingPrecios; }
-  get error()            { return this.pc.error; }
+  get loadingPrecios() { return this.pc.loadingPrecios; }
+  get loadingHistorial() { return this.pc.loadingHistorial; }
+  get error() { return this.pc.error; }
 
   constructor(
     public readonly pc: PreciosClarosService,
+    public readonly lista: ListaService,
     private readonly toastCtrl: ToastController,
     private readonly modalCtrl: ModalController,
+    private readonly platform: Platform,
   ) {
     addIcons({
       locationOutline, scanOutline, searchOutline,
       barcodeOutline, cameraOutline, trendingDownOutline,
+      timeOutline, cartOutline,
     });
+  }
+
+  ngOnDestroy() {
+    this.pc.historial.set([]);
   }
 
   onSegmentChange(event: any) {
@@ -93,7 +108,10 @@ export class ComparadorPage {
       this.userLat() ?? undefined,
       this.userLng() ?? undefined,
     );
-    if (producto) this.productoSeleccionado.set(producto);
+    if (producto) {
+      this.productoSeleccionado.set(producto);
+      await this.pc.getHistorial(ean);
+    }
   }
 
   async abrirEscaner() {
@@ -102,14 +120,11 @@ export class ComparadorPage {
       cssClass: 'scanner-modal',
     });
     await modal.present();
-
     const { data } = await modal.onDidDismiss<{ ean: string } | null>();
-
     if (data?.ean) {
       this.searchMode.set('ean');
       this.eanInput.set(data.ean);
       this.resetResultados();
-
       const producto = await this.pc.buscarPorEAN(
         data.ean,
         this.userLat() ?? undefined,
@@ -117,6 +132,7 @@ export class ComparadorPage {
       );
       if (producto) {
         this.productoSeleccionado.set(producto);
+        await this.pc.getHistorial(data.ean);
       } else {
         const toast = await this.toastCtrl.create({
           message: `Código ${data.ean} no encontrado en Precios Claros.`,
@@ -131,48 +147,91 @@ export class ComparadorPage {
   async seleccionarProducto(producto: PCProducto) {
     this.productoSeleccionado.set(producto);
     this.pc.precios.set([]);
-    await this.pc.buscarPrecios(
-      producto.id,
-      this.userLat() ?? undefined,
-      this.userLng() ?? undefined,
-    );
+    this.mostrarHistorial.set(false);
+    await Promise.all([
+      this.pc.buscarPrecios(
+        producto.id,
+        this.userLat() ?? undefined,
+        this.userLng() ?? undefined,
+      ),
+      this.pc.getHistorial(producto.id),
+    ]);
+  }
+
+  async agregarALista(producto: PCProducto) {
+    this.lista.agregarItem(producto);
+    const toast = await this.toastCtrl.create({
+      message: `${producto.nombre} agregado a la lista`,
+      duration: 2000,
+      color: 'success',
+    });
+    await toast.present();
   }
 
   async usarUbicacion() {
-    if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        this.userLat.set(pos.coords.latitude);
-        this.userLng.set(pos.coords.longitude);
-        this.usandoUbicacion.set(true);
-        if (this.productoSeleccionado()) {
-          await this.pc.buscarPrecios(
-            this.productoSeleccionado()!.id,
-            pos.coords.latitude,
-            pos.coords.longitude,
-          );
-        }
-      },
-      async () => {
+    try {
+      // Pedir permiso explícito con @capacitor/geolocation
+      const perm = await Geolocation.requestPermissions();
+      if (perm.location !== 'granted') {
         const toast = await this.toastCtrl.create({
-          message: 'No se pudo obtener la ubicación.',
-          duration: 2000,
+          message: 'Permiso de ubicación denegado.',
+          duration: 2500,
           color: 'warning',
         });
         await toast.present();
-      },
-    );
+        return;
+      }
+
+      const pos = await Geolocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 10000,
+      });
+
+      this.userLat.set(pos.coords.latitude);
+      this.userLng.set(pos.coords.longitude);
+      this.usandoUbicacion.set(true);
+
+      if (this.productoSeleccionado()) {
+        await this.pc.buscarPrecios(
+          this.productoSeleccionado()!.id,
+          pos.coords.latitude,
+          pos.coords.longitude,
+        );
+      }
+
+      const toast = await this.toastCtrl.create({
+        message: '📍 Ubicación activada',
+        duration: 1500,
+        color: 'primary',
+      });
+      await toast.present();
+    } catch (err: any) {
+      const toast = await this.toastCtrl.create({
+        message: 'No se pudo obtener la ubicación.',
+        duration: 2000,
+        color: 'warning',
+      });
+      await toast.present();
+    }
   }
 
   volverAResultados() {
     this.productoSeleccionado.set(null);
     this.pc.precios.set([]);
+    this.pc.historial.set([]);
+    this.mostrarHistorial.set(false);
+  }
+
+  toggleHistorial() {
+    this.mostrarHistorial.update(v => !v);
   }
 
   private resetResultados() {
     this.productoSeleccionado.set(null);
     this.pc.productos.set([]);
     this.pc.precios.set([]);
+    this.pc.historial.set([]);
     this.pc.error.set('');
+    this.mostrarHistorial.set(false);
   }
 }

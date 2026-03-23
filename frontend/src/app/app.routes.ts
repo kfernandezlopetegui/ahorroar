@@ -37,6 +37,10 @@ export const routes: Routes = [
         loadComponent: () => import('./comparador/comparador.page').then(m => m.ComparadorPage),
       },
       {
+        path: 'lista',
+        loadComponent: () => import('./lista/lista.page').then(m => m.ListaPage),
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full',
@@ -48,5 +52,6 @@ export const routes: Routes = [
     redirectTo: 'tabs/home',
   },
   
+
 
 ];

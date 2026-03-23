@@ -31,6 +31,13 @@ export interface PCPrecio {
   distancia_km?: number;
 }
 
+export interface PCHistorialRow {
+  cadena: string;
+  precio_lista: number;
+  precio_promo: number | null;
+  captured_at: string;
+}
+
 export interface PCResultadoEAN {
   producto: PCProducto | null;
   sucursales: PCPrecio[];
@@ -40,11 +47,13 @@ const BASE = `${environment.apiUrl}/precios-claros`;
 
 @Injectable({ providedIn: 'root' })
 export class PreciosClarosService {
-  productos     = signal<PCProducto[]>([]);
-  precios       = signal<PCPrecio[]>([]);
+  productos        = signal<PCProducto[]>([]);
+  precios          = signal<PCPrecio[]>([]);
+  historial        = signal<PCHistorialRow[]>([]);
   loadingProductos = signal(false);
   loadingPrecios   = signal(false);
-  error         = signal('');
+  loadingHistorial = signal(false);
+  error            = signal('');
 
   constructor(private readonly http: HttpClient) {}
 
@@ -56,7 +65,6 @@ export class PreciosClarosService {
       const params: Record<string, any> = { q: query };
       if (lat != null) params['lat'] = lat;
       if (lng != null) params['lng'] = lng;
-
       const res = await firstValueFrom(
         this.http.get<any>(`${BASE}/productos`, { params }),
       );
@@ -75,7 +83,6 @@ export class PreciosClarosService {
       const params: Record<string, any> = { id: productoId };
       if (lat != null) params['lat'] = lat;
       if (lng != null) params['lng'] = lng;
-
       const res = await firstValueFrom(
         this.http.get<any>(`${BASE}/precios`, { params }),
       );
@@ -95,16 +102,13 @@ export class PreciosClarosService {
       const params: Record<string, any> = {};
       if (lat != null) params['lat'] = lat;
       if (lng != null) params['lng'] = lng;
-
       const res = await firstValueFrom(
         this.http.get<PCResultadoEAN>(`${BASE}/ean/${ean}`, { params }),
       );
-
       if (!res.producto) {
         this.error.set('Producto no encontrado para este código.');
         return null;
       }
-
       this.productos.set([res.producto]);
       this.precios.set(this.sortSucursales(res.sucursales, lat, lng));
       return res.producto;
@@ -114,6 +118,22 @@ export class PreciosClarosService {
     } finally {
       this.loadingProductos.set(false);
       this.loadingPrecios.set(false);
+    }
+  }
+
+  async getHistorial(ean: string, dias = 30): Promise<void> {
+    this.loadingHistorial.set(true);
+    try {
+      const res = await firstValueFrom(
+        this.http.get<PCHistorialRow[]>(`${BASE}/historial/${ean}`, {
+          params: { dias: String(dias) },
+        }),
+      );
+      this.historial.set(res ?? []);
+    } catch {
+      this.historial.set([]);
+    } finally {
+      this.loadingHistorial.set(false);
     }
   }
 
