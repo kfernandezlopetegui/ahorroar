@@ -35,3 +35,11 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+
+// Scanner modal full screen
+.scanner-modal {
+  --width: 100%;
+  --height: 100%;
+  --border-radius: 0;
+}

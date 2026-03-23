@@ -1,39 +1,47 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { SupabaseService } from '../supabase/supabase.service';
 
 const BASE_URL = 'https://d3e6htiiul5ek9.cloudfront.net/prod';
 
-const HEADERS = {
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-  'Accept': 'application/json, text/plain, */*',
-  'Accept-Language': 'es-AR,es;q=0.9',
-  'Referer': 'https://www.preciosclaros.gob.ar/',
-  'Origin': 'https://www.preciosclaros.gob.ar',
-  'x-api-key': process.env.PRECIOS_CLAROS_API_KEY,
-};
-
 @Injectable()
 export class PreciosClarosService {
-  constructor(private http: HttpService) { }
+  constructor(
+    private readonly http: HttpService,
+    private readonly supabase: SupabaseService,
+  ) {}
+
+  private get headers() {
+    return {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      Accept: 'application/json, text/plain, */*',
+      'Accept-Language': 'es-AR,es;q=0.9',
+      Referer: 'https://www.preciosclaros.gob.ar/',
+      Origin: 'https://www.preciosclaros.gob.ar',
+      ...(process.env.PRECIOS_CLAROS_API_KEY && {
+        'x-api-key': process.env.PRECIOS_CLAROS_API_KEY,
+      }),
+    };
+  }
 
   async buscarProductos(query: string, lat = -34.6037, lng = -58.3816) {
     const { data } = await firstValueFrom(
       this.http.get(`${BASE_URL}/productos`, {
-        headers: HEADERS,
+        headers: this.headers,
         params: { string: query, lat, lng, limit: 20, offset: 0 },
-      })
+      }),
     );
-    console.log('Total productos:', data?.total, '| Primero:', JSON.stringify(data?.productos?.[0], null, 2));
     return data;
   }
 
   async buscarSucursales(lat = -34.6037, lng = -58.3816) {
     const { data } = await firstValueFrom(
       this.http.get(`${BASE_URL}/sucursales`, {
-        headers: HEADERS,
+        headers: this.headers,
         params: { lat, lng, limit: 30, offset: 0 },
-      })
+      }),
     );
     return data;
   }
@@ -47,17 +55,85 @@ export class PreciosClarosService {
 
     const { data } = await firstValueFrom(
       this.http.get(`${BASE_URL}/producto`, {
-        headers: HEADERS,
-        params: { limit: 30, id_producto: productoId, array_sucursales: arraySucursales },
-      })
+        headers: this.headers,
+        params: {
+          limit: 30,
+          id_producto: productoId,
+          array_sucursales: arraySucursales,
+        },
+      }),
     );
 
-    // Filtrar solo las sucursales que tienen el producto
     const conProducto = (data?.sucursales ?? []).filter(
-      (s: any) => !s.message
+      (s: any) => !s.message,
     );
 
-    console.log('Con producto:', JSON.stringify(conProducto[0], null, 2));
     return { ...data, sucursales: conProducto };
+  }
+
+  async buscarPorEAN(ean: string, lat = -34.6037, lng = -58.3816) {
+    // 1. Buscar producto por EAN (el ID en Precios Claros = EAN)
+    const productosData = await this.buscarProductos(ean, lat, lng);
+    const productos: any[] = productosData?.productos ?? [];
+
+    // Preferir match exacto de ID, sino primer resultado
+    const producto =
+      productos.find((p: any) => p.id === ean) ?? productos[0] ?? null;
+
+    if (!producto) return { producto: null, sucursales: [] };
+
+    // 2. Buscar precios en sucursales cercanas
+    const preciosData = await this.buscarPrecios(producto.id, lat, lng);
+
+    // 3. Guardar snapshot histórico (fire & forget)
+    this.savePriceSnapshot(producto, preciosData.sucursales ?? []).catch(
+      (err) => console.error('[price_history] Error saving snapshot:', err),
+    );
+
+    return { producto, ...preciosData };
+  }
+
+  async getHistorial(ean: string, dias = 30) {
+    const desde = new Date();
+    desde.setDate(desde.getDate() - dias);
+
+    const { data, error } = await this.supabase.client
+      .from('price_history')
+      .select('cadena, precio_lista, precio_promo, captured_at')
+      .eq('ean', ean)
+      .gte('captured_at', desde.toISOString())
+      .order('captured_at', { ascending: true });
+
+    if (error) throw error;
+    return data ?? [];
+  }
+
+  private async savePriceSnapshot(producto: any, sucursales: any[]) {
+    if (!sucursales.length) return;
+
+    const rows = sucursales
+      .map((s: any) => ({
+        ean: producto.id,
+        producto_nombre: producto.nombre,
+        sucursal_id: s.id,
+        cadena: s.banderaDescripcion,
+        sucursal_nombre: s.sucursalNombre,
+        direccion: s.direccion,
+        localidad: s.localidad,
+        lat: parseFloat(s.lat) || null,
+        lng: parseFloat(s.lng) || null,
+        precio_lista: s.preciosProducto?.precioLista ?? null,
+        precio_promo: s.preciosProducto?.promo1?.precio ?? null,
+        descripcion_promo: s.preciosProducto?.promo1?.descripcion ?? null,
+      }))
+      .filter((r) => r.precio_lista !== null);
+
+    if (!rows.length) return;
+
+    const { error } = await this.supabase.client
+      .from('price_history')
+      .insert(rows);
+
+    if (error) throw error;
   }
 }

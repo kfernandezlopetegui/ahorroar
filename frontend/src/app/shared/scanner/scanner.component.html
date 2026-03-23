@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title style="color: white;">Escanear código</ion-title>
+    <ion-button slot="end" fill="clear" color="light" (click)="cerrar()">
+      <ion-icon name="close-outline" />
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="dark" style="--background: #000;">
+
+  <!-- Cargando / esperando permiso -->
+  @if (hasPermission() === null) {
+    <div class="permission-box">
+      <ion-spinner name="crescent" color="light" />
+      <p style="margin-top: 16px;">Solicitando permiso de cámara...</p>
+    </div>
+  }
+
+  <!-- Permiso denegado -->
+  @if (hasPermission() === false) {
+    <div class="permission-box">
+      <ion-icon name="camera-outline" class="permission-icon" />
+      <p>Permiso de cámara denegado.</p>
+      <p style="font-size: 13px; opacity: 0.7; margin-top: 8px;">
+        Andá a Configuración → Aplicaciones → AhorroAR → Permisos → Cámara
+      </p>
+      <ion-button
+        fill="outline"
+        color="light"
+        style="margin-top: 24px;"
+        (click)="cerrar()">
+        Cerrar
+      </ion-button>
+    </div>
+  }
+
+  <!-- Escáner activo -->
+  @if (hasPermission() === true && scannerEnabled()) {
+    <div class="scanner-container">
+      <zxing-scanner
+        [enable]="scannerEnabled()"
+        [formats]="allowedFormats"
+        (scanSuccess)="onScanSuccess($event)"
+        (permissionResponse)="onPermissionResponse($event)" />
+
+      <div class="reticle-overlay">
+        <div class="reticle">
+          <span class="corner tl"></span>
+          <span class="corner tr"></span>
+          <span class="corner bl"></span>
+          <span class="corner br"></span>
+          <div class="scan-line"></div>
+        </div>
+        <p class="hint">Apuntá al código de barras del producto</p>
+      </div>
+    </div>
+  }
+
+</ion-content>

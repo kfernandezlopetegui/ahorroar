@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface PCProducto {
   id: string;
@@ -24,55 +25,44 @@ export interface PCPrecio {
   actualizadoHoy: boolean;
   preciosProducto: {
     precioLista: number;
-    promo1?: { descripcion: string; precio: string | number; };
-    promo2?: { descripcion: string; precio: string | number; };
+    promo1?: { descripcion: string; precio: string | number };
+    promo2?: { descripcion: string; precio: string | number };
   };
   distancia_km?: number;
 }
-const BASE_URL = 'http://localhost:3000/precios-claros';
+
+export interface PCResultadoEAN {
+  producto: PCProducto | null;
+  sucursales: PCPrecio[];
+}
+
+const BASE = `${environment.apiUrl}/precios-claros`;
 
 @Injectable({ providedIn: 'root' })
 export class PreciosClarosService {
-  productos = signal<PCProducto[]>([]);
-  precios = signal<PCPrecio[]>([]);
+  productos     = signal<PCProducto[]>([]);
+  precios       = signal<PCPrecio[]>([]);
   loadingProductos = signal(false);
-  loadingPrecios = signal(false);
-  error = signal('');
+  loadingPrecios   = signal(false);
+  error         = signal('');
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {}
 
   async buscarProductos(query: string, lat?: number, lng?: number): Promise<void> {
     if (query.length < 3) return;
     this.loadingProductos.set(true);
     this.error.set('');
     try {
-      const params: any = { q: query };
-      if (lat) params['lat'] = lat;
-      if (lng) params['lng'] = lng;
+      const params: Record<string, any> = { q: query };
+      if (lat != null) params['lat'] = lat;
+      if (lng != null) params['lng'] = lng;
 
       const res = await firstValueFrom(
-        this.http.get<any>(`${BASE_URL}/productos`, { params })
+        this.http.get<any>(`${BASE}/productos`, { params }),
       );
-      console.log('Respuesta frontend:', res);
-
       this.productos.set(res.productos ?? []);
     } catch {
       this.error.set('No se pudo conectar con Precios Claros.');
-    } finally {
-      this.loadingProductos.set(false);
-    }
-  }
-  async buscarPorEAN(ean: string): Promise<void> {
-    this.loadingProductos.set(true);
-    this.error.set('');
-    try {
-      const params = new HttpParams().set('string', ean);
-      const res = await firstValueFrom(
-        this.http.get<any>(`${BASE_URL}/productos`, { params })
-      );
-      this.productos.set(res.productos ?? []);
-    } catch {
-      this.error.set('Producto no encontrado.');
     } finally {
       this.loadingProductos.set(false);
     }
@@ -82,46 +72,76 @@ export class PreciosClarosService {
     this.loadingPrecios.set(true);
     this.error.set('');
     try {
-      const params: any = { id: productoId };
-      if (lat) params['lat'] = lat;
-      if (lng) params['lng'] = lng;
+      const params: Record<string, any> = { id: productoId };
+      if (lat != null) params['lat'] = lat;
+      if (lng != null) params['lng'] = lng;
 
       const res = await firstValueFrom(
-        this.http.get<any>(`${BASE_URL}/precios`, { params })
+        this.http.get<any>(`${BASE}/precios`, { params }),
       );
-
-      let sucursales: PCPrecio[] = res.sucursales ?? [];
-
-      // Calcular distancia si tenemos ubicación
-      if (lat && lng) {
-        sucursales = sucursales.map(s => ({
-          ...s,
-          distancia_km: this.calcularDistancia(lat, lng, parseFloat(s.lat), parseFloat(s.lng))
-        })).sort((a, b) => (a.distancia_km ?? 99) - (b.distancia_km ?? 99));
-      } else {
-        sucursales = sucursales.sort((a, b) =>
-          (a.preciosProducto?.precioLista ?? 99999) - (b.preciosProducto?.precioLista ?? 99999)
-        );
-      }
-
-      this.precios.set(sucursales);
-    } catch (e: any) {
-      console.error('Error detalle:', e?.status, e?.message);
+      this.precios.set(this.sortSucursales(res.sucursales ?? [], lat, lng));
+    } catch {
       this.error.set('No se pudieron cargar los precios.');
     } finally {
       this.loadingPrecios.set(false);
     }
   }
 
+  async buscarPorEAN(ean: string, lat?: number, lng?: number): Promise<PCProducto | null> {
+    this.loadingProductos.set(true);
+    this.loadingPrecios.set(true);
+    this.error.set('');
+    try {
+      const params: Record<string, any> = {};
+      if (lat != null) params['lat'] = lat;
+      if (lng != null) params['lng'] = lng;
+
+      const res = await firstValueFrom(
+        this.http.get<PCResultadoEAN>(`${BASE}/ean/${ean}`, { params }),
+      );
+
+      if (!res.producto) {
+        this.error.set('Producto no encontrado para este código.');
+        return null;
+      }
+
+      this.productos.set([res.producto]);
+      this.precios.set(this.sortSucursales(res.sucursales, lat, lng));
+      return res.producto;
+    } catch {
+      this.error.set('Error buscando por código EAN.');
+      return null;
+    } finally {
+      this.loadingProductos.set(false);
+      this.loadingPrecios.set(false);
+    }
+  }
+
+  private sortSucursales(sucursales: PCPrecio[], lat?: number, lng?: number): PCPrecio[] {
+    if (lat != null && lng != null) {
+      return sucursales
+        .map((s) => ({
+          ...s,
+          distancia_km: this.calcularDistancia(lat, lng, parseFloat(s.lat), parseFloat(s.lng)),
+        }))
+        .sort((a, b) => (a.distancia_km ?? 99) - (b.distancia_km ?? 99));
+    }
+    return [...sucursales].sort(
+      (a, b) =>
+        (a.preciosProducto?.precioLista ?? 99999) -
+        (b.preciosProducto?.precioLista ?? 99999),
+    );
+  }
+
   private calcularDistancia(lat1: number, lng1: number, lat2: number, lng2: number): number {
     const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLng = ((lng2 - lng1) * Math.PI) / 180;
     const a =
       Math.sin(dLat / 2) ** 2 +
-      Math.cos(lat1 * Math.PI / 180) *
-      Math.cos(lat2 * Math.PI / 180) *
-      Math.sin(dLng / 2) ** 2;
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLng / 2) ** 2;
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 }

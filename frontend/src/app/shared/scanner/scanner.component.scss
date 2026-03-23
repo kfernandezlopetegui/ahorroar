@@ -1,0 +1,87 @@
+.permission-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: white;
+  text-align: center;
+  padding: 40px;
+
+  .permission-icon {
+    font-size: 72px;
+    margin-bottom: 24px;
+    opacity: 0.6;
+  }
+}
+
+.scanner-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  zxing-scanner {
+    width: 100%;
+    height: 100%;
+
+    ::ng-deep video {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover;
+    }
+  }
+}
+
+.reticle-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.reticle {
+  position: relative;
+  width: 260px;
+  height: 160px;
+
+  .corner {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-color: #fff;
+    border-style: solid;
+
+    &.tl { top: 0;    left: 0;  border-width: 3px 0 0 3px; }
+    &.tr { top: 0;    right: 0; border-width: 3px 3px 0 0; }
+    &.bl { bottom: 0; left: 0;  border-width: 0 0 3px 3px; }
+    &.br { bottom: 0; right: 0; border-width: 0 3px 3px 0; }
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00e676, transparent);
+    animation: scan 2s ease-in-out infinite;
+    top: 0;
+  }
+}
+
+@keyframes scan {
+  0%   { top: 8px;   opacity: 1; }
+  50%  { top: calc(100% - 8px); opacity: 1; }
+  100% { top: 8px;   opacity: 1; }
+}
+
+.hint {
+  color: white;
+  font-size: 14px;
+  margin-top: 24px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  padding: 0 20px;
+}
