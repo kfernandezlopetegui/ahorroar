@@ -7,5 +7,6 @@ import { PreciosClarosController } from './precios-claros.controller';
   imports: [HttpModule],
   controllers: [PreciosClarosController],
   providers: [PreciosClarosService],
+  exports: [PreciosClarosService],
 })
-export class PreciosClarosModule { }
+export class PreciosClarosModule {}

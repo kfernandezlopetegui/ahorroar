@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Watchlist</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  @if (loading()) {
+    <div style="display:flex; justify-content:center; padding:40px;">
+      <ion-spinner name="crescent" />
+    </div>
+  }
+
+  @if (!loading() && !items().length) {
+    <div style="display:flex; flex-direction:column; align-items:center;
+                justify-content:center; height:60vh; gap:16px; text-align:center;">
+      <ion-icon name="eye-outline" style="font-size:72px; color:var(--ion-color-light-shade);" />
+      <p style="color:var(--ion-color-medium); font-size:15px; margin:0;">
+        No seguís ningún producto todavía.<br>
+        Buscá un producto en el <strong>Comparador</strong><br>y tocá <strong>Seguir precio</strong>.
+      </p>
+      <ion-button routerLink="/tabs/comparador" fill="outline">
+        Ir al comparador
+      </ion-button>
+    </div>
+  }
+
+  <div style="padding-bottom:16px;">
+    @for (item of items(); track item.id) {
+      <ion-card style="margin:8px 0; border-radius:12px;">
+        <ion-card-content style="padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+            <div style="flex:1; min-width:0;">
+              <p style="font-weight:600; font-size:14px; margin:0; white-space:nowrap;
+                         overflow:hidden; text-overflow:ellipsis;">
+                {{ item.producto_nombre }}
+              </p>
+              <p style="font-size:11px; color:var(--ion-color-medium); margin:4px 0 0;">
+                EAN: {{ item.ean }}
+              </p>
+              <div style="display:flex; align-items:center; gap:6px; margin-top:8px;">
+                <ion-icon name="trending-down-outline" color="success" style="font-size:16px;" />
+                <span style="font-size:12px; color:var(--ion-color-medium);">Alertar si baja de</span>
+                <ion-chip color="success" style="height:24px; font-size:13px; padding:0 10px; margin:0;">
+                  ${{ item.precio_objetivo | number }}
+                </ion-chip>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <ion-button fill="clear" size="small" (click)="openEdit(item)">
+                <ion-icon name="pricetag-outline" />
+              </ion-button>
+              <ion-button fill="clear" size="small" color="danger" (click)="confirmRemove(item)">
+                <ion-icon name="trash-outline" />
+              </ion-button>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    }
+  </div>
+
+</ion-content>
+
+<ion-modal [isOpen]="isModalOpen()" (didDismiss)="isModalOpen.set(false)">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Editar precio objetivo</ion-title>
+        <ion-button slot="end" fill="clear" (click)="isModalOpen.set(false)">Cerrar</ion-button>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      @if (editItem()) {
+        <p style="font-weight:600; margin-bottom:16px;">{{ editItem()!.producto_nombre }}</p>
+      }
+      <form [formGroup]="form" (ngSubmit)="saveEdit()">
+        <ion-item>
+          <ion-label position="floating">Precio objetivo ($)</ion-label>
+          <ion-input type="number" formControlName="precio_objetivo" />
+        </ion-item>
+        <p style="font-size:12px; color:var(--ion-color-medium); margin:10px 4px;">
+          Te avisamos cuando el precio baje de este valor.
+        </p>
+        <ion-button expand="block" type="submit" style="margin-top:16px;" [disabled]="form.invalid">
+          Guardar
+        </ion-button>
+      </form>
+    </ion-content>
+  </ng-template>
+</ion-modal>

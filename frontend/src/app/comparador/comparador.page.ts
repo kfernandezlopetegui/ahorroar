@@ -5,7 +5,7 @@ import {
   IonButton, IonIcon, IonSpinner, IonText,
   IonChip, IonSegment, IonSegmentButton, IonLabel,
   IonItem, IonInput,
-  ToastController, ModalController,
+  ToastController, ModalController,AlertController
 } from '@ionic/angular/standalone';
 import { DecimalPipe, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +13,7 @@ import { addIcons } from 'ionicons';
 import {
   locationOutline, scanOutline, searchOutline,
   barcodeOutline, cameraOutline, trendingDownOutline,
-  timeOutline, cartOutline,
+  timeOutline, cartOutline, eyeOutline
 } from 'ionicons/icons';
 import { Geolocation } from '@capacitor/geolocation';
 import { Platform } from '@ionic/angular/standalone';
@@ -21,6 +21,8 @@ import { PreciosClarosService, PCProducto } from '../core/services/precios-claro
 import { ScannerComponent } from '../shared/scanner/scanner.component';
 import { PriceChartComponent } from '../shared/price-chart/price-chart.component';
 import { ListaService } from '../core/services/lista';
+import { WatchlistService } from '../core/services/watchlist';
+
 
 type SearchMode = 'nombre' | 'ean';
 
@@ -68,15 +70,18 @@ export class ComparadorPage implements OnDestroy {
   constructor(
     public readonly pc: PreciosClarosService,
     public readonly lista: ListaService,
+    public readonly watchlist: WatchlistService,   // ← NUEVO
     private readonly toastCtrl: ToastController,
     private readonly modalCtrl: ModalController,
     private readonly platform: Platform,
+    private readonly alertCtrl: AlertController,   // ← NUEVO
   ) {
     addIcons({
       locationOutline, scanOutline, searchOutline,
       barcodeOutline, cameraOutline, trendingDownOutline,
-      timeOutline, cartOutline,
+      timeOutline, cartOutline, eyeOutline
     });
+    this.watchlist.load();
   }
 
   ngOnDestroy() {
@@ -234,4 +239,35 @@ export class ComparadorPage implements OnDestroy {
     this.pc.error.set('');
     this.mostrarHistorial.set(false);
   }
+
+  async seguirPrecio(producto: PCProducto) {
+  const watching = this.watchlist.getItem(producto.id);
+  const alert = await this.alertCtrl.create({
+    header: watching ? 'Actualizar precio objetivo' : 'Seguir precio',
+    subHeader: producto.nombre,
+    inputs: [{
+      name: 'precio',
+      type: 'number',
+      placeholder: 'Precio objetivo ($)',
+      value: watching ? String(watching.precio_objetivo) : '',
+    }],
+    buttons: [
+      { text: 'Cancelar', role: 'cancel' },
+      {
+        text: watching ? 'Actualizar' : 'Seguir',
+        handler: async (data) => {
+          const precio = parseFloat(data.precio);
+          if (!precio || precio <= 0) return;
+          await this.watchlist.upsert(producto.id, producto.nombre, precio);
+          const t = await this.toastCtrl.create({
+            message: `✅ Seguimiento activado a $${precio.toLocaleString('es-AR')}`,
+            duration: 2500, color: 'success',
+          });
+          await t.present();
+        },
+      },
+    ],
+  });
+  await alert.present();
+}
 }

@@ -8,7 +8,7 @@ import {
   IonIcon, IonRefresher, IonRefresherContent
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { personOutline } from 'ionicons/icons';
+import { personOutline, cardOutline } from 'ionicons/icons';
 import { PromotionsService, CATEGORIES, Promotion } from '../core/services/promotions';
 import { AuthService } from '../core/services/auth';
 import { DecimalPipe } from '@angular/common';
@@ -50,7 +50,7 @@ export class HomePage implements OnInit {
     public auth: AuthService,
     public cardsSvc: CardsService
   ) {
-    addIcons({ personOutline });
+    addIcons({ personOutline, cardOutline });
   }
 
  async ngOnInit() {

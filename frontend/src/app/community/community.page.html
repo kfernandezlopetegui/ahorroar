@@ -1,0 +1,204 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Comunidad</ion-title>
+    @if (userStats()) {
+      <ion-chip slot="end" color="primary" style="margin-right:8px; height:28px; font-size:13px;">
+        <ion-icon name="trophy-outline" slot="start" />
+        {{ userStats()!.points.points }} pts
+      </ion-chip>
+    }
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [value]="activeSegment()" (ionChange)="onSegmentChange($event)">
+      <ion-segment-button value="reportes">
+        <ion-icon name="alert-circle-outline" />
+        <ion-label>Reportes</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="ranking">
+        <ion-icon name="trophy-outline" />
+        <ion-label>Ranking</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- Badges del usuario -->
+  @if (userStats()?.badges?.length) {
+    <div style="display:flex; gap:8px; padding:12px 16px 4px; overflow-x:auto; scrollbar-width:none;">
+      @for (b of userStats()!.badges; track b.badge) {
+        <ion-chip [color]="badgeInfo[b.badge]?.color ?? 'medium'" style="white-space:nowrap; height:28px; font-size:12px;">
+          {{ badgeInfo[b.badge]?.icon }} {{ badgeInfo[b.badge]?.label }}
+        </ion-chip>
+      }
+    </div>
+  }
+
+  @if (loading()) {
+    <div style="display:flex; justify-content:center; padding:40px;">
+      <ion-spinner name="crescent" />
+    </div>
+  }
+
+  @if (error()) {
+    <ion-text color="danger">
+      <p style="text-align:center; padding:20px;">{{ error() }}</p>
+    </ion-text>
+  }
+
+  <!-- REPORTES -->
+  @if (activeSegment() === 'reportes') {
+    <div style="padding:8px 12px 80px;">
+
+      @if (!loading() && !reports().length) {
+        <p style="text-align:center; color:var(--ion-color-medium); padding:40px 0;">
+          Sé el primero en reportar un precio 🏷️
+        </p>
+      }
+
+      @for (r of reports(); track r.id) {
+        <ion-card style="margin:8px 0; border-radius:12px;">
+          <ion-card-content style="padding:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+              <div style="flex:1; min-width:0;">
+                <p style="font-weight:600; font-size:14px; margin:0; white-space:nowrap;
+                           overflow:hidden; text-overflow:ellipsis;">
+                  {{ r.producto_nombre }}
+                </p>
+                <p style="font-size:12px; color:var(--ion-color-medium); margin:4px 0 0;">
+                  {{ r.cadena }}@if (r.sucursal) { · {{ r.sucursal }} }
+                </p>
+                @if (r.direccion) {
+                  <p style="font-size:11px; color:var(--ion-color-medium); margin:2px 0 0;">
+                    {{ r.direccion }}
+                  </p>
+                }
+                <div style="display:flex; align-items:center; gap:6px; margin-top:4px;">
+                  <span style="font-size:11px; color:var(--ion-color-medium);">{{ timeAgo(r.created_at) }}</span>
+                  @if (r.verified) {
+                    <ion-badge color="success" style="font-size:10px;">✓ Verificado</ion-badge>
+                  }
+                </div>
+              </div>
+              <div style="text-align:right; min-width:80px; flex-shrink:0;">
+                <p style="font-weight:800; font-size:20px; color:var(--ion-color-success); margin:0;">
+                  ${{ r.precio | number }}
+                </p>
+                <ion-button
+                  fill="clear" size="small" (click)="upvote(r.id)"
+                  [disabled]="svc.hasUpvoted(r.id)" style="height:28px; margin-top:4px;">
+                  <ion-icon name="thumbs-up-outline" slot="start"
+                    [color]="svc.hasUpvoted(r.id) ? 'primary' : 'medium'" />
+                  <span style="font-size:12px;">{{ r.upvotes }}</span>
+                </ion-button>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      }
+    </div>
+  }
+
+  <!-- RANKING -->
+  @if (activeSegment() === 'ranking') {
+    <div style="padding:8px 12px 80px;">
+      <p style="font-size:13px; color:var(--ion-color-medium); margin:8px 0 12px;">
+        Top contribuidores de la comunidad
+      </p>
+      @for (user of leaderboard(); track user.user_id; let i = $index) {
+        <ion-card style="margin:8px 0; border-radius:12px;"
+          [style.border]="i < 3 ? '1px solid var(--ion-color-warning)' : ''">
+          <ion-card-content style="padding:12px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span style="font-size:26px; min-width:36px; text-align:center;">
+                {{ i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '#' + (i + 1) }}
+              </span>
+              <div style="flex:1;">
+                <p style="font-weight:600; font-size:14px; margin:0;">
+                  Usuario {{ user.user_id.slice(0, 8) }}...
+                </p>
+                <p style="font-size:12px; color:var(--ion-color-medium); margin:2px 0 0;">
+                  {{ user.reports_count }} reportes enviados
+                </p>
+              </div>
+              <ion-chip color="primary" style="height:28px; font-size:14px; font-weight:700;">
+                {{ user.points }} pts
+              </ion-chip>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      }
+    </div>
+  }
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="isModalOpen.set(true)">
+      <ion-icon name="add-outline" />
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
+
+<!-- Modal: reportar precio -->
+<ion-modal [isOpen]="isModalOpen()" (didDismiss)="isModalOpen.set(false)">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Reportar precio</ion-title>
+        <ion-button slot="end" fill="clear" (click)="isModalOpen.set(false)">Cerrar</ion-button>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+
+      <p style="font-size:13px; color:var(--ion-color-medium); margin-bottom:16px;">
+        <ion-icon name="trophy-outline" /> Ganás <strong>+10 puntos</strong> por cada precio reportado.
+      </p>
+
+      <form [formGroup]="form" (ngSubmit)="submitReport()">
+
+        <ion-item>
+          <ion-label position="floating">EAN / Código de barras</ion-label>
+          <ion-input type="number" inputmode="numeric" formControlName="ean" />
+        </ion-item>
+
+        <ion-item style="margin-top:8px;">
+          <ion-label position="floating">Nombre del producto</ion-label>
+          <ion-input formControlName="producto_nombre" />
+        </ion-item>
+
+        <ion-item style="margin-top:8px;">
+          <ion-label>Cadena</ion-label>
+          <ion-select formControlName="cadena" placeholder="Seleccioná">
+            @for (c of CADENAS; track c) {
+              <ion-select-option [value]="c">{{ c }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+
+        <ion-item style="margin-top:8px;">
+          <ion-label position="floating">Precio que viste ($)</ion-label>
+          <ion-input type="number" inputmode="decimal" formControlName="precio" />
+        </ion-item>
+
+        <ion-item style="margin-top:8px;">
+          <ion-label position="floating">Sucursal (opcional)</ion-label>
+          <ion-input formControlName="sucursal" />
+        </ion-item>
+
+        <ion-item style="margin-top:8px;">
+          <ion-label position="floating">Dirección (opcional)</ion-label>
+          <ion-input formControlName="direccion" />
+        </ion-item>
+
+        <ion-button
+          expand="block" type="submit"
+          style="margin-top:24px;"
+          [disabled]="form.invalid || submitting()">
+          @if (submitting()) { <ion-spinner name="crescent" /> } @else { Reportar precio }
+        </ion-button>
+
+      </form>
+    </ion-content>
+  </ng-template>
+</ion-modal>

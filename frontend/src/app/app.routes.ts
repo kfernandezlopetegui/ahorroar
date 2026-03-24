@@ -2,11 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'tabs/home',
-    pathMatch: 'full',
-  },
+  { path: '', redirectTo: 'tabs/home', pathMatch: 'full' },
   {
     path: 'auth/login',
     loadComponent: () => import('./auth/login/login.page').then(m => m.LoginPage),
@@ -20,38 +16,16 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./tabs/tabs.page').then(m => m.TabsPage),
     children: [
-      {
-        path: 'home',
-        loadComponent: () => import('./home/home.page').then(m => m.HomePage),
-      },
-      {
-        path: 'profile',
-        loadComponent: () => import('./profile/profile.page').then(m => m.ProfilePage),
-      },
-      {
-        path: 'coupons',
-        loadComponent: () => import('./coupons/coupons.page').then(m => m.CouponsPage),
-      },
-      {
-        path: 'comparador',
-        loadComponent: () => import('./comparador/comparador.page').then(m => m.ComparadorPage),
-      },
-      {
-        path: 'lista',
-        loadComponent: () => import('./lista/lista.page').then(m => m.ListaPage),
-      },
-      {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full',
-      },
+      { path: 'home',       loadComponent: () => import('./home/home.page').then(m => m.HomePage) },
+      { path: 'comparador', loadComponent: () => import('./comparador/comparador.page').then(m => m.ComparadorPage) },
+      { path: 'lista',      loadComponent: () => import('./lista/lista.page').then(m => m.ListaPage) },
+      { path: 'watchlist',  loadComponent: () => import('./watchlist/watchlist.page').then(m => m.WatchlistPage) },
+      { path: 'comunidad',  loadComponent: () => import('./community/community.page').then(m => m.CommunityPage) },
+      { path: 'bank-combo', loadComponent: () => import('./bank-combo/bank-combo.page').then(m => m.BankComboPage) },
+      { path: 'coupons',    loadComponent: () => import('./coupons/coupons.page').then(m => m.CouponsPage) },
+      { path: 'profile',    loadComponent: () => import('./profile/profile.page').then(m => m.ProfilePage) },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
   },
-  {
-    path: '**',
-    redirectTo: 'tabs/home',
-  },
-  
-
-
+  { path: '**', redirectTo: 'tabs/home' },
 ];

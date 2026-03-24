@@ -203,22 +203,28 @@
   </div>
   }
 
+
   <!-- Botón historial + agregar a lista -->
-  @if (!loadingPrecios() && precios().length) {
-  <div style="display:flex; gap:8px; margin: 8px 0 4px;">
+  @if (!loadingPrecios() && (precios().length || productoSeleccionado())) {
+  <div style="display:flex; gap:8px; margin:8px 0 4px; flex-wrap:wrap;">
     <ion-button fill="outline" size="small" (click)="toggleHistorial()" style="flex:1;">
       <ion-icon name="time-outline" slot="start" />
-      Historial de precios
+      Historial
     </ion-button>
     @if (productoSeleccionado()) {
     <ion-button fill="outline" size="small" color="success" (click)="agregarALista(productoSeleccionado()!)">
       <ion-icon name="cart-outline" slot="start" />
       + Lista
     </ion-button>
+    <ion-button fill="outline" size="small"
+      [color]="watchlist.isWatching(productoSeleccionado()!.id) ? 'warning' : 'medium'"
+      (click)="seguirPrecio(productoSeleccionado()!)">
+      <ion-icon name="eye-outline" slot="start" />
+      {{ watchlist.isWatching(productoSeleccionado()!.id) ? 'Siguiendo' : 'Seguir' }}
+    </ion-button>
     }
   </div>
   }
-
   <!-- Gráfico historial -->
   @if (mostrarHistorial()) {
   <ion-card style="margin: 6px 0; border-radius: 12px;">
