@@ -85,11 +85,17 @@ AhorroAR centralizes all of that into one app.
 
 ## 📸 Screenshots
 
-| Promotions Feed | Price Comparator | Coupons 
-|----------------|-----------------|
-| ![Promotions](./screenshots/promotions.jpeg) | ![Comparator](./screenshots/comparator.jpeg) |![Coupons](./screenshots/coupons.jpeg) |
+<div align="center">
+  <img src="./screenshots/promotions.jpeg" width="250"/>
+  &nbsp;&nbsp;
+  <img src="./screenshots/comparator.jpeg" width="250"/>
+  &nbsp;&nbsp;
+  <img src="./screenshots/coupons.jpeg" width="250"/>
+</div>
 
----
+<div align="center">
+  <em>Promotions Feed &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Price Comparator &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Coupons</em>
+</div>
 
 ## 🚀 Getting Started
 ```bash
