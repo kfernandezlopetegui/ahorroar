@@ -85,9 +85,9 @@ AhorroAR centralizes all of that into one app.
 
 ## 📸 Screenshots
 
-| Promotions Feed | Price Comparator |
+| Promotions Feed | Price Comparator | Coupons 
 |----------------|-----------------|
-| ![Promotions](./screenshots/promotions.png) | ![Comparator](./screenshots/comparator.png) |
+| ![Promotions](./screenshots/promotions.jpg) | ![Comparator](./screenshots/comparator.jpg) |![Coupons](./screenshots/coupons.jpg) |
 
 ---
 
