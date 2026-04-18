@@ -2,64 +2,75 @@ import { Component, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   IonContent, IonHeader, IonToolbar, IonTitle,
-  IonButton, IonIcon, IonSpinner, IonText,
-  IonCard, IonCardContent, IonChip, IonModal,
-  IonItem, IonLabel, IonInput,
+  IonButton, IonIcon, IonSpinner,
+  IonCard, IonCardContent, IonBadge,
+  IonItem, IonLabel, IonRange,
   ToastController, AlertController,
 } from '@ionic/angular/standalone';
 import { DecimalPipe } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { addIcons } from 'ionicons';
-import { trashOutline, pricetagOutline, eyeOutline, trendingDownOutline, cartOutline } from 'ionicons/icons';
+import {
+  trashOutline, pricetagOutline, eyeOutline,
+  trendingDownOutline, notificationsOutline,
+} from 'ionicons/icons';
 import { WatchlistService, WatchlistItem } from '../core/services/watchlist';
 
 @Component({
   selector: 'app-watchlist',
   standalone: true,
   imports: [
-    DecimalPipe, RouterLink, ReactiveFormsModule,
+    DecimalPipe, RouterLink,
     IonContent, IonHeader, IonToolbar, IonTitle,
     IonButton, IonIcon, IonSpinner,
-    IonCard, IonCardContent, IonChip, IonModal,
-    IonItem, IonLabel, IonInput,
+    IonCard, IonCardContent, IonBadge,
+    
   ],
   templateUrl: './watchlist.page.html',
 })
 export class WatchlistPage implements OnInit {
-  editItem   = signal<WatchlistItem | null>(null);
-  isModalOpen = signal(false);
-
-  form = this.fb.group({
-    precio_objetivo: [null as number | null, [Validators.required, Validators.min(1)]],
-  });
-
   get items()   { return this.svc.items; }
   get loading() { return this.svc.loading; }
 
   constructor(
     public svc: WatchlistService,
-    private fb: FormBuilder,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
   ) {
-    addIcons({ trashOutline, pricetagOutline, eyeOutline, trendingDownOutline, cartOutline });
+    addIcons({ trashOutline, pricetagOutline, eyeOutline, trendingDownOutline, notificationsOutline });
   }
 
   ngOnInit() { this.svc.load(); }
 
-  openEdit(item: WatchlistItem) {
-    this.editItem.set(item);
-    this.form.patchValue({ precio_objetivo: item.precio_objetivo });
-    this.isModalOpen.set(true);
-  }
-
-  async saveEdit() {
-    const item = this.editItem();
-    if (!item || this.form.invalid) return;
-    await this.svc.upsert(item.ean, item.producto_nombre, this.form.value.precio_objetivo!);
-    this.isModalOpen.set(false);
-    const t = await this.toastCtrl.create({ message: 'Precio objetivo actualizado', duration: 2000, color: 'success' });
-    await t.present();
+  async editThreshold(item: WatchlistItem) {
+    const alert = await this.alertCtrl.create({
+      header: 'Umbral de descuento',
+      subHeader: item.producto_nombre,
+      message: `Actual: ${item.discount_threshold}% — Te avisamos cuando baje ese % o más.`,
+      inputs: [{
+        name:  'threshold',
+        type:  'number',
+        value: item.discount_threshold,
+        min:   5,
+        max:   80,
+        placeholder: '% de descuento (5–80)',
+      }],
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Guardar',
+          handler: async (val) => {
+            const pct = Math.min(80, Math.max(5, Number(val.threshold) || 10));
+            await this.svc.upsertByThreshold(item.ean, item.producto_nombre, pct);
+            const t = await this.toastCtrl.create({
+              message: `Umbral actualizado a ${pct}% 🔔`,
+              duration: 2000, color: 'success', position: 'top',
+            });
+            await t.present();
+          },
+        },
+      ],
+    });
+    await alert.present();
   }
 
   async confirmRemove(item: WatchlistItem) {
@@ -72,7 +83,9 @@ export class WatchlistPage implements OnInit {
           text: 'Eliminar', role: 'destructive',
           handler: async () => {
             await this.svc.remove(item.id);
-            const t = await this.toastCtrl.create({ message: 'Eliminado de watchlist', duration: 2000 });
+            const t = await this.toastCtrl.create({
+              message: 'Eliminado de watchlist', duration: 2000,
+            });
             await t.present();
           },
         },

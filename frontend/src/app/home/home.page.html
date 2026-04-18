@@ -1,9 +1,21 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>AhorroAR</ion-title>
-    <ion-button slot="end" fill="clear" routerLink="/tabs/bank-combo">
-      <ion-icon name="card-outline" />
+
+    <!-- Carrito con badge -->
+    <ion-button slot="end" fill="clear" routerLink="/tabs/lista" style="position:relative;">
+      <ion-icon name="cart-outline" />
+      @if (cartCount() > 0) {
+        <span style="position:absolute; top:6px; right:4px; background:var(--ion-color-danger);
+                      color:white; border-radius:50%; font-size:10px; font-weight:700;
+                      width:16px; height:16px; display:flex; align-items:center; justify-content:center;
+                      pointer-events:none;">
+          {{ cartCount() }}
+        </span>
+      }
     </ion-button>
+
+    <!-- Perfil -->
     <ion-button slot="end" fill="clear" routerLink="/tabs/profile">
       <ion-icon name="person-outline" />
     </ion-button>

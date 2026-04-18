@@ -1,4 +1,7 @@
-import { Controller, Get, Post, Body, Param, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller, Get, Post, Body, Param,
+  Query, Req, UseGuards,
+} from '@nestjs/common';
 import { JwtGuard } from '../auth/jwt.guard';
 import { CommunityService } from './community.service';
 import { CreateReportDto } from './dto/create-report.dto';
@@ -8,13 +11,28 @@ export class CommunityController {
   constructor(private svc: CommunityService) {}
 
   @Get('reports')
-  getReports(@Query('ean') ean?: string, @Query('limit') limit?: string) {
+  getReports(
+    @Query('ean') ean?: string,
+    @Query('limit') limit?: string,
+  ) {
     return this.svc.getReports(ean, limit ? parseInt(limit) : 20);
   }
 
   @Get('leaderboard')
   getLeaderboard() {
     return this.svc.getLeaderboard();
+  }
+
+  
+  @Get('product-lookup/:ean')
+  lookupProduct(@Param('ean') ean: string) {
+    return this.svc.lookupProduct(ean);
+  }
+
+  
+  @Get('branch-search')
+  searchBranches(@Query('q') q: string) {
+    return this.svc.searchBranches(q ?? '');
   }
 
   @Post('reports')

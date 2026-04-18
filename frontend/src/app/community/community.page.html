@@ -24,7 +24,6 @@
 
 <ion-content>
 
-  <!-- Badges del usuario -->
   @if (userStats()?.badges?.length) {
     <div style="display:flex; gap:8px; padding:12px 16px 4px; overflow-x:auto; scrollbar-width:none;">
       @for (b of userStats()!.badges; track b.badge) {
@@ -41,38 +40,27 @@
     </div>
   }
 
-  @if (error()) {
-    <ion-text color="danger">
-      <p style="text-align:center; padding:20px;">{{ error() }}</p>
-    </ion-text>
-  }
-
   <!-- REPORTES -->
   @if (activeSegment() === 'reportes') {
     <div style="padding:8px 12px 80px;">
-
       @if (!loading() && !reports().length) {
         <p style="text-align:center; color:var(--ion-color-medium); padding:40px 0;">
           Sé el primero en reportar un precio 🏷️
         </p>
       }
-
       @for (r of reports(); track r.id) {
         <ion-card style="margin:8px 0; border-radius:12px;">
           <ion-card-content style="padding:12px;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
               <div style="flex:1; min-width:0;">
-                <p style="font-weight:600; font-size:14px; margin:0; white-space:nowrap;
-                           overflow:hidden; text-overflow:ellipsis;">
+                <p style="font-weight:600; font-size:14px; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                   {{ r.producto_nombre }}
                 </p>
                 <p style="font-size:12px; color:var(--ion-color-medium); margin:4px 0 0;">
                   {{ r.cadena }}@if (r.sucursal) { · {{ r.sucursal }} }
                 </p>
                 @if (r.direccion) {
-                  <p style="font-size:11px; color:var(--ion-color-medium); margin:2px 0 0;">
-                    {{ r.direccion }}
-                  </p>
+                  <p style="font-size:11px; color:var(--ion-color-medium); margin:2px 0 0;">{{ r.direccion }}</p>
                 }
                 <div style="display:flex; align-items:center; gap:6px; margin-top:4px;">
                   <span style="font-size:11px; color:var(--ion-color-medium);">{{ timeAgo(r.created_at) }}</span>
@@ -85,8 +73,7 @@
                 <p style="font-weight:800; font-size:20px; color:var(--ion-color-success); margin:0;">
                   ${{ r.precio | number }}
                 </p>
-                <ion-button
-                  fill="clear" size="small" (click)="upvote(r.id)"
+                <ion-button fill="clear" size="small" (click)="upvote(r.id)"
                   [disabled]="svc.hasUpvoted(r.id)" style="height:28px; margin-top:4px;">
                   <ion-icon name="thumbs-up-outline" slot="start"
                     [color]="svc.hasUpvoted(r.id) ? 'primary' : 'medium'" />
@@ -103,9 +90,6 @@
   <!-- RANKING -->
   @if (activeSegment() === 'ranking') {
     <div style="padding:8px 12px 80px;">
-      <p style="font-size:13px; color:var(--ion-color-medium); margin:8px 0 12px;">
-        Top contribuidores de la comunidad
-      </p>
       @for (user of leaderboard(); track user.user_id; let i = $index) {
         <ion-card style="margin:8px 0; border-radius:12px;"
           [style.border]="i < 3 ? '1px solid var(--ion-color-warning)' : ''">
@@ -115,12 +99,8 @@
                 {{ i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '#' + (i + 1) }}
               </span>
               <div style="flex:1;">
-                <p style="font-weight:600; font-size:14px; margin:0;">
-                  Usuario {{ user.user_id.slice(0, 8) }}...
-                </p>
-                <p style="font-size:12px; color:var(--ion-color-medium); margin:2px 0 0;">
-                  {{ user.reports_count }} reportes enviados
-                </p>
+                <p style="font-weight:600; font-size:14px; margin:0;">Usuario {{ user.user_id.slice(0,8) }}...</p>
+                <p style="font-size:12px; color:var(--ion-color-medium); margin:2px 0 0;">{{ user.reports_count }} reportes</p>
               </div>
               <ion-chip color="primary" style="height:28px; font-size:14px; font-weight:700;">
                 {{ user.points }} pts
@@ -133,14 +113,14 @@
   }
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button (click)="isModalOpen.set(true)">
+    <ion-fab-button (click)="openModal()">
       <ion-icon name="add-outline" />
     </ion-fab-button>
   </ion-fab>
 
 </ion-content>
 
-<!-- Modal: reportar precio -->
+<!-- ── Modal: reportar precio ─────────────────────────────────────────────── -->
 <ion-modal [isOpen]="isModalOpen()" (didDismiss)="isModalOpen.set(false)">
   <ng-template>
     <ion-header>
@@ -157,45 +137,112 @@
 
       <form [formGroup]="form" (ngSubmit)="submitReport()">
 
+        <!-- EAN con lookup automático -->
         <ion-item>
-          <ion-label position="floating">EAN / Código de barras</ion-label>
-          <ion-input type="number" inputmode="numeric" formControlName="ean" />
+          <ion-label position="stacked">EAN / Código de barras *</ion-label>
+          <ion-input
+            type="number"
+            inputmode="numeric"
+            formControlName="ean"
+            placeholder="ej: 7790070009084"
+            (ionInput)="onEanInput($event)" />
+          @if (loadingProduct()) {
+            <ion-spinner slot="end" name="crescent" style="width:20px;height:20px;" />
+          }
+          @if (productFound()) {
+            <ion-icon slot="end" name="checkmark-circle" color="success" />
+          }
         </ion-item>
 
+        <!-- Preview del producto encontrado -->
+        @if (productFound()) {
+          <div style="display:flex; align-items:center; gap:10px; padding:10px 16px;
+                       background:var(--ion-color-light); border-radius:8px; margin:6px 0;">
+            <img [src]="productFound()!.imagen" style="width:44px; height:44px; object-fit:contain;"
+                 onerror="this.style.display='none'" />
+            <div>
+              <p style="font-weight:600; font-size:13px; margin:0;">{{ productFound()!.nombre }}</p>
+              @if (productFound()!.marca) {
+                <p style="font-size:11px; color:var(--ion-color-medium); margin:2px 0 0;">{{ productFound()!.marca }}</p>
+              }
+            </div>
+          </div>
+        }
+        @if (eanTouched() && !productFound() && !loadingProduct()) {
+          <ion-note color="medium" style="padding:0 16px; font-size:12px;">
+            No encontrado en Precios Claros — completá el nombre manualmente.
+          </ion-note>
+        }
+
+        <!-- Nombre del producto (editable / pre-llenado) -->
         <ion-item style="margin-top:8px;">
-          <ion-label position="floating">Nombre del producto</ion-label>
-          <ion-input formControlName="producto_nombre" />
+          <ion-label position="stacked">Nombre del producto *</ion-label>
+          <ion-input formControlName="producto_nombre" placeholder="ej: Leche La Serenísima 1L" />
         </ion-item>
 
+        <!-- Precio -->
         <ion-item style="margin-top:8px;">
-          <ion-label>Cadena</ion-label>
-          <ion-select formControlName="cadena" placeholder="Seleccioná">
-            @for (c of CADENAS; track c) {
-              <ion-select-option [value]="c">{{ c }}</ion-select-option>
+          <ion-label position="stacked">Precio que viste ($) *</ion-label>
+          <ion-input type="number" inputmode="decimal" formControlName="precio" placeholder="ej: 1250" />
+        </ion-item>
+
+        <!-- Sucursal: búsqueda con autocomplete -->
+        <ion-item style="margin-top:8px;">
+          <ion-label position="stacked">Sucursal (opcional)</ion-label>
+          <ion-input
+            formControlName="branch_query"
+            placeholder="Nombre, dirección o número de sucursal"
+            (ionInput)="onBranchInput($event)" />
+          @if (loadingBranch()) {
+            <ion-spinner slot="end" name="crescent" style="width:20px;height:20px;" />
+          }
+        </ion-item>
+
+        <!-- Dropdown sucursales -->
+        @if (branchResults().length > 0) {
+          <ion-list style="border-radius:8px; margin:0 0 8px;">
+            @for (b of branchResults(); track b.id) {
+              <ion-item button (click)="selectBranch(b)" lines="full">
+                <ion-icon name="storefront" slot="start" color="medium" />
+                <ion-label>
+                  <p style="font-size:13px; font-weight:600;">{{ b.cadena }} — {{ b.nombre }}</p>
+                  <p style="font-size:11px; color:var(--ion-color-medium);">{{ b.direccion }}</p>
+                </ion-label>
+              </ion-item>
             }
-          </ion-select>
-        </ion-item>
+          </ion-list>
+        }
 
-        <ion-item style="margin-top:8px;">
-          <ion-label position="floating">Precio que viste ($)</ion-label>
-          <ion-input type="number" inputmode="decimal" formControlName="precio" />
-        </ion-item>
+        <!-- Sucursal seleccionada -->
+        @if (selectedBranch()) {
+          <div style="display:flex; align-items:center; gap:8px; padding:8px 16px;
+                       background:var(--ion-color-success-tint); border-radius:8px; margin-bottom:8px;">
+            <ion-icon name="checkmark-circle" color="success" />
+            <span style="flex:1; font-size:12px;">{{ selectedBranch()!.cadena }} — {{ selectedBranch()!.direccion }}</span>
+            <ion-button fill="clear" size="small" (click)="clearBranch()">
+              <ion-icon name="close-circle" color="medium" />
+            </ion-button>
+          </div>
+        }
 
-        <ion-item style="margin-top:8px;">
-          <ion-label position="floating">Sucursal (opcional)</ion-label>
-          <ion-input formControlName="sucursal" />
-        </ion-item>
-
-        <ion-item style="margin-top:8px;">
-          <ion-label position="floating">Dirección (opcional)</ion-label>
-          <ion-input formControlName="direccion" />
-        </ion-item>
+        <!-- Si no hay autocomplete, input manual de cadena -->
+        @if (!selectedBranch()) {
+          <ion-item style="margin-top:4px;">
+            <ion-label>Cadena *</ion-label>
+            <ion-select formControlName="cadena" placeholder="Seleccioná">
+              @for (c of CADENAS; track c) {
+                <ion-select-option [value]="c">{{ c }}</ion-select-option>
+              }
+            </ion-select>
+          </ion-item>
+        }
 
         <ion-button
           expand="block" type="submit"
           style="margin-top:24px;"
           [disabled]="form.invalid || submitting()">
-          @if (submitting()) { <ion-spinner name="crescent" /> } @else { Reportar precio }
+          @if (submitting()) { <ion-spinner name="crescent" /> }
+          @else { Reportar precio }
         </ion-button>
 
       </form>

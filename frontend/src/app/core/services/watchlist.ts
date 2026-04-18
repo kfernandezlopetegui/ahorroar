@@ -9,7 +9,9 @@ export interface WatchlistItem {
   user_id: string;
   ean: string;
   producto_nombre: string;
-  precio_objetivo: number;
+  precio_objetivo?: number;
+  discount_threshold: number;
+  last_known_price?: number;
   activa: boolean;
   created_at: string;
 }
@@ -37,7 +39,9 @@ export class WatchlistService {
     this.error.set('');
     try {
       const h = await this.headers();
-      const data = await firstValueFrom(this.http.get<WatchlistItem[]>(BASE, { headers: h }));
+      const data = await firstValueFrom(
+        this.http.get<WatchlistItem[]>(BASE, { headers: h }),
+      );
       this.items.set(data ?? []);
     } catch {
       this.error.set('No se pudo cargar la watchlist.');
@@ -46,10 +50,41 @@ export class WatchlistService {
     }
   }
 
-  async upsert(ean: string, producto_nombre: string, precio_objetivo: number) {
+  
+  async upsertByThreshold(
+    ean: string,
+    producto_nombre: string,
+    discount_threshold: number,
+  ): Promise<WatchlistItem> {
     const h = await this.headers();
     const item = await firstValueFrom(
-      this.http.post<WatchlistItem>(BASE, { ean, producto_nombre, precio_objetivo }, { headers: h }),
+      this.http.post<WatchlistItem>(
+        BASE,
+        { ean, producto_nombre, discount_threshold },
+        { headers: h },
+      ),
+    );
+    this.items.update(list => {
+      const idx = list.findIndex(i => i.ean === ean);
+      if (idx >= 0) { const n = [...list]; n[idx] = item; return n; }
+      return [item, ...list];
+    });
+    return item;
+  }
+
+  
+  async upsert(
+    ean: string,
+    producto_nombre: string,
+    precio_objetivo: number,
+  ): Promise<WatchlistItem> {
+    const h = await this.headers();
+    const item = await firstValueFrom(
+      this.http.post<WatchlistItem>(
+        BASE,
+        { ean, producto_nombre, precio_objetivo },
+        { headers: h },
+      ),
     );
     this.items.update(list => {
       const idx = list.findIndex(i => i.ean === ean);
@@ -65,6 +100,6 @@ export class WatchlistService {
     this.items.update(list => list.filter(i => i.id !== id));
   }
 
-  isWatching(ean: string) { return this.items().some(i => i.ean === ean); }
+  isWatching(ean: string) { return this.items().some(i => i.ean === ean && i.activa); }
   getItem(ean: string)     { return this.items().find(i => i.ean === ean); }
 }

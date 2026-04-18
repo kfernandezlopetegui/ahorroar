@@ -18,12 +18,23 @@ export class WatchlistService {
   }
 
   async upsert(userId: string, dto: CreateWatchlistDto) {
+    const payload: Record<string, any> = {
+      user_id:         userId,
+      ean:             dto.ean,
+      producto_nombre: dto.producto_nombre,
+      activa:          true,
+    };
+
+    if (dto.discount_threshold != null) {
+      payload['discount_threshold'] = dto.discount_threshold;
+    }
+    if (dto.precio_objetivo != null) {
+      payload['precio_objetivo'] = dto.precio_objetivo;
+    }
+
     const { data, error } = await this.supabase.client
       .from('watchlist')
-      .upsert(
-        { user_id: userId, ...dto, activa: true },
-        { onConflict: 'user_id,ean' },
-      )
+      .upsert(payload, { onConflict: 'user_id,ean' })
       .select()
       .single();
     if (error) throw error;
@@ -40,7 +51,6 @@ export class WatchlistService {
     return { ok: true };
   }
 
-  // usado por jobs internos
   async getAllActive() {
     const { data, error } = await this.supabase.client
       .from('watchlist')
