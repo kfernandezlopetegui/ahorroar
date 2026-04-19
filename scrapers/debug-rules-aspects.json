@@ -1,0 +1,5393 @@
+[
+  {
+    "aspect": {
+      "filters": [
+        {
+          "dateTo": {
+            "gte": "now/d"
+          },
+          "category": [
+            {
+              "name": "SUPERMERCADOS",
+              "subcategory": []
+            }
+          ],
+          "dateFrom": {
+            "lt": "now+5d/d"
+          },
+          "plan": [
+            "41"
+          ]
+        }
+      ],
+      "id": "01HBXF2F1PVJZ6KNV77S44HPBP",
+      "payload": [
+        "province",
+        "locality"
+      ],
+      "code": "para-tarjetear-la-compra-del-super",
+      "description": "Para tarjetear la compra del super",
+      "class": "IMPERSONATE_BUSINESS_RULE_CLASS",
+      "dispatchRule": false,
+      "enabled": true,
+      "order": 0,
+      "type": "BENEFIT_CATEGORY"
+    },
+    "binders": [
+      {
+        "commerceName": "Changomas",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/supermercados/hipermercados/hipermercados_2.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito",
+              "dinero",
+              "debito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/07/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/JUL",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "dinero",
+              "debito",
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 16,
+              "visible": true,
+              "description": "Exclusiva Turbo",
+              "url": "exclusiva-turbo"
+            },
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                2
+              ],
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 01/ABR al 30/ABR",
+              "daysApplied": [],
+              "type": 2
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "dinero",
+              "debito",
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                2
+              ],
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 01/ABR al 30/ABR",
+              "daysApplied": [],
+              "type": 2
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Changomas, ingresá y encontrá más beneficios.",
+        "weight": 125,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030678138300_bUnYHfgogk3JlhWP.png",
+        "id": "3fd0558b-7f78-438f-ba6d-4714e1cffaf7",
+        "title": "25% off y 12 cuotas cero interés",
+        "category": {
+          "sectorId": 550,
+          "name": "Supermercados",
+          "id": 101,
+          "subcategory": {
+            "name": "Hipermercados",
+            "id": "3",
+            "key": "HIPERMERCADOS"
+          },
+          "key": "SUPERMERCADOS"
+        },
+        "urlDetail": null,
+        "url": "changomas",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "$ 12.000, por persona, por semana",
+            "type": "refund"
+          },
+          {
+            "description": "Días seleccionados",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Jumbo",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/supermercados/hipermercados/hipermercados_5.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito",
+              "dinero",
+              "debito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito",
+              "dinero",
+              "debito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/07/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/JUL",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "dinero",
+              "debito",
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 16,
+              "visible": true,
+              "description": "Exclusiva Turbo",
+              "url": "exclusiva-turbo"
+            },
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                2
+              ],
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 01/ABR al 30/ABR",
+              "daysApplied": [],
+              "type": 2
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "dinero",
+              "debito",
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                2
+              ],
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 01/ABR al 30/ABR",
+              "daysApplied": [],
+              "type": 2
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Jumbo, ingresá y encontrá más beneficios.",
+        "weight": 125,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030590360763_IwbKhAqiWpl50LUB.png",
+        "id": "e40f78d8-5587-4c8e-b7aa-adaf77d267a0",
+        "title": "25% off y 12 cuotas cero interés",
+        "category": {
+          "sectorId": 550,
+          "name": "Supermercados",
+          "id": 101,
+          "subcategory": {
+            "name": "Hipermercados",
+            "id": "3",
+            "key": "HIPERMERCADOS"
+          },
+          "key": "SUPERMERCADOS"
+        },
+        "urlDetail": null,
+        "url": "jumbo",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "$ 12.000, por persona, por semana",
+            "type": "refund"
+          },
+          {
+            "description": "Días seleccionados",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Disco",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/supermercados/hipermercados/hipermercados_2.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito",
+              "dinero",
+              "debito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito",
+              "dinero",
+              "debito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/07/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/JUL",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "dinero",
+              "debito",
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 16,
+              "visible": true,
+              "description": "Exclusiva Turbo",
+              "url": "exclusiva-turbo"
+            },
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                2
+              ],
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 01/ABR al 30/ABR",
+              "daysApplied": [],
+              "type": 2
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "dinero",
+              "debito",
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                2
+              ],
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 01/ABR al 30/ABR",
+              "daysApplied": [],
+              "type": 2
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Disco, ingresá y encontrá más beneficios.",
+        "weight": 125,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030590360763_bnLZh2zri0W7FmSb.png",
+        "id": "37a014ba-1951-4069-a974-4961d9deafb5",
+        "title": "25% off y 12 cuotas cero interés",
+        "category": {
+          "sectorId": 550,
+          "name": "Supermercados",
+          "id": 101,
+          "subcategory": {
+            "name": "Hipermercados",
+            "id": "3",
+            "key": "HIPERMERCADOS"
+          },
+          "key": "SUPERMERCADOS"
+        },
+        "urlDetail": null,
+        "url": "disco",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "$ 12.000, por persona, por semana",
+            "type": "refund"
+          },
+          {
+            "description": "Días seleccionados",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Vea",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/supermercados/hipermercados/hipermercados_6.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito",
+              "dinero",
+              "debito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito",
+              "dinero",
+              "debito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/07/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/JUL",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "dinero",
+              "debito",
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 16,
+              "visible": true,
+              "description": "Exclusiva Turbo",
+              "url": "exclusiva-turbo"
+            },
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                2
+              ],
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 01/ABR al 30/ABR",
+              "daysApplied": [],
+              "type": 2
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "dinero",
+              "debito",
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                2
+              ],
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 01/ABR al 30/ABR",
+              "daysApplied": [],
+              "type": 2
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Vea, ingresá y encontrá más beneficios.",
+        "weight": 125,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030590360763_UqZBzVgn2dMkc4XC.png",
+        "id": "5e491e95-fbe2-4188-b087-99718fe56e0f",
+        "title": "25% off y 12 cuotas cero interés",
+        "category": {
+          "sectorId": 550,
+          "name": "Supermercados",
+          "id": 101,
+          "subcategory": {
+            "name": "Hipermercados",
+            "id": "3",
+            "key": "HIPERMERCADOS"
+          },
+          "key": "SUPERMERCADOS"
+        },
+        "urlDetail": null,
+        "url": "vea",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "$ 12.000, por persona, por semana",
+            "type": "refund"
+          },
+          {
+            "description": "Días seleccionados",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "La Anonima",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/supermercados/hipermercados/hipermercados_5.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/07/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/JUL",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En La Anonima, ingresá y encontrá más beneficios.",
+        "weight": 125,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030506730038_Jo4eZwSyzPo4uc3i.png",
+        "id": "58a23f53-11a9-4276-bcc6-1ab1ec0b1abb",
+        "title": "12 cuotas cero interés",
+        "category": {
+          "sectorId": 550,
+          "name": "Supermercados",
+          "id": 101,
+          "subcategory": {
+            "name": "Hipermercados",
+            "id": "3",
+            "key": "HIPERMERCADOS"
+          },
+          "key": "SUPERMERCADOS"
+        },
+        "urlDetail": null,
+        "url": "la_anonima",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Carrefour",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/supermercados/hipermercados/hipermercados_1.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito",
+              "dinero",
+              "debito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/07/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/JUL",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "dinero",
+              "debito",
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 16,
+              "visible": true,
+              "description": "Exclusiva Turbo",
+              "url": "exclusiva-turbo"
+            },
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                2
+              ],
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 01/ABR al 30/ABR",
+              "daysApplied": [],
+              "type": 2
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "dinero",
+              "debito",
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                2
+              ],
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 01/ABR al 30/ABR",
+              "daysApplied": [],
+              "type": 2
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "dinero"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                6
+              ],
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 01/ABR al 30/ABR",
+              "daysApplied": [],
+              "type": 2
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Carrefour, ingresá y encontrá más beneficios.",
+        "weight": 123,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030687310434_B9UF8hHz19MGE4Az.png",
+        "id": "32180adf-615a-4b57-8142-2b06c3bb67e6",
+        "title": "25% off y 4 cuotas cero interés",
+        "category": {
+          "sectorId": 550,
+          "name": "Supermercados",
+          "id": 101,
+          "subcategory": {
+            "name": "Hipermercados",
+            "id": "3",
+            "key": "HIPERMERCADOS"
+          },
+          "key": "SUPERMERCADOS"
+        },
+        "urlDetail": null,
+        "url": "carrefour",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "$ 12.000, por persona, por semana",
+            "type": "refund"
+          },
+          {
+            "description": "Días seleccionados",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Yaguar",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/supermercados/mayoristas/mayoristas_1.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "25/04/2026",
+              "weekdaysApplied": [
+                5,
+                6
+              ],
+              "type": 3,
+              "dateFrom": "03/04/2026",
+              "datesDescription": "Desde: 3/ABR al 25/ABR",
+              "daysApplied": [
+                "03/04/2026",
+                "04/04/2026",
+                "10/04/2026",
+                "11/04/2026",
+                "17/04/2026",
+                "18/04/2026",
+                "24/04/2026",
+                "25/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/07/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/JUL",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Yaguar, ingresá y encontrá más beneficios.",
+        "weight": 123,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030629642672_5bSq2owR21F0M41z.png",
+        "id": "e1560caa-22c6-43ef-b94e-b4847403219e",
+        "title": "4 cuotas cero interés",
+        "category": {
+          "sectorId": 730,
+          "name": "Supermercados",
+          "id": 101,
+          "subcategory": {
+            "name": "Mayoristas",
+            "id": "76",
+            "key": "MAYORISTAS"
+          },
+          "key": "SUPERMERCADOS"
+        },
+        "urlDetail": null,
+        "url": "yaguar",
+        "tags": [
+          {
+            "description": "Días seleccionados",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Diarco",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/supermercados/mayoristas/mayoristas_3.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                4,
+                5,
+                6,
+                7,
+                1,
+                2,
+                3
+              ],
+              "type": 2,
+              "dateFrom": "16/04/2026",
+              "datesDescription": "Desde: 16/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/07/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/JUL",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Diarco, ingresá y encontrá más beneficios.",
+        "weight": 123,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030607371799_wSsOwv6kR59LzmOV.png",
+        "id": "7898b78e-bf0e-4cc2-a40b-d44f5a8f6073",
+        "title": "6 cuotas cero interés",
+        "category": {
+          "sectorId": 730,
+          "name": "Supermercados",
+          "id": 101,
+          "subcategory": {
+            "name": "Mayoristas",
+            "id": "76",
+            "key": "MAYORISTAS"
+          },
+          "key": "SUPERMERCADOS"
+        },
+        "urlDetail": null,
+        "url": "diarco",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "aspect": {
+      "filters": [
+        {
+          "category": [
+            {
+              "name": "ELECTRO_Y_TECNOLOGIA",
+              "subcategory": []
+            }
+          ],
+          "dateTo": {
+            "gte": "now/d"
+          },
+          "dateFrom": {
+            "lt": "now+5d/d"
+          }
+        }
+      ],
+      "id": "01HBXF2F1P1PCAAK181W4Y5N9K",
+      "payload": [
+        "province",
+        "locality"
+      ],
+      "code": "cuotas-en-tecno-y-electro",
+      "description": "Cuotas en tecno y electro",
+      "class": "IMPERSONATE_BUSINESS_RULE_CLASS",
+      "dispatchRule": false,
+      "enabled": true,
+      "order": 2,
+      "type": "BENEFIT_CATEGORY"
+    },
+    "binders": [
+      {
+        "commerceName": "Cetrogar",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/electro_y_tecnologia/electrodomesticos/electrodomesticos_5.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 15,
+              "visible": false,
+              "description": "Especial",
+              "url": "especial"
+            },
+            "days": {
+              "dateTo": "25/04/2026",
+              "weekdaysApplied": [
+                6,
+                7,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "type": 2,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 25/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Cetrogar, ingresá y encontrá más beneficios.",
+        "weight": 130,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/commerce_30592845748_bYjnYAWkzaPEiD2k.png",
+        "id": "1fe20f90-89fd-4177-b57a-42afc1a12a0f",
+        "title": "14 cuotas cero interés",
+        "category": {
+          "sectorId": 60,
+          "name": "Electro y tecnología",
+          "id": 102,
+          "subcategory": {
+            "name": "Electrodomésticos",
+            "id": "27",
+            "key": "ELECTRODOMESTICOS"
+          },
+          "key": "ELECTRO_Y_TECNOLOGIA"
+        },
+        "urlDetail": null,
+        "url": "cetrogar",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Musimundo",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/electro_y_tecnologia/electrodomesticos/electrodomesticos_4.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 15,
+              "visible": false,
+              "description": "Especial",
+              "url": "especial"
+            },
+            "days": {
+              "dateTo": "25/04/2026",
+              "weekdaysApplied": [
+                6,
+                7,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "type": 2,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 25/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 15,
+              "visible": false,
+              "description": "Especial",
+              "url": "especial"
+            },
+            "days": {
+              "dateTo": "25/04/2026",
+              "weekdaysApplied": [
+                6,
+                7,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "type": 2,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 25/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Musimundo, ingresá y encontrá más beneficios.",
+        "weight": 130,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030543659734_1BCK4HP3iOPyOzm5.png",
+        "id": "c4349b06-c800-42ca-8161-c0838c9bf907",
+        "title": "14 cuotas cero interés",
+        "category": {
+          "sectorId": 60,
+          "name": "Electro y tecnología",
+          "id": 102,
+          "subcategory": {
+            "name": "Electrodomésticos",
+            "id": "27",
+            "key": "ELECTRODOMESTICOS"
+          },
+          "key": "ELECTRO_Y_TECNOLOGIA"
+        },
+        "urlDetail": null,
+        "url": "musimundo",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Megatone",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/electro_y_tecnologia/electrodomesticos/electrodomesticos_3.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 15,
+              "visible": false,
+              "description": "Especial",
+              "url": "especial"
+            },
+            "days": {
+              "dateTo": "25/04/2026",
+              "weekdaysApplied": [
+                6,
+                7,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "type": 2,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 25/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                1
+              ],
+              "type": 2,
+              "dateFrom": "14/04/2026",
+              "datesDescription": "Desde: 14/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 15,
+              "visible": false,
+              "description": "Especial",
+              "url": "especial"
+            },
+            "days": {
+              "dateTo": "25/04/2026",
+              "weekdaysApplied": [
+                6,
+                7,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "type": 2,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 25/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                1
+              ],
+              "type": 2,
+              "dateFrom": "14/04/2026",
+              "datesDescription": "Desde: 14/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Megatone, ingresá y encontrá más beneficios.",
+        "weight": 130,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030532847547_JBM3MhejgHj8x025.png",
+        "id": "0d47b6b0-e932-40a8-83e8-e5a4eb42e6e9",
+        "title": "14 cuotas cero interés",
+        "category": {
+          "sectorId": 60,
+          "name": "Electro y tecnología",
+          "id": 102,
+          "subcategory": {
+            "name": "Electrodomésticos",
+            "id": "27",
+            "key": "ELECTRODOMESTICOS"
+          },
+          "key": "ELECTRO_Y_TECNOLOGIA"
+        },
+        "urlDetail": null,
+        "url": "megatone",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Casa del Audio",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/electro_y_tecnologia/electrodomesticos/electrodomesticos_3.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 15,
+              "visible": false,
+              "description": "Especial",
+              "url": "especial"
+            },
+            "days": {
+              "dateTo": "25/04/2026",
+              "weekdaysApplied": [
+                6,
+                7,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "type": 2,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 25/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 15,
+              "visible": false,
+              "description": "Especial",
+              "url": "especial"
+            },
+            "days": {
+              "dateTo": "25/04/2026",
+              "weekdaysApplied": [
+                6,
+                7,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "type": 2,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 25/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Casa del Audio, ingresá y encontrá más beneficios.",
+        "weight": 130,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/commerce_33708711999_csabNftOWauXOIEM.png",
+        "id": "e311f988-8eb2-45bb-b647-4cab57b2b2a0",
+        "title": "14 cuotas cero interés",
+        "category": {
+          "sectorId": 60,
+          "name": "Electro y tecnología",
+          "id": 102,
+          "subcategory": {
+            "name": "Electrodomésticos",
+            "id": "27",
+            "key": "ELECTRODOMESTICOS"
+          },
+          "key": "ELECTRO_Y_TECNOLOGIA"
+        },
+        "urlDetail": null,
+        "url": "casa_del_audio",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Fravega",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/electro_y_tecnologia/electrodomesticos/electrodomesticos_4.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 15,
+              "visible": false,
+              "description": "Especial",
+              "url": "especial"
+            },
+            "days": {
+              "dateTo": "25/04/2026",
+              "weekdaysApplied": [
+                6,
+                7,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "type": 2,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 25/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Fravega, ingresá y encontrá más beneficios.",
+        "weight": 125,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030526874249_ReFIbKH7OF3NdaYm.png",
+        "id": "37eefeb2-c9d4-4677-8193-ca65540f9dea",
+        "title": "14 cuotas cero interés",
+        "category": {
+          "sectorId": 60,
+          "name": "Electro y tecnología",
+          "id": 102,
+          "subcategory": {
+            "name": "Electrodomésticos",
+            "id": "27",
+            "key": "ELECTRODOMESTICOS"
+          },
+          "key": "ELECTRO_Y_TECNOLOGIA"
+        },
+        "urlDetail": null,
+        "url": "fravega",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Samsung",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/electro_y_tecnologia/electrodomesticos/electrodomesticos_3.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Samsung, ingresá y encontrá más beneficios.",
+        "weight": 125,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/commerce_254225736_HcqWHmu73U5j6Qgw.png",
+        "id": "c333608f-cc03-4129-957f-821c46d7c9b5",
+        "title": "14 cuotas cero interés",
+        "category": {
+          "sectorId": 60,
+          "name": "Electro y tecnología",
+          "id": 102,
+          "subcategory": {
+            "name": "Electrodomésticos",
+            "id": "27",
+            "key": "ELECTRODOMESTICOS"
+          },
+          "key": "ELECTRO_Y_TECNOLOGIA"
+        },
+        "urlDetail": null,
+        "url": "samsung",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Whirlpool",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/electro_y_tecnologia/electrodomesticos/electrodomesticos_3.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/06/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/JUN",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/06/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/JUN",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/06/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/JUN",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Whirlpool, ingresá y encontrá más beneficios.",
+        "weight": 125,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/commerce_535040725_LdVE6Wzuh8fF0gwM.png",
+        "id": "8280c1fd-93e5-4c1d-a967-db86cb177283",
+        "title": "12 cuotas cero interés",
+        "category": {
+          "sectorId": 60,
+          "name": "Electro y tecnología",
+          "id": 102,
+          "subcategory": {
+            "name": "Electrodomésticos",
+            "id": "27",
+            "key": "ELECTRODOMESTICOS"
+          },
+          "key": "ELECTRO_Y_TECNOLOGIA"
+        },
+        "urlDetail": null,
+        "url": "whirlpool",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Naldo",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/electro_y_tecnologia/electrodomesticos/electrodomesticos_3.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 15,
+              "visible": false,
+              "description": "Especial",
+              "url": "especial"
+            },
+            "days": {
+              "dateTo": "25/04/2026",
+              "weekdaysApplied": [
+                6,
+                7,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "type": 2,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 25/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 15,
+              "visible": false,
+              "description": "Especial",
+              "url": "especial"
+            },
+            "days": {
+              "dateTo": "25/04/2026",
+              "weekdaysApplied": [
+                6,
+                7,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "type": 2,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 25/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Naldo, ingresá y encontrá más beneficios.",
+        "weight": 125,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/commerce_30697465983_9NsCODU5M5xgwcUX.png",
+        "id": "63aa88a5-f62b-4ae0-990b-9fd54f505980",
+        "title": "14 cuotas cero interés",
+        "category": {
+          "sectorId": 60,
+          "name": "Electro y tecnología",
+          "id": 102,
+          "subcategory": {
+            "name": "Electrodomésticos",
+            "id": "27",
+            "key": "ELECTRODOMESTICOS"
+          },
+          "key": "ELECTRO_Y_TECNOLOGIA"
+        },
+        "urlDetail": null,
+        "url": "naldo",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "aspect": {
+      "filters": [
+        {
+          "category": [
+            {
+              "name": "VIAJES_Y_TURISMO",
+              "subcategory": []
+            }
+          ],
+          "dateTo": {
+            "gte": "now/d"
+          }
+        }
+      ],
+      "id": "01HBXF2F1PY143QC4Z1WYPJ03S",
+      "payload": [
+        "province",
+        "locality"
+      ],
+      "code": "cuotas-y-descuentos-en-viajes",
+      "description": "Cuotas y descuentos en viajes",
+      "class": "IMPERSONATE_BUSINESS_RULE_CLASS",
+      "dispatchRule": false,
+      "enabled": true,
+      "order": 2,
+      "type": "BENEFIT_CATEGORY"
+    },
+    "binders": [
+      {
+        "commerceName": "Aerolineas Argentinas",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/viajes_y_turismo/aerolineas/aerolineas_3.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 15,
+              "visible": false,
+              "description": "Especial",
+              "url": "especial"
+            },
+            "days": {
+              "dateTo": "19/04/2026",
+              "weekdaysApplied": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "type": 2,
+              "dateFrom": "13/04/2026",
+              "datesDescription": "Desde: 13/ABR al 19/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "31/05/2026",
+              "weekdaysApplied": [
+                7,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "type": 2,
+              "dateFrom": "01/02/2026",
+              "datesDescription": "Desde: 1/FEB al 31/MAY",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "31/05/2026",
+              "weekdaysApplied": [
+                7,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "type": 2,
+              "dateFrom": "01/02/2026",
+              "datesDescription": "Desde: 1/FEB al 31/MAY",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Aerolineas Argentinas, ingresá y encontrá más beneficios.",
+        "weight": 129,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030641405554_PtrD4W8rtnkGINAr.png",
+        "id": "20286a1f-e075-48e7-81a5-0684613e69aa",
+        "title": "9 cuotas cero interés",
+        "category": {
+          "sectorId": 331,
+          "name": "Viajes y turismo",
+          "id": 117,
+          "subcategory": {
+            "name": "Aerolíneas",
+            "id": "75",
+            "key": "AEROLINEAS"
+          },
+          "key": "VIAJES_Y_TURISMO"
+        },
+        "urlDetail": null,
+        "url": "aerolineas_argentinas",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Viajes Naranjax",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/viajes_y_turismo/agencias_de_viajes/agencias_de_viajes_2.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                1
+              ],
+              "type": 2,
+              "dateFrom": "14/04/2026",
+              "datesDescription": "Desde: 14/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Viajes Naranjax.",
+        "weight": 125,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/commerce_555099953_NusNAsPPtysxtRVL.png",
+        "id": "5d4473fc-0205-495b-b359-44f867fa3215",
+        "title": "12 cuotas cero interés",
+        "category": {
+          "sectorId": 20,
+          "name": "Viajes y turismo",
+          "id": 117,
+          "subcategory": {
+            "name": "Agencias de viajes",
+            "id": "72",
+            "key": "AGENCIAS_DE_VIAJES"
+          },
+          "key": "VIAJES_Y_TURISMO"
+        },
+        "urlDetail": "12_cuotas_cero_interes-C",
+        "url": "viajes_naranjax",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "El Practico",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/viajes_y_turismo/transportes/transportes_2.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En El Practico.",
+        "weight": 124,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030652896444_TswLgekPza4qE5K4.png",
+        "id": "bb381fe3-edc3-4f8d-8a35-0ce6c611b484",
+        "title": "10% off y 6 cuotas cero interés",
+        "category": {
+          "sectorId": 574,
+          "name": "Viajes y turismo",
+          "id": 117,
+          "subcategory": {
+            "name": "Transportes",
+            "id": "73",
+            "key": "TRANSPORTES"
+          },
+          "key": "VIAJES_Y_TURISMO"
+        },
+        "urlDetail": "6_cuotas_cero_interes-10_de_descuento-C",
+        "url": "el_practico",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "General Urquiza Transportes",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/viajes_y_turismo/transportes/transportes_1.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En General Urquiza Transportes, ingresá y encontrá más beneficios.",
+        "weight": 124,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030546227665_FA2r5thC0O1kOYDz.png",
+        "id": "edb1c1d1-ed34-4f2b-bc9b-a439a5d05eb3",
+        "title": "10% off y 6 cuotas cero interés",
+        "category": {
+          "sectorId": 574,
+          "name": "Viajes y turismo",
+          "id": 117,
+          "subcategory": {
+            "name": "Transportes",
+            "id": "73",
+            "key": "TRANSPORTES"
+          },
+          "key": "VIAJES_Y_TURISMO"
+        },
+        "urlDetail": null,
+        "url": "general_urquiza_transportes",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "El Norte",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/viajes_y_turismo/transportes/transportes_2.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En El Norte, ingresá y encontrá más beneficios.",
+        "weight": 124,
+        "logo": "",
+        "id": "c0aed07b-75ba-40c9-8247-06540beb0358",
+        "title": "10% off y 6 cuotas cero interés",
+        "category": {
+          "sectorId": 574,
+          "name": "Viajes y turismo",
+          "id": 117,
+          "subcategory": {
+            "name": "Transportes",
+            "id": "73",
+            "key": "TRANSPORTES"
+          },
+          "key": "VIAJES_Y_TURISMO"
+        },
+        "urlDetail": null,
+        "url": "el_norte",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Flecha Bus",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/viajes_y_turismo/transportes/transportes_1.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Flecha Bus, ingresá y encontrá más beneficios.",
+        "weight": 124,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030611338844_kVRmyauZ8g1bc4Hh.png",
+        "id": "61efe06e-2791-4f6d-8142-3bfdb01b84df",
+        "title": "10% off y 6 cuotas cero interés",
+        "category": {
+          "sectorId": 574,
+          "name": "Viajes y turismo",
+          "id": 117,
+          "subcategory": {
+            "name": "Transportes",
+            "id": "73",
+            "key": "TRANSPORTES"
+          },
+          "key": "VIAJES_Y_TURISMO"
+        },
+        "urlDetail": null,
+        "url": "flecha_bus",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Chevallier",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/viajes_y_turismo/transportes/transportes_3.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Chevallier, ingresá y encontrá más beneficios.",
+        "weight": 124,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030707215689_dEHrbDavMwrGs2Af.png",
+        "id": "bb57a7fd-023e-491f-a9d5-4bc5b0dc4940",
+        "title": "10% off y 6 cuotas cero interés",
+        "category": {
+          "sectorId": 574,
+          "name": "Viajes y turismo",
+          "id": 117,
+          "subcategory": {
+            "name": "Transportes",
+            "id": "73",
+            "key": "TRANSPORTES"
+          },
+          "key": "VIAJES_Y_TURISMO"
+        },
+        "urlDetail": null,
+        "url": "chevallier",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "La Veloz del Norte",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/viajes_y_turismo/transportes/transportes_4.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En La Veloz del Norte, ingresá y encontrá más beneficios.",
+        "weight": 124,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030546221314_AvWEMw7WAVo2vogF.png",
+        "id": "d1375700-96e9-49c8-a986-860aa8d70fab",
+        "title": "10% off y 6 cuotas cero interés",
+        "category": {
+          "sectorId": 574,
+          "name": "Viajes y turismo",
+          "id": 117,
+          "subcategory": {
+            "name": "Transportes",
+            "id": "73",
+            "key": "TRANSPORTES"
+          },
+          "key": "VIAJES_Y_TURISMO"
+        },
+        "urlDetail": null,
+        "url": "la_veloz_del_norte",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "aspect": {
+      "filters": [
+        {
+          "category": [
+            {
+              "name": "HOGAR_Y_DECO",
+              "subcategory": []
+            }
+          ],
+          "dateTo": {
+            "gte": "now/d"
+          },
+          "dateFrom": {
+            "lt": "now+5d/d"
+          }
+        }
+      ],
+      "id": "01HBXF2F1Q6CWRRH8V2FB5DY0P",
+      "payload": [
+        "province",
+        "locality"
+      ],
+      "code": "cuotas-y-descuentos-en-hogar-y-jardin",
+      "description": "Cuotas y descuentos en hogar y jardín",
+      "class": "IMPERSONATE_BUSINESS_RULE_CLASS",
+      "dispatchRule": false,
+      "enabled": true,
+      "order": 3,
+      "type": "BENEFIT_CATEGORY"
+    },
+    "binders": [
+      {
+        "commerceName": "Simmons",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/hogar_y_deco/textiles_de_hogar/textiles_de_hogar_3.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Simmons, ingresá y encontrá más beneficios.",
+        "weight": 125,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030500625194_fBd42PcNPHccXMGJ.png",
+        "id": "37bbf224-9695-442f-bc57-542d3f21b9fd",
+        "title": "12 cuotas cero interés",
+        "category": {
+          "sectorId": 130,
+          "name": "Hogar y deco",
+          "id": 105,
+          "subcategory": {
+            "name": "Textiles de hogar",
+            "id": "43",
+            "key": "TEXTILES_DE_HOGAR"
+          },
+          "key": "HOGAR_Y_DECO"
+        },
+        "urlDetail": null,
+        "url": "simmons",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "La Cardeuse",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/hogar_y_deco/textiles_de_hogar/textiles_de_hogar_2.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En La Cardeuse, ingresá y encontrá más beneficios.",
+        "weight": 125,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0033644471069_gsgDAG8RTtIof1ay.png",
+        "id": "e1cefe44-bc11-42ac-a5d6-0917283694d3",
+        "title": "12 cuotas cero interés",
+        "category": {
+          "sectorId": 130,
+          "name": "Hogar y deco",
+          "id": 105,
+          "subcategory": {
+            "name": "Textiles de hogar",
+            "id": "43",
+            "key": "TEXTILES_DE_HOGAR"
+          },
+          "key": "HOGAR_Y_DECO"
+        },
+        "urlDetail": null,
+        "url": "la_cardeuse",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Shopgallery",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/hogar_y_deco/regalerias/regalerias_3.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "28/04/2026",
+              "weekdaysApplied": [
+                2
+              ],
+              "type": 3,
+              "dateFrom": "07/04/2026",
+              "datesDescription": "Desde: 7/ABR al 28/ABR",
+              "daysApplied": [
+                "07/04/2026",
+                "14/04/2026",
+                "21/04/2026",
+                "28/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Shopgallery.",
+        "weight": 122,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030701989194_tfiMQu0CDz9b32Y6.png",
+        "id": "9d1ab941-b526-4670-8be1-8ad9c3c5b0a1",
+        "title": "10% off y 9 cuotas cero interés",
+        "category": {
+          "sectorId": 470,
+          "name": "Hogar y deco",
+          "id": 105,
+          "subcategory": {
+            "name": "Regalerías",
+            "id": "46",
+            "key": "REGALERIAS"
+          },
+          "key": "HOGAR_Y_DECO"
+        },
+        "urlDetail": "9_cuotas_cero_interes-10_de_descuento-C",
+        "url": "shopgallery",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "$ 15.000, por transacción",
+            "type": "refund"
+          },
+          {
+            "description": "Los martes",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Essen",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/hogar_y_deco/bazar/bazar_1.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "23/04/2026",
+              "weekdaysApplied": [
+                4,
+                5,
+                6,
+                7,
+                1,
+                2,
+                3
+              ],
+              "type": 2,
+              "dateFrom": "02/04/2026",
+              "datesDescription": "Desde: 2/ABR al 23/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/06/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/JUN",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Essen, ingresá y encontrá más beneficios.",
+        "weight": 25,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/commerce_555068546_MPVHHRvFGp5hkV53.png",
+        "id": "971d56a6-b6ef-4640-9ee9-749ad995372c",
+        "title": "12 cuotas cero interés",
+        "category": {
+          "sectorId": 100,
+          "name": "Hogar y deco",
+          "id": 105,
+          "subcategory": {
+            "name": "Bazar",
+            "id": "44",
+            "key": "BAZAR"
+          },
+          "key": "HOGAR_Y_DECO"
+        },
+        "urlDetail": null,
+        "url": "essen",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Rosen",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/hogar_y_deco/decoracion/decoracion_3.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Rosen, ingresá y encontrá más beneficios.",
+        "weight": 25,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/commerce_288034817_0QG0KGjcIRKgJHG3.png",
+        "id": "93c9208d-a2c5-4bf7-b1cc-2eaeec03c91c",
+        "title": "12 cuotas cero interés",
+        "category": {
+          "sectorId": 420,
+          "name": "Hogar y deco",
+          "id": 105,
+          "subcategory": {
+            "name": "Decoración",
+            "id": "45",
+            "key": "DECORACION"
+          },
+          "key": "HOGAR_Y_DECO"
+        },
+        "urlDetail": null,
+        "url": "rosen",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Suavestar",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/hogar_y_deco/decoracion/decoracion_4.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Suavestar, ingresá y encontrá más beneficios.",
+        "weight": 25,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/commerce_292034438_VKrwotQwkuCsFFL5.png",
+        "id": "d2c096a4-681e-4816-a118-a619427cb213",
+        "title": "12 cuotas cero interés",
+        "category": {
+          "sectorId": 420,
+          "name": "Hogar y deco",
+          "id": 105,
+          "subcategory": {
+            "name": "Decoración",
+            "id": "45",
+            "key": "DECORACION"
+          },
+          "key": "HOGAR_Y_DECO"
+        },
+        "urlDetail": null,
+        "url": "suavestar",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Belmo - Caballito",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/hogar_y_deco/textiles_de_hogar/textiles_de_hogar_3.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Belmo - Caballito, ingresá y encontrá más beneficios.",
+        "weight": 25,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030500625194_fBd42PcNPHccXMGJ.png",
+        "id": "7615a51b-091f-47fe-b732-eec98e1668e7",
+        "title": "12 cuotas cero interés",
+        "category": {
+          "sectorId": 130,
+          "name": "Hogar y deco",
+          "id": 105,
+          "subcategory": {
+            "name": "Textiles de hogar",
+            "id": "43",
+            "key": "TEXTILES_DE_HOGAR"
+          },
+          "key": "HOGAR_Y_DECO"
+        },
+        "urlDetail": null,
+        "url": "belmo__caballito",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Deventas Sa",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/hogar_y_deco/bazar/bazar_4.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Deventas Sa, ingresá y encontrá más beneficios.",
+        "weight": 25,
+        "logo": "",
+        "id": "9b96f2bc-8f9b-4f52-8040-798d868b53b0",
+        "title": "10 cuotas cero interés",
+        "category": {
+          "sectorId": 100,
+          "name": "Hogar y deco",
+          "id": 105,
+          "subcategory": {
+            "name": "Bazar",
+            "id": "44",
+            "key": "BAZAR"
+          },
+          "key": "HOGAR_Y_DECO"
+        },
+        "urlDetail": null,
+        "url": "deventas_sa",
+        "tags": [
+          {
+            "description": "Todos los dias",
+            "type": "days"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "aspect": {
+      "filters": [
+        {
+          "category": [
+            {
+              "name": "MODA_Y_ACCESORIOS",
+              "subcategory": [
+                "INDUMENTARIA_DEPORTIVA"
+              ]
+            }
+          ],
+          "dateTo": {
+            "gte": "now/d"
+          },
+          "dateFrom": {
+            "lt": "now+5d/d"
+          }
+        }
+      ],
+      "id": "01HBXF2F1Q7VMAYY7A8QGZTZY5",
+      "payload": [
+        "province",
+        "locality"
+      ],
+      "code": "cuotas-y-descuentos-en-indumentaria-deportiva",
+      "description": "Cuotas y descuentos en indumentaria deportiva",
+      "class": "IMPERSONATE_BUSINESS_RULE_CLASS",
+      "dispatchRule": false,
+      "enabled": true,
+      "order": 4,
+      "type": "BENEFIT_CATEGORY"
+    },
+    "binders": [
+      {
+        "commerceName": "All Sport",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/moda_y_accesorios/indumentaria_deportiva/indumentaria_deportiva_2.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "28/04/2026",
+              "weekdaysApplied": [
+                2
+              ],
+              "type": 3,
+              "dateFrom": "07/04/2026",
+              "datesDescription": "Desde: 7/ABR al 28/ABR",
+              "daysApplied": [
+                "07/04/2026",
+                "14/04/2026",
+                "21/04/2026",
+                "28/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En All Sport.",
+        "weight": 124,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/commerce_100792461_UtCAhvg5rwsAIIMg.png",
+        "id": "d07111cd-1a9c-47c7-886a-c6ba1a4fb5be",
+        "title": "10% off y 6 cuotas cero interés",
+        "category": {
+          "sectorId": 155,
+          "name": "Moda y accesorios",
+          "id": 100,
+          "subcategory": {
+            "name": "Indumentaria deportiva",
+            "id": "47",
+            "key": "INDUMENTARIA_DEPORTIVA"
+          },
+          "key": "MODA_Y_ACCESORIOS"
+        },
+        "urlDetail": "6_cuotas_cero_interes-10_de_descuento-C",
+        "url": "all_sport",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "Los martes",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Rossetti Deportes",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/moda_y_accesorios/indumentaria_deportiva/indumentaria_deportiva_3.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "28/04/2026",
+              "weekdaysApplied": [
+                2
+              ],
+              "type": 3,
+              "dateFrom": "07/04/2026",
+              "datesDescription": "Desde: 7/ABR al 28/ABR",
+              "daysApplied": [
+                "07/04/2026",
+                "14/04/2026",
+                "21/04/2026",
+                "28/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Rossetti Deportes.",
+        "weight": 124,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/commerce_280028180_3Vc0KCm5Q6bFG2Sc.png",
+        "id": "b5e90b0d-d6c9-478f-843d-76e0f170c89e",
+        "title": "10% off y 6 cuotas cero interés",
+        "category": {
+          "sectorId": 155,
+          "name": "Moda y accesorios",
+          "id": 100,
+          "subcategory": {
+            "name": "Indumentaria deportiva",
+            "id": "47",
+            "key": "INDUMENTARIA_DEPORTIVA"
+          },
+          "key": "MODA_Y_ACCESORIOS"
+        },
+        "urlDetail": "6_cuotas_cero_interes-10_de_descuento-C",
+        "url": "rossetti_deportes",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "Los martes",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Ver",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/moda_y_accesorios/indumentaria/indumentaria_5.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "20/04/2026",
+              "weekdaysApplied": [
+                6,
+                7,
+                1
+              ],
+              "type": 3,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 20/ABR",
+              "daysApplied": [
+                "18/04/2026",
+                "19/04/2026",
+                "20/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "25/04/2026",
+              "weekdaysApplied": [
+                5,
+                6
+              ],
+              "type": 3,
+              "dateFrom": "03/04/2026",
+              "datesDescription": "Desde: 3/ABR al 25/ABR",
+              "daysApplied": [
+                "03/04/2026",
+                "04/04/2026",
+                "10/04/2026",
+                "11/04/2026",
+                "17/04/2026",
+                "18/04/2026",
+                "24/04/2026",
+                "25/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Ver, ingresá y encontrá más beneficios.",
+        "weight": 124,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0033542082459_YdHpwEPdcL7gJ6x2.png",
+        "id": "3365b67d-dcd7-404b-b74d-119ca6cac2c1",
+        "title": "20% off y 5 cuotas cero interés",
+        "category": {
+          "sectorId": 390,
+          "name": "Moda y accesorios",
+          "id": 100,
+          "subcategory": {
+            "name": "Indumentaria",
+            "id": "55",
+            "key": "INDUMENTARIA"
+          },
+          "key": "MODA_Y_ACCESORIOS"
+        },
+        "urlDetail": null,
+        "url": "ver",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "Días seleccionados",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Grisino",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/moda_y_accesorios/ninos/ninos_1.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/06/2026",
+              "weekdaysApplied": [
+                3,
+                1,
+                2
+              ],
+              "type": 3,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/JUN",
+              "daysApplied": [
+                "01/04/2026",
+                "06/04/2026",
+                "07/04/2026",
+                "08/04/2026",
+                "13/04/2026",
+                "14/04/2026",
+                "15/04/2026",
+                "20/04/2026",
+                "21/04/2026",
+                "22/04/2026",
+                "27/04/2026",
+                "28/04/2026",
+                "29/04/2026",
+                "04/05/2026",
+                "05/05/2026",
+                "06/05/2026",
+                "11/05/2026",
+                "12/05/2026",
+                "13/05/2026",
+                "18/05/2026",
+                "19/05/2026",
+                "20/05/2026",
+                "25/05/2026",
+                "26/05/2026",
+                "27/05/2026",
+                "01/06/2026",
+                "02/06/2026",
+                "03/06/2026",
+                "08/06/2026",
+                "09/06/2026",
+                "10/06/2026",
+                "15/06/2026",
+                "16/06/2026",
+                "17/06/2026",
+                "22/06/2026",
+                "23/06/2026",
+                "24/06/2026",
+                "29/06/2026",
+                "30/06/2026"
+              ]
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "26/04/2026",
+              "weekdaysApplied": [
+                6,
+                7
+              ],
+              "type": 3,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 26/ABR",
+              "daysApplied": [
+                "18/04/2026",
+                "19/04/2026",
+                "25/04/2026",
+                "26/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                6,
+                7,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "type": 2,
+              "dateFrom": "11/04/2026",
+              "datesDescription": "Desde: 11/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/06/2026",
+              "weekdaysApplied": [
+                6,
+                7,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "type": 2,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 30/JUN",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "24/04/2026",
+              "weekdaysApplied": [
+                5
+              ],
+              "type": 3,
+              "dateFrom": "03/04/2026",
+              "datesDescription": "Desde: 3/ABR al 24/ABR",
+              "daysApplied": [
+                "03/04/2026",
+                "10/04/2026",
+                "17/04/2026",
+                "24/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/06/2026",
+              "weekdaysApplied": [
+                3,
+                1,
+                2
+              ],
+              "type": 3,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/JUN",
+              "daysApplied": [
+                "01/04/2026",
+                "06/04/2026",
+                "07/04/2026",
+                "08/04/2026",
+                "13/04/2026",
+                "14/04/2026",
+                "15/04/2026",
+                "20/04/2026",
+                "21/04/2026",
+                "22/04/2026",
+                "27/04/2026",
+                "28/04/2026",
+                "29/04/2026",
+                "04/05/2026",
+                "05/05/2026",
+                "06/05/2026",
+                "11/05/2026",
+                "12/05/2026",
+                "13/05/2026",
+                "18/05/2026",
+                "19/05/2026",
+                "20/05/2026",
+                "25/05/2026",
+                "26/05/2026",
+                "27/05/2026",
+                "01/06/2026",
+                "02/06/2026",
+                "03/06/2026",
+                "08/06/2026",
+                "09/06/2026",
+                "10/06/2026",
+                "15/06/2026",
+                "16/06/2026",
+                "17/06/2026",
+                "22/06/2026",
+                "23/06/2026",
+                "24/06/2026",
+                "29/06/2026",
+                "30/06/2026"
+              ]
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Grisino, ingresá y encontrá más beneficios.",
+        "weight": 123,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030710779062_dlCHEjuOTfe0LxCw.png",
+        "id": "e4e2ae7b-700e-4075-9871-0726e4c290fd",
+        "title": "20% off y Plan Zeta cero interés",
+        "category": {
+          "sectorId": 380,
+          "name": "Moda y accesorios",
+          "id": 100,
+          "subcategory": {
+            "name": "Niños",
+            "id": "49",
+            "key": "NINOS"
+          },
+          "key": "MODA_Y_ACCESORIOS"
+        },
+        "urlDetail": null,
+        "url": "grisino",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "$ 56.000, por transacción",
+            "type": "refund"
+          },
+          {
+            "description": "Días seleccionados",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Portsaid",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/moda_y_accesorios/indumentaria/indumentaria_6.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                7,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "type": 2,
+              "dateFrom": "01/03/2026",
+              "datesDescription": "Desde: 1/MAR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "26/04/2026",
+              "weekdaysApplied": [
+                6,
+                7
+              ],
+              "type": 3,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 26/ABR",
+              "daysApplied": [
+                "18/04/2026",
+                "19/04/2026",
+                "25/04/2026",
+                "26/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                7,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "type": 2,
+              "dateFrom": "01/03/2026",
+              "datesDescription": "Desde: 1/MAR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "31/05/2026",
+              "weekdaysApplied": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                1
+              ],
+              "type": 2,
+              "dateFrom": "07/04/2026",
+              "datesDescription": "Desde: 7/ABR al 31/MAY",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "25/04/2026",
+              "weekdaysApplied": [
+                5,
+                6
+              ],
+              "type": 3,
+              "dateFrom": "03/04/2026",
+              "datesDescription": "Desde: 3/ABR al 25/ABR",
+              "daysApplied": [
+                "03/04/2026",
+                "04/04/2026",
+                "10/04/2026",
+                "11/04/2026",
+                "17/04/2026",
+                "18/04/2026",
+                "24/04/2026",
+                "25/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                7,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "type": 2,
+              "dateFrom": "01/03/2026",
+              "datesDescription": "Desde: 1/MAR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "31/05/2026",
+              "weekdaysApplied": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                1
+              ],
+              "type": 2,
+              "dateFrom": "07/04/2026",
+              "datesDescription": "Desde: 7/ABR al 31/MAY",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Portsaid, ingresá y encontrá más beneficios.",
+        "weight": 123,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/commerce_550088386_Qo6EbjK2zqMkDWCa.png",
+        "id": "23cb51cc-a75e-4115-a3c8-c34c354df1b5",
+        "title": "20% off y Plan Zeta cero interés",
+        "category": {
+          "sectorId": 390,
+          "name": "Moda y accesorios",
+          "id": 100,
+          "subcategory": {
+            "name": "Indumentaria",
+            "id": "55",
+            "key": "INDUMENTARIA"
+          },
+          "key": "MODA_Y_ACCESORIOS"
+        },
+        "urlDetail": null,
+        "url": "portsaid",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "Días seleccionados",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Yagmour",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/moda_y_accesorios/indumentaria/indumentaria_2.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "26/04/2026",
+              "weekdaysApplied": [
+                6,
+                7
+              ],
+              "type": 3,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 26/ABR",
+              "daysApplied": [
+                "18/04/2026",
+                "19/04/2026",
+                "25/04/2026",
+                "26/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                7,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "type": 2,
+              "dateFrom": "01/03/2026",
+              "datesDescription": "Desde: 1/MAR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "31/05/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "15/04/2026",
+              "datesDescription": "Desde: 15/ABR al 31/MAY",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                6,
+                7,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "type": 2,
+              "dateFrom": "11/04/2026",
+              "datesDescription": "Desde: 11/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "25/04/2026",
+              "weekdaysApplied": [
+                5,
+                6
+              ],
+              "type": 3,
+              "dateFrom": "03/04/2026",
+              "datesDescription": "Desde: 3/ABR al 25/ABR",
+              "daysApplied": [
+                "03/04/2026",
+                "04/04/2026",
+                "10/04/2026",
+                "11/04/2026",
+                "17/04/2026",
+                "18/04/2026",
+                "24/04/2026",
+                "25/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Yagmour, ingresá y encontrá más beneficios.",
+        "weight": 123,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030578204713_5GLSCcAiS2zPdxJD.png",
+        "id": "628f94dd-4eb4-4a26-b90e-e2d5c333806c",
+        "title": "20% off y Plan Zeta cero interés",
+        "category": {
+          "sectorId": 390,
+          "name": "Moda y accesorios",
+          "id": 100,
+          "subcategory": {
+            "name": "Indumentaria",
+            "id": "55",
+            "key": "INDUMENTARIA"
+          },
+          "key": "MODA_Y_ACCESORIOS"
+        },
+        "urlDetail": null,
+        "url": "yagmour",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "Días seleccionados",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Xl Extra Large",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/moda_y_accesorios/marroquinerias/marroquinerias_3.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "26/04/2026",
+              "weekdaysApplied": [
+                6,
+                7
+              ],
+              "type": 3,
+              "dateFrom": "18/04/2026",
+              "datesDescription": "Desde: 18/ABR al 26/ABR",
+              "daysApplied": [
+                "18/04/2026",
+                "19/04/2026",
+                "25/04/2026",
+                "26/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Xl Extra Large.",
+        "weight": 123,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030703001633_S0tYG4S7507OOoSA.png",
+        "id": "4472dad3-8cb0-424b-aba6-a0ae014a6bb3",
+        "title": "5 cuotas cero interés",
+        "category": {
+          "sectorId": 350,
+          "name": "Moda y accesorios",
+          "id": 100,
+          "subcategory": {
+            "name": "Marroquinerías",
+            "id": "54",
+            "key": "MARROQUINERIAS"
+          },
+          "key": "MODA_Y_ACCESORIOS"
+        },
+        "urlDetail": "5_cuotas_cero_interes-C",
+        "url": "xl_extra_large",
+        "tags": [
+          {
+            "description": "Sábados y domingos",
+            "type": "days"
+          }
+        ]
+      },
+      {
+        "commerceName": "Macowens",
+        "backgroundImage": "https://promotion-featured-images.naranjax.com/categories/moda_y_accesorios/indumentaria/indumentaria_2.webp",
+        "plans": [
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": {
+              "code": 15,
+              "visible": false,
+              "description": "Especial",
+              "url": "especial"
+            },
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "19/04/2026",
+              "weekdaysApplied": [
+                5,
+                6,
+                7
+              ],
+              "type": 3,
+              "dateFrom": "17/04/2026",
+              "datesDescription": "Desde: 17/ABR al 19/ABR",
+              "daysApplied": [
+                "17/04/2026",
+                "18/04/2026",
+                "19/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "19/04/2026",
+              "weekdaysApplied": [
+                5,
+                6,
+                7
+              ],
+              "type": 3,
+              "dateFrom": "17/04/2026",
+              "datesDescription": "Desde: 17/ABR al 19/ABR",
+              "daysApplied": [
+                "17/04/2026",
+                "18/04/2026",
+                "19/04/2026"
+              ]
+            },
+            "status": "CURRENT"
+          },
+          {
+            "paymentMethods": [
+              "credito"
+            ],
+            "ephemeris": null,
+            "days": {
+              "dateTo": "30/04/2026",
+              "weekdaysApplied": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                1,
+                2
+              ],
+              "type": 2,
+              "dateFrom": "01/04/2026",
+              "datesDescription": "Desde: 1/ABR al 30/ABR",
+              "daysApplied": []
+            },
+            "status": "CURRENT"
+          }
+        ],
+        "subtitle": "En Macowens, ingresá y encontrá más beneficios.",
+        "weight": 123,
+        "logo": "https://merchants-api-statics.naranjax.com/commerces/logos/cuit_0030696666098_nSiLBOTCEfUVA8EJ.png",
+        "id": "bf4fda9a-8766-438a-a8a2-581b98e82333",
+        "title": "30% off y Plan Zeta cero interés",
+        "category": {
+          "sectorId": 410,
+          "name": "Moda y accesorios",
+          "id": 100,
+          "subcategory": {
+            "name": "Indumentaria",
+            "id": "55",
+            "key": "INDUMENTARIA"
+          },
+          "key": "MODA_Y_ACCESORIOS"
+        },
+        "urlDetail": null,
+        "url": "macowens",
+        "tags": [
+          {
+            "description": "Reintegro en el resumen de tu tarjeta",
+            "type": "accreditation"
+          },
+          {
+            "description": "$ 20.000, por transacción",
+            "type": "refund"
+          },
+          {
+            "description": "Días seleccionados",
+            "type": "days"
+          }
+        ]
+      }
+    ]
+  }
+]

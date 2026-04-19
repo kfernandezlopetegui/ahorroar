@@ -1,19 +1,31 @@
 {
-  "name": "scrapers",
+  "name": "ahorroar-scrapers",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Bank promotion scrapers for AhorroAR",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "scrape:galicia": "ts-node src/scrapers/galicia.ts",
+    "scrape:naranja": "ts-node src/scrapers/naranja.ts",
+    "scrape:bbva": "ts-node src/scrapers/bbva.ts",
+    "debug:galicia": "ts-node src/debug-galicia.ts",
+    "debug:naranja": "ts-node src/debug-naranja.ts",
+    "debug:bbva": "ts-node src/debug-bbva.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "axios": "^1.13.6",
-    "cheerio": "^1.2.0",
-    "dotenv": "^17.3.1",
-    "node-cron": "^4.2.1",
-    "playwright": "^1.58.2"
+    "@supabase/supabase-js": "^2.39.0",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.3.1",
+    "node-cron": "^3.0.3",
+    "playwright": "^1.40.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/node-cron": "^3.0.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   }
 }
