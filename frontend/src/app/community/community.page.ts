@@ -40,7 +40,7 @@ interface BranchResult {
     ReactiveFormsModule, DecimalPipe,
     IonContent, IonHeader, IonToolbar, IonTitle,
     IonCard, IonCardContent, IonButton, IonIcon,
-    IonSpinner, IonText, IonChip, IonBadge,
+    IonSpinner, IonChip, IonBadge,
     IonSegment, IonSegmentButton, IonLabel,
     IonFab, IonFabButton, IonModal, IonItem, IonInput,
     IonSelect, IonSelectOption, IonList, IonNote,
@@ -49,38 +49,38 @@ interface BranchResult {
 })
 export class CommunityPage implements OnInit, OnDestroy {
   activeSegment = signal<'reportes' | 'ranking'>('reportes');
-  isModalOpen   = signal(false);
-  submitting    = signal(false);
-  leaderboard   = signal<any[]>([]);
-  badgeInfo     = BADGE_INFO;
+  isModalOpen = signal(false);
+  submitting = signal(false);
+  leaderboard = signal<any[]>([]);
+  badgeInfo = BADGE_INFO;
 
   // Autocomplete estado
-  productFound    = signal<ProductLookup | null>(null);
-  loadingProduct  = signal(false);
-  branchResults   = signal<BranchResult[]>([]);
-  selectedBranch  = signal<BranchResult | null>(null);
-  loadingBranch   = signal(false);
-  eanTouched      = signal(false);
+  productFound = signal<ProductLookup | null>(null);
+  loadingProduct = signal(false);
+  branchResults = signal<BranchResult[]>([]);
+  selectedBranch = signal<BranchResult | null>(null);
+  loadingBranch = signal(false);
+  eanTouched = signal(false);
 
-  private ean$     = new Subject<string>();
-  private branch$  = new Subject<string>();
+  private ean$ = new Subject<string>();
+  private branch$ = new Subject<string>();
   private destroy$ = new Subject<void>();
 
-  CADENAS = ['Carrefour','Coto','Disco','Jumbo','DIA','La Anónima','Vea','Walmart','Otro'];
+  CADENAS = ['Carrefour', 'Coto', 'Disco', 'Jumbo', 'DIA', 'La Anónima', 'Vea', 'Walmart', 'Otro'];
 
   form = this.fb.group({
-    ean:             ['', Validators.required],
+    ean: ['', Validators.required],
     producto_nombre: ['', Validators.required],
-    cadena:          ['', Validators.required],
-    precio:          [null as number | null, [Validators.required, Validators.min(0.01)]],
-    sucursal:        [''],
-    direccion:       [''],
-    branch_query:    [''],
+    cadena: ['', Validators.required],
+    precio: [null as number | null, [Validators.required, Validators.min(0.01)]],
+    sucursal: [''],
+    direccion: [''],
+    branch_query: [''],
   });
 
-  get reports()   { return this.svc.reports; }
-  get loading()   { return this.svc.loading; }
-  get error()     { return this.svc.error; }
+  get reports() { return this.svc.reports; }
+  get loading() { return this.svc.loading; }
+  get error() { return this.svc.error; }
   get userStats() { return this.svc.userStats; }
 
   constructor(
@@ -168,9 +168,9 @@ export class CommunityPage implements OnInit, OnDestroy {
     this.selectedBranch.set(b);
     this.branchResults.set([]);
     this.form.patchValue({
-      cadena:       b.cadena,
-      sucursal:     b.nombre,
-      direccion:    b.direccion,
+      cadena: b.cadena,
+      sucursal: b.nombre,
+      direccion: b.direccion,
       branch_query: `${b.cadena} — ${b.direccion}`,
     });
   }
@@ -205,7 +205,12 @@ export class CommunityPage implements OnInit, OnDestroy {
     this.submitting.set(true);
     try {
       const { branch_query, ...rest } = this.form.value;
-      await this.svc.createReport(rest as any);
+      const payload = {
+        ...rest,
+        ean: String(rest.ean ?? '').trim(),          // forzar string
+        precio: Number(rest.precio),
+      };
+      await this.svc.createReport(payload as any);
       this.isModalOpen.set(false);
       this.form.reset();
       const t = await this.toastCtrl.create({
@@ -215,7 +220,8 @@ export class CommunityPage implements OnInit, OnDestroy {
     } catch (err: any) {
       const msg = err?.error?.message ?? err?.message ?? 'Error al enviar el reporte';
       const t = await this.toastCtrl.create({
-        message: msg, duration: 3000, color: 'danger', position: 'top',
+        message: Array.isArray(msg) ? msg.join(', ') : msg,
+        duration: 3000, color: 'danger', position: 'top',
       });
       await t.present();
     } finally {
