@@ -2,16 +2,20 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   IonContent, IonHeader, IonToolbar, IonTitle,
-  IonSearchbar, IonChip, IonCard,
-  IonCardHeader, IonCardTitle, IonCardContent,
-  IonBadge, IonSpinner, IonText, IonButton,
-  IonIcon, IonRefresher, IonRefresherContent,
+  IonSearchbar, IonChip, IonCard, IonCardHeader,
+  IonCardTitle, IonCardContent, IonBadge, IonSpinner,
+  IonText, IonButton, IonIcon, IonRefresher,
+  IonRefresherContent, IonInfiniteScroll,
+  IonInfiniteScrollContent, IonModal, IonNote,
 } from '@ionic/angular/standalone';
+import { DecimalPipe, SlicePipe } from '@angular/common';
 import { addIcons } from 'ionicons';
-import { personOutline, cardOutline, cartOutline } from 'ionicons/icons';
-import { PromotionsService, CATEGORIES } from '../core/services/promotions';
+import {
+  personOutline, cartOutline, calculatorOutline,
+  informationCircleOutline,
+} from 'ionicons/icons';
+import { PromotionsService, CATEGORIES, Promotion } from '../core/services/promotions';
 import { AuthService } from '../core/services/auth';
-import { DecimalPipe } from '@angular/common';
 import { CardsService } from '../core/services/cards';
 import { ListaService } from '../core/services/lista';
 
@@ -19,67 +23,86 @@ import { ListaService } from '../core/services/lista';
   selector: 'app-home',
   standalone: true,
   imports: [
-    DecimalPipe, RouterLink,
+    DecimalPipe, SlicePipe, RouterLink,
     IonContent, IonHeader, IonToolbar, IonTitle,
-    IonSearchbar, IonChip, IonCard,
-    IonCardHeader, IonCardTitle, IonCardContent,
-    IonBadge, IonSpinner, IonText, IonButton,
-    IonIcon, IonRefresher, IonRefresherContent,
+    IonSearchbar, IonChip, IonCard, IonCardHeader,
+    IonCardTitle, IonCardContent, IonBadge, IonSpinner,
+    IonText, IonButton, IonIcon, IonRefresher,
+    IonRefresherContent, IonInfiniteScroll,
+    IonInfiniteScrollContent, IonModal,
   ],
   templateUrl: './home.page.html',
 })
 export class HomePage implements OnInit {
-  categories = CATEGORIES;
+  categories       = CATEGORIES;
   selectedCategory = signal('todos');
-  searchQuery = signal('');
+  searchQuery      = signal('');
+  isDetailOpen     = signal(false);
+  selectedPromo    = signal<Promotion | null>(null);
+  userBanks        = signal<string[]>([]);
 
-  // Badge del carrito
   cartCount = computed(() => this.lista.totalItems());
 
   filteredPromotions = computed(() => {
-    const query = this.searchQuery().toLowerCase();
+    const q = this.searchQuery().toLowerCase();
+    if (!q) return this.svc.promotions();
     return this.svc.promotions().filter(p =>
-      !query ||
-      p.title.toLowerCase().includes(query) ||
-      p.bank.toLowerCase().includes(query) ||
-      p.store?.toLowerCase().includes(query),
+      p.title.toLowerCase().includes(q)   ||
+      p.bank.toLowerCase().includes(q)    ||
+      p.store?.toLowerCase().includes(q),
     );
   });
 
-  get loading() { return this.svc.loading; }
-  get error()   { return this.svc.error; }
+  get loading()  { return this.svc.loading;     }
+  get error()    { return this.svc.error;        }
+  get hasMore()  { return this.svc.hasMore;      }
 
   constructor(
-    public svc: PromotionsService,
-    public auth: AuthService,
-    public cardsSvc: CardsService,
-    public lista: ListaService,
+    public  svc:      PromotionsService,
+    public  auth:     AuthService,
+    public  cardsSvc: CardsService,
+    public  lista:    ListaService,
   ) {
-    addIcons({ personOutline, cardOutline, cartOutline });
+    addIcons({ personOutline, cartOutline, calculatorOutline, informationCircleOutline });
   }
 
   async ngOnInit() {
     await this.cardsSvc.loadCards();
     const banks = this.cardsSvc.getBankNames();
-    banks.length > 0
-      ? this.svc.loadByUserCards(banks)
-      : this.svc.loadAll();
+    this.userBanks.set(banks);
+    this.svc.setUserBanks(banks);
+    await this.svc.loadAll('todos');
   }
 
-  selectCategory(value: string) {
+  isMyBank(bank: string): boolean {
+    return this.userBanks().some(b =>
+      bank?.toLowerCase().includes(b.toLowerCase())
+    );
+  }
+
+  async selectCategory(value: string) {
     this.selectedCategory.set(value);
-    this.svc.loadAll(value === 'todos' ? undefined : value);
+    this.searchQuery.set('');
+    await this.svc.loadAll(value === 'todos' ? 'todos' : value);
   }
 
   onSearch(event: any) {
     this.searchQuery.set(event.detail.value ?? '');
   }
 
+  async loadMore(event: any) {
+    await this.svc.loadMore();
+    event.target.complete();
+  }
+
   async refresh(event: any) {
-    await this.svc.loadAll(
-      this.selectedCategory() === 'todos' ? undefined : this.selectedCategory(),
-    );
+    await this.svc.loadAll(this.selectedCategory());
     event.detail.complete();
+  }
+
+  openDetail(promo: Promotion) {
+    this.selectedPromo.set(promo);
+    this.isDetailOpen.set(true);
   }
 
   getDaysLabel(days: number[]): string {

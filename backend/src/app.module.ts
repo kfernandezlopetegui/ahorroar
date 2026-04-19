@@ -14,6 +14,7 @@ import { CommunityModule } from './community/community.module';
 import { BankComboService } from './bank-combo/bank-combo.service';
 import { BankComboModule } from './bank-combo/bank-combo.module';
 import { JobsModule } from './jobs/jobs.module';
+import { PromotionsModule } from './promotions/promotions.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { JobsModule } from './jobs/jobs.module';
     CommunityModule,
     BankComboModule,
     JobsModule,
+    PromotionsModule,
   ],
   controllers: [AppController, NotificationsController],
   providers: [AppService, NotificationsService, WatchlistService, CommunityService, BankComboService],

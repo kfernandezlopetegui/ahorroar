@@ -1,108 +1,238 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>AhorroAR</ion-title>
-
-    <!-- Carrito con badge -->
     <ion-button slot="end" fill="clear" routerLink="/tabs/lista" style="position:relative;">
       <ion-icon name="cart-outline" />
       @if (cartCount() > 0) {
         <span style="position:absolute; top:6px; right:4px; background:var(--ion-color-danger);
                       color:white; border-radius:50%; font-size:10px; font-weight:700;
-                      width:16px; height:16px; display:flex; align-items:center; justify-content:center;
-                      pointer-events:none;">
+                      width:16px; height:16px; display:flex; align-items:center; justify-content:center;">
           {{ cartCount() }}
         </span>
       }
     </ion-button>
-
-    <!-- Perfil -->
     <ion-button slot="end" fill="clear" routerLink="/tabs/profile">
       <ion-icon name="person-outline" />
     </ion-button>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-searchbar
-      placeholder="Buscar banco, tienda..."
-      [debounce]="300"
-      (ionInput)="onSearch($event)" />
+    <ion-searchbar placeholder="Buscar banco, tienda..." [debounce]="300" (ionInput)="onSearch($event)" />
   </ion-toolbar>
 </ion-header>
-<ion-content>
 
+<ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content />
   </ion-refresher>
 
-  <!-- Filtros por categoría -->
-  <div style="display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; scrollbar-width: none;">
+  <!-- Filtros -->
+  <div style="display:flex; gap:8px; padding:12px 16px 4px; overflow-x:auto; scrollbar-width:none;">
     @for (cat of categories; track cat.value) {
       <ion-chip
         [color]="selectedCategory() === cat.value ? 'primary' : 'medium'"
         [outline]="selectedCategory() !== cat.value"
         (click)="selectCategory(cat.value)"
-        style="white-space: nowrap; cursor: pointer;">
+        style="white-space:nowrap; cursor:pointer; flex-shrink:0;">
         {{ cat.label }}
       </ion-chip>
     }
   </div>
 
-  <!-- Loading -->
+  @if (userBanks().length) {
+    <p style="font-size:12px; color:var(--ion-color-primary); padding:4px 16px 0; margin:0;">
+      ⭐ Tus bancos aparecen primero
+    </p>
+  }
+
   @if (loading()) {
-    <div style="display: flex; justify-content: center; padding: 40px;">
+    <div style="display:flex; justify-content:center; padding:40px;">
       <ion-spinner name="crescent" />
     </div>
   }
 
-  <!-- Error -->
   @if (error()) {
     <ion-text color="danger">
-      <p style="text-align: center; padding: 20px;">{{ error() }}</p>
+      <p style="text-align:center; padding:20px;">{{ error() }}</p>
     </ion-text>
   }
 
-  <!-- Listado -->
   @if (!loading()) {
-    <div style="padding: 0 12px 20px;">
+    <div style="padding:4px 12px 0;">
 
       @if (filteredPromotions().length === 0) {
-        <p style="text-align: center; color: var(--ion-color-medium); padding: 40px 0;">
+        <p style="text-align:center; color:var(--ion-color-medium); padding:40px 0;">
           No hay promociones para esta categoría.
         </p>
       }
 
       @for (promo of filteredPromotions(); track promo.id) {
-        <ion-card style="margin: 8px 0; border-radius: 12px;">
-          <ion-card-header style="padding-bottom: 4px;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-              <ion-card-title style="font-size: 16px; font-weight: 600;">
-                {{ promo.title }}
-              </ion-card-title>
-              <ion-badge color="success" style="font-size: 16px; padding: 6px 10px;">
+        <ion-card
+          style="margin:6px 0; border-radius:12px; cursor:pointer;"
+          [style.border]="isMyBank(promo.bank) ? '1.5px solid var(--ion-color-primary)' : ''"
+          (click)="openDetail(promo)">
+          <ion-card-header style="padding-bottom:4px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+              <div style="flex:1; min-width:0;">
+                @if (isMyBank(promo.bank)) {
+                  <ion-badge color="primary" style="font-size:10px; margin-bottom:4px;">Tu tarjeta</ion-badge>
+                }
+                <ion-card-title style="font-size:15px; font-weight:600; display:block;">
+                  {{ promo.title }}
+                </ion-card-title>
+                <p style="font-size:12px; color:var(--ion-color-medium); margin:2px 0 0;">
+                  {{ promo.bank }}@if (promo.store) { · {{ promo.store }} }
+                </p>
+              </div>
+              <ion-badge color="success" style="font-size:15px; padding:5px 9px; flex-shrink:0;">
                 {{ promo.discount_pct }}%
               </ion-badge>
             </div>
-            <p style="font-size: 13px; color: var(--ion-color-medium); margin: 4px 0 0;">
-              {{ promo.bank }} @if (promo.store) { · {{ promo.store }} }
-            </p>
           </ion-card-header>
-
-          <ion-card-content>
-            <p style="font-size: 14px; margin-bottom: 8px;">{{ promo.description }}</p>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 12px; color: var(--ion-color-medium);">
+          <ion-card-content style="padding-top:4px;">
+            <p style="font-size:13px; margin:0 0 6px; color:var(--ion-color-dark);">
+              {{ promo.description | slice:0:100 }}{{ promo.description.length > 100 ? '...' : '' }}
+            </p>
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
+              <span style="font-size:11px; color:var(--ion-color-medium);">
                 {{ getDaysLabel(promo.days_of_week) }}
               </span>
-              @if (promo.max_discount) {
-                <span style="font-size: 12px; color: var(--ion-color-medium);">
-                  Tope ${{ promo.max_discount | number }}
+              <div style="display:flex; gap:8px; align-items:center;">
+                @if (promo.max_discount) {
+                  <span style="font-size:11px; color:var(--ion-color-medium);">
+                    Tope ${{ promo.max_discount | number }}
+                  </span>
+                }
+                <span style="font-size:11px; color:var(--ion-color-medium);">
+                  hasta {{ promo.valid_until }}
                 </span>
-              }
+              </div>
             </div>
           </ion-card-content>
         </ion-card>
       }
-
     </div>
   }
 
+  <!-- Infinite scroll -->
+  <ion-infinite-scroll [disabled]="!hasMore()" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingText="Cargando más..." />
+  </ion-infinite-scroll>
+
 </ion-content>
+
+<!-- ── Modal detalle ─────────────────────────────────────────────────────── -->
+<ion-modal [isOpen]="isDetailOpen()" (didDismiss)="isDetailOpen.set(false)">
+  <ng-template>
+    @if (selectedPromo()) {
+      <ion-header>
+        <ion-toolbar>
+          <ion-title style="font-size:16px;">Detalle de promo</ion-title>
+          <ion-button slot="end" fill="clear" (click)="isDetailOpen.set(false)">Cerrar</ion-button>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+
+        <!-- Badge descuento -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+          <div style="flex:1;">
+            <h2 style="font-size:20px; font-weight:700; margin:0 0 4px;">{{ selectedPromo()!.title }}</h2>
+            <p style="color:var(--ion-color-medium); font-size:14px; margin:0;">
+              {{ selectedPromo()!.bank }}
+              @if (selectedPromo()!.store) { · {{ selectedPromo()!.store }} }
+            </p>
+          </div>
+          <ion-badge color="success" style="font-size:22px; padding:8px 12px; flex-shrink:0;">
+            {{ selectedPromo()!.discount_pct }}%
+          </ion-badge>
+        </div>
+
+        <!-- Info rápida -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:20px;">
+          <div style="background:var(--ion-color-light); border-radius:10px; padding:12px;">
+            <p style="font-size:11px; color:var(--ion-color-medium); margin:0 0 2px;">Válido hasta</p>
+            <p style="font-weight:600; font-size:14px; margin:0;">{{ selectedPromo()!.valid_until }}</p>
+          </div>
+          @if (selectedPromo()!.max_discount) {
+            <div style="background:var(--ion-color-light); border-radius:10px; padding:12px;">
+              <p style="font-size:11px; color:var(--ion-color-medium); margin:0 0 2px;">Tope de reintegro</p>
+              <p style="font-weight:600; font-size:14px; margin:0;">${{ selectedPromo()!.max_discount | number }}</p>
+            </div>
+          }
+          <div style="background:var(--ion-color-light); border-radius:10px; padding:12px;"
+               [style.grid-column]="selectedPromo()!.max_discount ? 'auto' : '1 / -1'">
+            <p style="font-size:11px; color:var(--ion-color-medium); margin:0 0 2px;">Días de aplicación</p>
+            <p style="font-weight:600; font-size:14px; margin:0;">{{ getDaysLabel(selectedPromo()!.days_of_week) }}</p>
+          </div>
+          <div style="background:var(--ion-color-light); border-radius:10px; padding:12px;">
+            <p style="font-size:11px; color:var(--ion-color-medium); margin:0 0 2px;">Categoría</p>
+            <p style="font-weight:600; font-size:14px; margin:0; text-transform:capitalize;">{{ selectedPromo()!.category }}</p>
+          </div>
+        </div>
+
+        <!-- Descripción -->
+        <div style="margin-bottom:20px;">
+          <h3 style="font-size:15px; font-weight:600; margin:0 0 8px;">Descripción</h3>
+          <p style="font-size:14px; color:var(--ion-color-dark); line-height:1.6; margin:0;">
+            {{ selectedPromo()!.description }}
+          </p>
+        </div>
+
+        <!-- Cómo usarla -->
+        <div style="background:var(--ion-color-light); border-radius:12px; padding:16px; margin-bottom:20px;">
+          <h3 style="font-size:15px; font-weight:600; margin:0 0 12px;">
+            <ion-icon name="information-circle-outline" style="vertical-align:middle; margin-right:4px;" />
+            Cómo usarla
+          </h3>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; align-items:flex-start; gap:10px;">
+              <span style="background:var(--ion-color-primary); color:white; border-radius:50%;
+                            width:22px; height:22px; display:flex; align-items:center; justify-content:center;
+                            font-size:12px; font-weight:700; flex-shrink:0;">1</span>
+              <p style="font-size:13px; margin:2px 0 0;">
+                Pagá con tu tarjeta <strong>{{ selectedPromo()!.bank }}</strong>
+                @if (selectedPromo()!.store) { en <strong>{{ selectedPromo()!.store }}</strong> }
+              </p>
+            </div>
+            <div style="display:flex; align-items:flex-start; gap:10px;">
+              <span style="background:var(--ion-color-primary); color:white; border-radius:50%;
+                            width:22px; height:22px; display:flex; align-items:center; justify-content:center;
+                            font-size:12px; font-weight:700; flex-shrink:0;">2</span>
+              <p style="font-size:13px; margin:2px 0 0;">
+                El descuento se aplica <strong>{{ getDaysLabel(selectedPromo()!.days_of_week) }}</strong>
+              </p>
+            </div>
+            @if (selectedPromo()!.max_discount) {
+              <div style="display:flex; align-items:flex-start; gap:10px;">
+                <span style="background:var(--ion-color-warning); color:white; border-radius:50%;
+                              width:22px; height:22px; display:flex; align-items:center; justify-content:center;
+                              font-size:12px; font-weight:700; flex-shrink:0;">!</span>
+                <p style="font-size:13px; margin:2px 0 0;">
+                  El reintegro tiene un tope de <strong>${{ selectedPromo()!.max_discount | number }}</strong>
+                </p>
+              </div>
+            }
+            <div style="display:flex; align-items:flex-start; gap:10px;">
+              <span style="background:var(--ion-color-success); color:white; border-radius:50%;
+                            width:22px; height:22px; display:flex; align-items:center; justify-content:center;
+                            font-size:12px; font-weight:700; flex-shrink:0;">✓</span>
+              <p style="font-size:13px; margin:2px 0 0;">
+                Válido hasta el <strong>{{ selectedPromo()!.valid_until }}</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Usar en banco combo -->
+        <ion-button
+          expand="block"
+          fill="outline"
+          routerLink="/tabs/bank-combo"
+          (click)="isDetailOpen.set(false)">
+          <ion-icon name="calculator-outline" slot="start" />
+          Calcular ahorro con esta promo
+        </ion-button>
+
+      </ion-content>
+    }
+  </ng-template>
+</ion-modal>
