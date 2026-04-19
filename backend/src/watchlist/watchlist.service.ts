@@ -23,11 +23,9 @@ export class WatchlistService {
       ean:             dto.ean,
       producto_nombre: dto.producto_nombre,
       activa:          true,
+      alert_on_promo:  dto.alert_on_promo ?? true,
     };
 
-    if (dto.discount_threshold != null) {
-      payload['discount_threshold'] = dto.discount_threshold;
-    }
     if (dto.precio_objetivo != null) {
       payload['precio_objetivo'] = dto.precio_objetivo;
     }

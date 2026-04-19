@@ -243,24 +243,65 @@ export class ComparadorPage implements OnDestroy {
   async seguirPrecio(producto: PCProducto) {
   const watching = this.watchlist.getItem(producto.id);
   const alert = await this.alertCtrl.create({
-    header: watching ? 'Actualizar precio objetivo' : 'Seguir precio',
+    header: watching ? 'Actualizar alerta' : 'Seguir precio',
+    subHeader: producto.nombre,
+    inputs: [
+      {
+        type: 'radio',
+        label: '🏷️ Cualquier oferta (2x1, % desc, etc.)',
+        value: 'promo',
+        checked: watching ? watching.alert_on_promo : true,
+      },
+      {
+        type: 'radio',
+        label: '🎯 Cuando baje de un precio',
+        value: 'precio',
+        checked: watching ? !watching.alert_on_promo : false,
+      },
+    ],
+    buttons: [
+      { text: 'Cancelar', role: 'cancel' },
+      {
+        text: 'Siguiente',
+        handler: async (mode: 'promo' | 'precio') => {
+          if (mode === 'promo') {
+            await this.watchlist.followPromo(producto.id, producto.nombre);
+            const t = await this.toastCtrl.create({
+              message: '✅ Te avisamos cuando aparezca cualquier oferta',
+              duration: 2500, color: 'success',
+            });
+            await t.present();
+          } else {
+            await this.askPrecioObjetivo(producto);
+          }
+        },
+      },
+    ],
+  });
+  await alert.present();
+}
+
+private async askPrecioObjetivo(producto: PCProducto) {
+  const watching = this.watchlist.getItem(producto.id);
+  const alert = await this.alertCtrl.create({
+    header: 'Precio objetivo',
     subHeader: producto.nombre,
     inputs: [{
       name: 'precio',
       type: 'number',
-      placeholder: 'Precio objetivo ($)',
-      value: watching ? String(watching.precio_objetivo) : '',
+      placeholder: 'Ej: 1500',
+      value: watching?.precio_objetivo ? String(watching.precio_objetivo) : '',
     }],
     buttons: [
       { text: 'Cancelar', role: 'cancel' },
       {
-        text: watching ? 'Actualizar' : 'Seguir',
-        handler: async (data) => {
-          const precio = parseFloat(data.precio);
+        text: 'Guardar',
+        handler: async (val) => {
+          const precio = parseFloat(val.precio);
           if (!precio || precio <= 0) return;
-          await this.watchlist.upsert(producto.id, producto.nombre, precio);
+          await this.watchlist.followPrecio(producto.id, producto.nombre, precio);
           const t = await this.toastCtrl.create({
-            message: `✅ Seguimiento activado a $${precio.toLocaleString('es-AR')}`,
+            message: `✅ Te avisamos cuando baje de $${precio.toLocaleString('es-AR')}`,
             duration: 2500, color: 'success',
           });
           await t.present();

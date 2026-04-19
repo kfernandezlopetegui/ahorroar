@@ -9,9 +9,10 @@ export interface WatchlistItem {
   user_id: string;
   ean: string;
   producto_nombre: string;
+  alert_on_promo: boolean;
   precio_objetivo?: number;
-  discount_threshold: number;
   last_known_price?: number;
+  last_notified_at?: string;
   activa: boolean;
   created_at: string;
 }
@@ -20,14 +21,14 @@ const BASE = `${environment.apiUrl}/watchlist`;
 
 @Injectable({ providedIn: 'root' })
 export class WatchlistService {
-  items   = signal<WatchlistItem[]>([]);
+  items = signal<WatchlistItem[]>([]);
   loading = signal(false);
-  error   = signal('');
+  error = signal('');
 
   constructor(
     private readonly http: HttpClient,
     private readonly supabase: SupabaseService,
-  ) {}
+  ) { }
 
   private async headers(): Promise<HttpHeaders> {
     const { data } = await this.supabase.client.auth.getSession();
@@ -50,44 +51,33 @@ export class WatchlistService {
     }
   }
 
-  
-  async upsertByThreshold(
-    ean: string,
-    producto_nombre: string,
-    discount_threshold: number,
-  ): Promise<WatchlistItem> {
-    const h = await this.headers();
-    const item = await firstValueFrom(
-      this.http.post<WatchlistItem>(
-        BASE,
-        { ean, producto_nombre, discount_threshold },
-        { headers: h },
-      ),
-    );
-    this.items.update(list => {
-      const idx = list.findIndex(i => i.ean === ean);
-      if (idx >= 0) { const n = [...list]; n[idx] = item; return n; }
-      return [item, ...list];
-    });
-    return item;
+  // Seguir con alerta de promo (modo default)
+  async followPromo(ean: string, producto_nombre: string): Promise<WatchlistItem> {
+    return this.upsertRaw({ ean, producto_nombre, alert_on_promo: true });
   }
 
-  
-  async upsert(
-    ean: string,
-    producto_nombre: string,
-    precio_objetivo: number,
-  ): Promise<WatchlistItem> {
+  // Seguir con precio objetivo
+  async followPrecio(ean: string, producto_nombre: string, precio_objetivo: number): Promise<WatchlistItem> {
+    return this.upsertRaw({ ean, producto_nombre, alert_on_promo: false, precio_objetivo });
+  }
+
+  // Actualizar modo de alerta
+  async updateAlertMode(item: WatchlistItem, mode: 'promo' | 'precio', precio_objetivo?: number): Promise<WatchlistItem> {
+    return this.upsertRaw({
+      ean: item.ean,
+      producto_nombre: item.producto_nombre,
+      alert_on_promo: mode === 'promo',
+      precio_objetivo: mode === 'precio' ? precio_objetivo : undefined,
+    });
+  }
+
+  private async upsertRaw(dto: Record<string, any>): Promise<WatchlistItem> {
     const h = await this.headers();
     const item = await firstValueFrom(
-      this.http.post<WatchlistItem>(
-        BASE,
-        { ean, producto_nombre, precio_objetivo },
-        { headers: h },
-      ),
+      this.http.post<WatchlistItem>(BASE, dto, { headers: h }),
     );
     this.items.update(list => {
-      const idx = list.findIndex(i => i.ean === ean);
+      const idx = list.findIndex(i => i.ean === dto['ean']);  // ← corregido
       if (idx >= 0) { const n = [...list]; n[idx] = item; return n; }
       return [item, ...list];
     });
@@ -101,5 +91,5 @@ export class WatchlistService {
   }
 
   isWatching(ean: string) { return this.items().some(i => i.ean === ean && i.activa); }
-  getItem(ean: string)     { return this.items().find(i => i.ean === ean); }
+  getItem(ean: string) { return this.items().find(i => i.ean === ean); }
 }

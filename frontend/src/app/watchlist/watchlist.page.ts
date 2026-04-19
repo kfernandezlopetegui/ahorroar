@@ -1,17 +1,16 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   IonContent, IonHeader, IonToolbar, IonTitle,
   IonButton, IonIcon, IonSpinner,
-  IonCard, IonCardContent, IonBadge,
-  IonItem, IonLabel, IonRange,
+  IonCard, IonCardContent, IonChip, IonBadge,
   ToastController, AlertController,
 } from '@ionic/angular/standalone';
 import { DecimalPipe } from '@angular/common';
 import { addIcons } from 'ionicons';
 import {
-  trashOutline, pricetagOutline, eyeOutline,
-  trendingDownOutline, notificationsOutline,
+  trashOutline, eyeOutline, trendingDownOutline,
+  notificationsOutline, pricetagOutline, createOutline,
 } from 'ionicons/icons';
 import { WatchlistService, WatchlistItem } from '../core/services/watchlist';
 
@@ -22,8 +21,7 @@ import { WatchlistService, WatchlistItem } from '../core/services/watchlist';
     DecimalPipe, RouterLink,
     IonContent, IonHeader, IonToolbar, IonTitle,
     IonButton, IonIcon, IonSpinner,
-    IonCard, IonCardContent, IonBadge,
-    
+    IonCard, IonCardContent, IonChip,
   ],
   templateUrl: './watchlist.page.html',
 })
@@ -36,36 +34,67 @@ export class WatchlistPage implements OnInit {
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
   ) {
-    addIcons({ trashOutline, pricetagOutline, eyeOutline, trendingDownOutline, notificationsOutline });
+    addIcons({ trashOutline, eyeOutline, trendingDownOutline,
+               notificationsOutline, pricetagOutline, createOutline });
   }
 
   ngOnInit() { this.svc.load(); }
 
-  async editThreshold(item: WatchlistItem) {
+  async editAlert(item: WatchlistItem) {
     const alert = await this.alertCtrl.create({
-      header: 'Umbral de descuento',
+      header: 'Tipo de alerta',
       subHeader: item.producto_nombre,
-      message: `Actual: ${item.discount_threshold}% — Te avisamos cuando baje ese % o más.`,
+      inputs: [
+        {
+          type: 'radio',
+          label: '🏷️ Cualquier oferta (2x1, % desc, etc.)',
+          value: 'promo',
+          checked: item.alert_on_promo,
+        },
+        {
+          type: 'radio',
+          label: '🎯 Cuando baje de un precio',
+          value: 'precio',
+          checked: !item.alert_on_promo,
+        },
+      ],
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Siguiente',
+          handler: async (mode: 'promo' | 'precio') => {
+            if (mode === 'promo') {
+              await this.svc.updateAlertMode(item, 'promo');
+              this.showToast('✅ Alerta activada para cualquier oferta');
+            } else {
+              await this.askPrecioObjetivo(item);
+            }
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
+  private async askPrecioObjetivo(item: WatchlistItem) {
+    const alert = await this.alertCtrl.create({
+      header: 'Precio objetivo',
+      subHeader: item.producto_nombre,
       inputs: [{
-        name:  'threshold',
-        type:  'number',
-        value: item.discount_threshold,
-        min:   5,
-        max:   80,
-        placeholder: '% de descuento (5–80)',
+        name: 'precio',
+        type: 'number',
+        placeholder: 'Ej: 1500',
+        value: item.precio_objetivo ? String(item.precio_objetivo) : '',
       }],
       buttons: [
         { text: 'Cancelar', role: 'cancel' },
         {
           text: 'Guardar',
           handler: async (val) => {
-            const pct = Math.min(80, Math.max(5, Number(val.threshold) || 10));
-            await this.svc.upsertByThreshold(item.ean, item.producto_nombre, pct);
-            const t = await this.toastCtrl.create({
-              message: `Umbral actualizado a ${pct}% 🔔`,
-              duration: 2000, color: 'success', position: 'top',
-            });
-            await t.present();
+            const precio = parseFloat(val.precio);
+            if (!precio || precio <= 0) return;
+            await this.svc.updateAlertMode(item, 'precio', precio);
+            this.showToast(`✅ Te avisamos cuando baje de $${precio.toLocaleString('es-AR')}`);
           },
         },
       ],
@@ -83,14 +112,25 @@ export class WatchlistPage implements OnInit {
           text: 'Eliminar', role: 'destructive',
           handler: async () => {
             await this.svc.remove(item.id);
-            const t = await this.toastCtrl.create({
-              message: 'Eliminado de watchlist', duration: 2000,
-            });
-            await t.present();
+            this.showToast('Eliminado de alertas');
           },
         },
       ],
     });
     await alert.present();
+  }
+
+  timeAgo(dateStr: string): string {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 60) return `hace ${mins}m`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `hace ${hrs}h`;
+    return `hace ${Math.floor(hrs / 24)}d`;
+  }
+
+  private async showToast(message: string) {
+    const t = await this.toastCtrl.create({ message, duration: 2500, color: 'success', position: 'top' });
+    await t.present();
   }
 }

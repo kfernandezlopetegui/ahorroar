@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, Min, Max } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsBoolean, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateWatchlistDto {
@@ -8,18 +8,15 @@ export class CreateWatchlistDto {
   @IsString()
   producto_nombre: string;
 
-  
+  // Alerta cuando aparece CUALQUIER promo (2x1, %, etc.)
+  @IsOptional()
+  @IsBoolean()
+  alert_on_promo?: boolean;
+
+  // Alerta si el precio baja de este monto
   @IsOptional()
   @IsNumber()
   @Min(0)
   @Type(() => Number)
   precio_objetivo?: number;
-
- 
-  @IsOptional()
-  @IsNumber()
-  @Min(5)
-  @Max(80)
-  @Type(() => Number)
-  discount_threshold?: number;
 }

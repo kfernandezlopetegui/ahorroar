@@ -29,17 +29,59 @@ export class PriceCheckProcessor extends WorkerHost {
         const sucursales: any[] = (result as any).sucursales ?? [];
         if (!sucursales.length) continue;
 
-        const listaPrecios = sucursales
-          .map((s: any) => s.preciosProducto?.precioLista)
-          .filter((p: any): p is number => typeof p === 'number' && p > 0);
+        // ── Modo: alerta en cualquier promo ───────────────────────────────
+        if (item.alert_on_promo) {
+          const conPromo = sucursales.filter(
+            (s: any) => s.preciosProducto?.promo1?.precio || s.preciosProducto?.promo2?.precio,
+          );
 
-        if (!listaPrecios.length) continue;
+          if (!conPromo.length) continue;
 
-        const minPrecio = Math.min(...listaPrecios);
+          // Evitar spam: no volver a notificar en menos de 24hs
+          if (item.last_notified_at) {
+            const hoursAgo = (Date.now() - new Date(item.last_notified_at).getTime()) / 3_600_000;
+            if (hoursAgo < 24) continue;
+          }
 
-        
-        if (item.precio_objetivo && !item.discount_threshold) {
+          // Armar descripción con las mejores promos encontradas
+          const promoDescs = conPromo
+            .slice(0, 3)
+            .map((s: any) => {
+              const promo = s.preciosProducto.promo1 ?? s.preciosProducto.promo2;
+              return `${s.banderaDescripcion}: ${promo.descripcion} ($${Number(promo.precio).toLocaleString('es-AR')})`;
+            })
+            .join(' · ');
+
+          await this.notifs.sendToUser(
+            item.user_id,
+            `🏷️ ¡Oferta! ${item.producto_nombre}`,
+            promoDescs,
+            { ean: item.ean, tipo: 'promo_alert' },
+          );
+
+          await this.supabase.client
+            .from('watchlist')
+            .update({ last_notified_at: new Date().toISOString() })
+            .eq('id', item.id);
+
+          continue;
+        }
+
+        // ── Modo: alerta por precio objetivo ──────────────────────────────
+        if (item.precio_objetivo) {
+          const listaPrecios = sucursales
+            .map((s: any) => s.preciosProducto?.precioLista)
+            .filter((p: any): p is number => typeof p === 'number' && p > 0);
+
+          if (!listaPrecios.length) continue;
+          const minPrecio = Math.min(...listaPrecios);
+
           if (minPrecio <= item.precio_objetivo) {
+            if (item.last_notified_at) {
+              const hoursAgo = (Date.now() - new Date(item.last_notified_at).getTime()) / 3_600_000;
+              if (hoursAgo < 24) continue;
+            }
+
             await this.notifs.sendToUser(
               item.user_id,
               '🎯 Precio objetivo alcanzado',
@@ -47,53 +89,20 @@ export class PriceCheckProcessor extends WorkerHost {
                 `(objetivo: $${item.precio_objetivo.toLocaleString('es-AR')})`,
               { ean: item.ean, tipo: 'price_alert' },
             );
+
+            await this.supabase.client
+              .from('watchlist')
+              .update({
+                last_known_price: minPrecio,
+                last_notified_at: new Date().toISOString(),
+              })
+              .eq('id', item.id);
+          } else {
+            await this.supabase.client
+              .from('watchlist')
+              .update({ last_known_price: minPrecio })
+              .eq('id', item.id);
           }
-          continue;
-        }
-
-        
-        const threshold   = item.discount_threshold ?? 10;
-        const lastPrice   = item.last_known_price;
-
-       
-        if (!lastPrice) {
-          await this.supabase.client
-            .from('watchlist')
-            .update({ last_known_price: minPrecio })
-            .eq('id', item.id);
-          continue;
-        }
-
-        const dropPct = ((lastPrice - minPrecio) / lastPrice) * 100;
-
-        if (dropPct >= threshold) {
-          
-          if (item.last_notified_at) {
-            const hoursAgo = (Date.now() - new Date(item.last_notified_at).getTime()) / 3600000;
-            if (hoursAgo < 24) continue;
-          }
-
-          await this.notifs.sendToUser(
-            item.user_id,
-            `📉 Bajó ${Math.round(dropPct)}% — ${item.producto_nombre}`,
-            `Ahora a $${minPrecio.toLocaleString('es-AR')} ` +
-              `(antes $${lastPrice.toLocaleString('es-AR')})`,
-            { ean: item.ean, tipo: 'price_drop', drop_pct: String(Math.round(dropPct)) },
-          );
-
-          await this.supabase.client
-            .from('watchlist')
-            .update({
-              last_known_price:  minPrecio,
-              last_notified_at:  new Date().toISOString(),
-            })
-            .eq('id', item.id);
-        } else {
-          
-          await this.supabase.client
-            .from('watchlist')
-            .update({ last_known_price: minPrecio })
-            .eq('id', item.id);
         }
       } catch (err) {
         this.logger.error(`Error checking EAN ${item.ean}:`, err);
