@@ -14,6 +14,7 @@ import { scrapeChangomas }  from './scrapers/supermarkets/changomas';
 import { saveSuperOffers, SuperOffer } from './scrapers/supermarkets/base-super';
 import { supabase }         from './supabase';
 
+
 interface ScraperDef {
   name:    string;
   fn:      () => Promise<SuperOffer[]>;

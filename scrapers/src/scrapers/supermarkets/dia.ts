@@ -5,54 +5,101 @@ import {
 } from './base-super';
 
 const CHAIN    = 'DIA';
-// URL real del ecommerce de DIA Argentina
-const BASE_URL = 'https://diaonline.supermercadosdia.com.ar/api/catalog_system/pub/products/search';
+const BASE     = 'https://diaonline.supermercadosdia.com.ar';
 const HEADERS  = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
   'Accept':     'application/json',
-  'Referer':    'https://diaonline.supermercadosdia.com.ar/',
-  'Origin':     'https://diaonline.supermercadosdia.com.ar',
+  'Referer':    `${BASE}/`,
 };
 
-const PAGE_SIZE = 50;
-const MAX_PAGES = 8;
-
-const CATEGORY_FILTERS = [
-  'C:/2/', 'C:/3/', 'C:/4/', 'C:/5/', 'C:/6/', 'C:/7/', 'C:/8/',
+// DIA usa productClusterIds — estos son los IDs de colecciones de ofertas
+// visibles en la home: /10392?map=productClusterIds, /10146, /10147, etc.
+const OFFER_CLUSTERS = [
+  10392, 10146, 10147, 10149, 10250, 10331, 10373,
+  10391, 10392, 10398, 10399, 632,
 ];
 
+const PAGE_SIZE = 50;
+
 export async function scrapeDIA(): Promise<SuperOffer[]> {
-  console.log(`[${CHAIN}] Iniciando scraper (Vtex API - diaonline)...`);
+  console.log(`[${CHAIN}] Iniciando scraper (Vtex productClusterIds)...`);
   const offers: SuperOffer[] = [];
 
-  for (const catFilter of CATEGORY_FILTERS) {
-    for (let page = 0; page < MAX_PAGES; page++) {
-      const from = page * PAGE_SIZE;
-      const to   = from + PAGE_SIZE - 1;
-      try {
-        const { data } = await axios.get<any[]>(BASE_URL, {
-          headers: HEADERS,
-          timeout: 12_000,
-          params:  { fq: catFilter, _from: from, _to: to, O: 'OrderByBestDiscountDESC' },
-        });
+  // Estrategia 1: Buscar todos los productos con descuento sin filtro de categoría
+  await scrapeByDiscount(offers);
 
-        if (!data?.length) break;
-
-        for (const product of data) {
-          const offer = mapVtexProduct(product);
-          if (offer) offers.push(offer);
-        }
-
-        if (data.length < PAGE_SIZE) break;
-        await sleep(350);
-      } catch (err: any) {
-        console.error(`[${CHAIN}] Cat ${catFilter} p${page}: ${err.message}`);
-        break;
-      }
-    }
+  // Estrategia 2: Por clusters de ofertas conocidos
+  if (offers.length < 50) {
+    console.log(`[${CHAIN}] Pocas ofertas, probando por clusters...`);
+    await scrapeByClusters(offers);
   }
 
+  console.log(`[${CHAIN}] Total crudo: ${offers.length}`);
   return offers;
+}
+
+/** Busca todos los productos ordenados por mayor descuento */
+async function scrapeByDiscount(offers: SuperOffer[]) {
+  const MAX_PAGES = 10;
+  for (let page = 0; page < MAX_PAGES; page++) {
+    const from = page * PAGE_SIZE;
+    const to   = from + PAGE_SIZE - 1;
+    try {
+      const { data } = await axios.get<any[]>(
+        `${BASE}/api/catalog_system/pub/products/search`,
+        {
+          headers: HEADERS,
+          timeout: 12_000,
+          params:  { _from: from, _to: to, O: 'OrderByBestDiscountDESC' },
+        },
+      );
+
+      if (!data?.length) break;
+
+      for (const product of data) {
+        const offer = mapVtexProduct(product);
+        if (offer) offers.push(offer);
+      }
+
+      if (data.length < PAGE_SIZE) break;
+      await sleep(400);
+    } catch (err: any) {
+      console.error(`[${CHAIN}] byDiscount p${page}: ${err.message}`);
+      break;
+    }
+  }
+}
+
+/** Busca por IDs de colecciones (clusters) de ofertas conocidos */
+async function scrapeByClusters(offers: SuperOffer[]) {
+  for (const clusterId of OFFER_CLUSTERS) {
+    try {
+      const { data } = await axios.get<any[]>(
+        `${BASE}/api/catalog_system/pub/products/search`,
+        {
+          headers: HEADERS,
+          timeout: 10_000,
+          params:  {
+            fq:    `productClusterIds:${clusterId}`,
+            _from: 0,
+            _to:   49,
+            O:     'OrderByBestDiscountDESC',
+          },
+        },
+      );
+
+      if (!data?.length) continue;
+
+      for (const product of data) {
+        const offer = mapVtexProduct(product);
+        if (offer) offers.push(offer);
+      }
+
+      await sleep(300);
+    } catch (err: any) {
+      console.error(`[${CHAIN}] cluster ${clusterId}: ${err.message}`);
+    }
+  }
 }
 
 function mapVtexProduct(p: any): SuperOffer | null {

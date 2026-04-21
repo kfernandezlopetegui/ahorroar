@@ -1,4 +1,5 @@
 import { supabase } from '../../supabase';
+export { createBrowser, createPage } from '../base';
 
 export interface SuperOffer {
   chain:              string;
