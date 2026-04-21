@@ -4,8 +4,8 @@ import {
   IonSearchbar, IonCard, IonCardContent,
   IonButton, IonIcon, IonSpinner, IonText,
   IonChip, IonSegment, IonSegmentButton, IonLabel,
-  IonItem, IonInput,
-  ToastController, ModalController,AlertController
+  IonItem, IonInput, IonBadge,
+  ToastController, ModalController, AlertController,
 } from '@ionic/angular/standalone';
 import { DecimalPipe, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +13,7 @@ import { addIcons } from 'ionicons';
 import {
   locationOutline, scanOutline, searchOutline,
   barcodeOutline, cameraOutline, trendingDownOutline,
-  timeOutline, cartOutline, eyeOutline
+  timeOutline, cartOutline, eyeOutline,
 } from 'ionicons/icons';
 import { Geolocation } from '@capacitor/geolocation';
 import { Platform } from '@ionic/angular/standalone';
@@ -22,7 +22,6 @@ import { ScannerComponent } from '../shared/scanner/scanner.component';
 import { PriceChartComponent } from '../shared/price-chart/price-chart.component';
 import { ListaService } from '../core/services/lista';
 import { WatchlistService } from '../core/services/watchlist';
-
 
 type SearchMode = 'nombre' | 'ean';
 
@@ -35,19 +34,19 @@ type SearchMode = 'nombre' | 'ean';
     IonSearchbar, IonCard, IonCardContent,
     IonButton, IonIcon, IonSpinner, IonText,
     IonChip, IonSegment, IonSegmentButton,
-    IonLabel, IonItem, IonInput,
+    IonLabel, IonItem, IonInput, IonBadge,
     PriceChartComponent,
   ],
   templateUrl: './comparador.page.html',
 })
 export class ComparadorPage implements OnDestroy {
-  searchMode = signal<SearchMode>('nombre');
-  eanInput = signal('');
+  searchMode           = signal<SearchMode>('nombre');
+  eanInput             = signal('');
   productoSeleccionado = signal<PCProducto | null>(null);
-  userLat = signal<number | null>(null);
-  userLng = signal<number | null>(null);
-  usandoUbicacion = signal(false);
-  mostrarHistorial = signal(false);
+  userLat              = signal<number | null>(null);
+  userLng              = signal<number | null>(null);
+  usandoUbicacion      = signal(false);
+  mostrarHistorial     = signal(false);
 
   mejorPrecio = computed(() => {
     const lista = this.pc.precios();
@@ -59,33 +58,35 @@ export class ComparadorPage implements OnDestroy {
     )[0];
   });
 
-  get productos() { return this.pc.productos; }
-  get precios() { return this.pc.precios; }
-  get historial() { return this.pc.historial; }
-  get loadingProductos() { return this.pc.loadingProductos; }
-  get loadingPrecios() { return this.pc.loadingPrecios; }
-  get loadingHistorial() { return this.pc.loadingHistorial; }
-  get error() { return this.pc.error; }
+  get productos()         { return this.pc.productos; }
+  get precios()           { return this.pc.precios; }
+  get historial()         { return this.pc.historial; }
+  get supermarketOffers() { return this.pc.supermarketOffers; }
+  get loadingProductos()  { return this.pc.loadingProductos; }
+  get loadingPrecios()    { return this.pc.loadingPrecios; }
+  get loadingHistorial()  { return this.pc.loadingHistorial; }
+  get error()             { return this.pc.error; }
 
   constructor(
-    public readonly pc: PreciosClarosService,
-    public readonly lista: ListaService,
-    public readonly watchlist: WatchlistService,   // ← NUEVO
-    private readonly toastCtrl: ToastController,
-    private readonly modalCtrl: ModalController,
-    private readonly platform: Platform,
-    private readonly alertCtrl: AlertController,   // ← NUEVO
+    public  readonly pc:         PreciosClarosService,
+    public  readonly lista:      ListaService,
+    public  readonly watchlist:  WatchlistService,
+    private readonly toastCtrl:  ToastController,
+    private readonly modalCtrl:  ModalController,
+    private readonly platform:   Platform,
+    private readonly alertCtrl:  AlertController,
   ) {
     addIcons({
       locationOutline, scanOutline, searchOutline,
       barcodeOutline, cameraOutline, trendingDownOutline,
-      timeOutline, cartOutline, eyeOutline
+      timeOutline, cartOutline, eyeOutline,
     });
     this.watchlist.load();
   }
 
   ngOnDestroy() {
     this.pc.historial.set([]);
+    this.pc.supermarketOffers.set([]);
   }
 
   onSegmentChange(event: any) {
@@ -122,7 +123,7 @@ export class ComparadorPage implements OnDestroy {
   async abrirEscaner() {
     const modal = await this.modalCtrl.create({
       component: ScannerComponent,
-      cssClass: 'scanner-modal',
+      cssClass:  'scanner-modal',
     });
     await modal.present();
     const { data } = await modal.onDidDismiss<{ ean: string } | null>();
@@ -140,9 +141,9 @@ export class ComparadorPage implements OnDestroy {
         await this.pc.getHistorial(data.ean);
       } else {
         const toast = await this.toastCtrl.create({
-          message: `Código ${data.ean} no encontrado en Precios Claros.`,
+          message:  `Código ${data.ean} no encontrado en Precios Claros.`,
           duration: 3000,
-          color: 'warning',
+          color:    'warning',
         });
         await toast.present();
       }
@@ -152,6 +153,7 @@ export class ComparadorPage implements OnDestroy {
   async seleccionarProducto(producto: PCProducto) {
     this.productoSeleccionado.set(producto);
     this.pc.precios.set([]);
+    this.pc.supermarketOffers.set([]);
     this.mostrarHistorial.set(false);
     await Promise.all([
       this.pc.buscarPrecios(
@@ -166,22 +168,21 @@ export class ComparadorPage implements OnDestroy {
   async agregarALista(producto: PCProducto) {
     this.lista.agregarItem(producto);
     const toast = await this.toastCtrl.create({
-      message: `${producto.nombre} agregado a la lista`,
+      message:  `${producto.nombre} agregado a la lista`,
       duration: 2000,
-      color: 'success',
+      color:    'success',
     });
     await toast.present();
   }
 
   async usarUbicacion() {
     try {
-      // Pedir permiso explícito con @capacitor/geolocation
       const perm = await Geolocation.requestPermissions();
       if (perm.location !== 'granted') {
         const toast = await this.toastCtrl.create({
           message: 'Permiso de ubicación denegado.',
           duration: 2500,
-          color: 'warning',
+          color:   'warning',
         });
         await toast.present();
         return;
@@ -189,7 +190,7 @@ export class ComparadorPage implements OnDestroy {
 
       const pos = await Geolocation.getCurrentPosition({
         enableHighAccuracy: true,
-        timeout: 10000,
+        timeout:            10000,
       });
 
       this.userLat.set(pos.coords.latitude);
@@ -205,16 +206,16 @@ export class ComparadorPage implements OnDestroy {
       }
 
       const toast = await this.toastCtrl.create({
-        message: '📍 Ubicación activada',
+        message:  '📍 Ubicación activada',
         duration: 1500,
-        color: 'primary',
+        color:    'primary',
       });
       await toast.present();
-    } catch (err: any) {
+    } catch {
       const toast = await this.toastCtrl.create({
-        message: 'No se pudo obtener la ubicación.',
+        message:  'No se pudo obtener la ubicación.',
         duration: 2000,
-        color: 'warning',
+        color:    'warning',
       });
       await toast.present();
     }
@@ -224,6 +225,7 @@ export class ComparadorPage implements OnDestroy {
     this.productoSeleccionado.set(null);
     this.pc.precios.set([]);
     this.pc.historial.set([]);
+    this.pc.supermarketOffers.set([]);
     this.mostrarHistorial.set(false);
   }
 
@@ -231,84 +233,87 @@ export class ComparadorPage implements OnDestroy {
     this.mostrarHistorial.update(v => !v);
   }
 
+  async seguirPrecio(producto: PCProducto) {
+    const watching = this.watchlist.getItem(producto.id);
+    const alert = await this.alertCtrl.create({
+      header:    watching ? 'Actualizar alerta' : 'Seguir precio',
+      subHeader: producto.nombre,
+      inputs: [
+        {
+          type:    'radio',
+          label:   '🏷️ Cualquier oferta (2x1, % desc, etc.)',
+          value:   'promo',
+          checked: watching ? watching.alert_on_promo : true,
+        },
+        {
+          type:    'radio',
+          label:   '🎯 Cuando baje de un precio',
+          value:   'precio',
+          checked: watching ? !watching.alert_on_promo : false,
+        },
+      ],
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Siguiente',
+          handler: async (mode: 'promo' | 'precio') => {
+            if (mode === 'promo') {
+              await this.watchlist.followPromo(producto.id, producto.nombre);
+              const t = await this.toastCtrl.create({
+                message:  '✅ Te avisamos cuando aparezca cualquier oferta',
+                duration: 2500,
+                color:    'success',
+              });
+              await t.present();
+            } else {
+              await this.askPrecioObjetivo(producto);
+            }
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
+  private async askPrecioObjetivo(producto: PCProducto) {
+    const watching = this.watchlist.getItem(producto.id);
+    const alert = await this.alertCtrl.create({
+      header:    'Precio objetivo',
+      subHeader: producto.nombre,
+      inputs: [{
+        name:        'precio',
+        type:        'number',
+        placeholder: 'Ej: 1500',
+        value:       watching?.precio_objetivo ? String(watching.precio_objetivo) : '',
+      }],
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Guardar',
+          handler: async (val) => {
+            const precio = parseFloat(val.precio);
+            if (!precio || precio <= 0) return;
+            await this.watchlist.followPrecio(producto.id, producto.nombre, precio);
+            const t = await this.toastCtrl.create({
+              message:  `✅ Te avisamos cuando baje de $${precio.toLocaleString('es-AR')}`,
+              duration: 2500,
+              color:    'success',
+            });
+            await t.present();
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
   private resetResultados() {
     this.productoSeleccionado.set(null);
     this.pc.productos.set([]);
     this.pc.precios.set([]);
     this.pc.historial.set([]);
+    this.pc.supermarketOffers.set([]);
     this.pc.error.set('');
     this.mostrarHistorial.set(false);
   }
-
-  async seguirPrecio(producto: PCProducto) {
-  const watching = this.watchlist.getItem(producto.id);
-  const alert = await this.alertCtrl.create({
-    header: watching ? 'Actualizar alerta' : 'Seguir precio',
-    subHeader: producto.nombre,
-    inputs: [
-      {
-        type: 'radio',
-        label: '🏷️ Cualquier oferta (2x1, % desc, etc.)',
-        value: 'promo',
-        checked: watching ? watching.alert_on_promo : true,
-      },
-      {
-        type: 'radio',
-        label: '🎯 Cuando baje de un precio',
-        value: 'precio',
-        checked: watching ? !watching.alert_on_promo : false,
-      },
-    ],
-    buttons: [
-      { text: 'Cancelar', role: 'cancel' },
-      {
-        text: 'Siguiente',
-        handler: async (mode: 'promo' | 'precio') => {
-          if (mode === 'promo') {
-            await this.watchlist.followPromo(producto.id, producto.nombre);
-            const t = await this.toastCtrl.create({
-              message: '✅ Te avisamos cuando aparezca cualquier oferta',
-              duration: 2500, color: 'success',
-            });
-            await t.present();
-          } else {
-            await this.askPrecioObjetivo(producto);
-          }
-        },
-      },
-    ],
-  });
-  await alert.present();
-}
-
-private async askPrecioObjetivo(producto: PCProducto) {
-  const watching = this.watchlist.getItem(producto.id);
-  const alert = await this.alertCtrl.create({
-    header: 'Precio objetivo',
-    subHeader: producto.nombre,
-    inputs: [{
-      name: 'precio',
-      type: 'number',
-      placeholder: 'Ej: 1500',
-      value: watching?.precio_objetivo ? String(watching.precio_objetivo) : '',
-    }],
-    buttons: [
-      { text: 'Cancelar', role: 'cancel' },
-      {
-        text: 'Guardar',
-        handler: async (val) => {
-          const precio = parseFloat(val.precio);
-          if (!precio || precio <= 0) return;
-          await this.watchlist.followPrecio(producto.id, producto.nombre, precio);
-          const t = await this.toastCtrl.create({
-            message: `✅ Te avisamos cuando baje de $${precio.toLocaleString('es-AR')}`,
-            duration: 2500, color: 'success',
-          });
-          await t.present();
-        },
-      },
-    ],
-  });
-  await alert.present();
-}
 }

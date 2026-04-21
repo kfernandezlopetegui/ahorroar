@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { SupabaseService } from '../supabase/supabase.service';
+import { SupermarketOffersService } from '../supermarket-offers/supermarket-offers.service';
+
 
 const BASE_URL = 'https://d3e6htiiul5ek9.cloudfront.net/prod';
 
@@ -10,7 +12,8 @@ export class PreciosClarosService {
   constructor(
     private readonly http: HttpService,
     private readonly supabase: SupabaseService,
-  ) {}
+    private readonly superOffers: SupermarketOffersService,
+  ) { }
 
   private get headers() {
     return {
@@ -72,25 +75,25 @@ export class PreciosClarosService {
   }
 
   async buscarPorEAN(ean: string, lat = -34.6037, lng = -58.3816) {
-    // 1. Buscar producto por EAN (el ID en Precios Claros = EAN)
     const productosData = await this.buscarProductos(ean, lat, lng);
     const productos: any[] = productosData?.productos ?? [];
 
-    // Preferir match exacto de ID, sino primer resultado
     const producto =
       productos.find((p: any) => p.id === ean) ?? productos[0] ?? null;
 
-    if (!producto) return { producto: null, sucursales: [] };
+    if (!producto) return { producto: null, sucursales: [], supermarketOffers: [] };
 
-    // 2. Buscar precios en sucursales cercanas
-    const preciosData = await this.buscarPrecios(producto.id, lat, lng);
+    // Correr en paralelo: precios de Precios Claros + ofertas de supermercados
+    const [preciosData, supermarketOffers] = await Promise.all([
+      this.buscarPrecios(producto.id, lat, lng),
+      this.superOffers.findByEan(ean).catch(() => []),  // no romper si falla
+    ]);
 
-    // 3. Guardar snapshot histórico (fire & forget)
     this.savePriceSnapshot(producto, preciosData.sucursales ?? []).catch(
       (err) => console.error('[price_history] Error saving snapshot:', err),
     );
 
-    return { producto, ...preciosData };
+    return { producto, ...preciosData, supermarketOffers };
   }
 
   async getHistorial(ean: string, dias = 30) {

@@ -38,22 +38,36 @@ export interface PCHistorialRow {
   captured_at: string;
 }
 
+export interface SupermarketOffer {
+  chain: string;
+  product_name: string;
+  offer_price: number;
+  original_price?: number;
+  discount_pct?: number;
+  offer_type: string;
+  offer_description?: string;
+  valid_until: string;
+  image_url?: string;
+}
+
 export interface PCResultadoEAN {
   producto: PCProducto | null;
   sucursales: PCPrecio[];
+  supermarketOffers: SupermarketOffer[];
 }
 
 const BASE = `${environment.apiUrl}/precios-claros`;
 
 @Injectable({ providedIn: 'root' })
 export class PreciosClarosService {
-  productos        = signal<PCProducto[]>([]);
-  precios          = signal<PCPrecio[]>([]);
-  historial        = signal<PCHistorialRow[]>([]);
-  loadingProductos = signal(false);
-  loadingPrecios   = signal(false);
-  loadingHistorial = signal(false);
-  error            = signal('');
+  productos         = signal<PCProducto[]>([]);
+  precios           = signal<PCPrecio[]>([]);
+  historial         = signal<PCHistorialRow[]>([]);
+  supermarketOffers = signal<SupermarketOffer[]>([]);
+  loadingProductos  = signal(false);
+  loadingPrecios    = signal(false);
+  loadingHistorial  = signal(false);
+  error             = signal('');
 
   constructor(private readonly http: HttpClient) {}
 
@@ -98,6 +112,7 @@ export class PreciosClarosService {
     this.loadingProductos.set(true);
     this.loadingPrecios.set(true);
     this.error.set('');
+    this.supermarketOffers.set([]);
     try {
       const params: Record<string, any> = {};
       if (lat != null) params['lat'] = lat;
@@ -111,6 +126,7 @@ export class PreciosClarosService {
       }
       this.productos.set([res.producto]);
       this.precios.set(this.sortSucursales(res.sucursales, lat, lng));
+      this.supermarketOffers.set(res.supermarketOffers ?? []);
       return res.producto;
     } catch {
       this.error.set('Error buscando por código EAN.');
@@ -140,7 +156,7 @@ export class PreciosClarosService {
   private sortSucursales(sucursales: PCPrecio[], lat?: number, lng?: number): PCPrecio[] {
     if (lat != null && lng != null) {
       return sucursales
-        .map((s) => ({
+        .map(s => ({
           ...s,
           distancia_km: this.calcularDistancia(lat, lng, parseFloat(s.lat), parseFloat(s.lng)),
         }))
@@ -154,7 +170,7 @@ export class PreciosClarosService {
   }
 
   private calcularDistancia(lat1: number, lng1: number, lat2: number, lng2: number): number {
-    const R = 6371;
+    const R    = 6371;
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLng = ((lng2 - lng1) * Math.PI) / 180;
     const a =

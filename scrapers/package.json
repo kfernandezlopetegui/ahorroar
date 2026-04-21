@@ -12,7 +12,14 @@
     "scrape:bbva": "ts-node src/scrapers/bbva.ts",
     "debug:galicia": "ts-node src/debug-galicia.ts",
     "debug:naranja": "ts-node src/debug-naranja.ts",
-    "debug:bbva": "ts-node src/debug-bbva.ts"
+    "debug:bbva": "ts-node src/debug-bbva.ts",
+    "scrape:supers": "ts-node src/supermarkets-index.ts",
+    "scrape:carrefour": "ts-node src/scrapers/supermarkets/carrefour.ts",
+    "scrape:coto": "ts-node src/scrapers/supermarkets/coto.ts",
+    "scrape:dia": "ts-node src/scrapers/supermarkets/dia.ts",
+    "scrape:jumbo": "ts-node src/scrapers/supermarkets/jumbo.ts",
+    "scrape:anonima": "ts-node src/scrapers/supermarkets/la-anonima.ts",
+    "scrape:changomas": "ts-node src/scrapers/supermarkets/changomas.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",

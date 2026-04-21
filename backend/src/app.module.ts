@@ -15,6 +15,9 @@ import { BankComboService } from './bank-combo/bank-combo.service';
 import { BankComboModule } from './bank-combo/bank-combo.module';
 import { JobsModule } from './jobs/jobs.module';
 import { PromotionsModule } from './promotions/promotions.module';
+import { SupermarketOffersService } from './supermarket-offers/supermarket-offers.service';
+import { SupermarketOffersController } from './supermarket-offers/supermarket-offers.controller';
+import { SupermarketOffersModule } from './supermarket-offers/supermarket-offers.module';
 
 @Module({
   imports: [
@@ -27,8 +30,9 @@ import { PromotionsModule } from './promotions/promotions.module';
     BankComboModule,
     JobsModule,
     PromotionsModule,
+    SupermarketOffersModule,
   ],
-  controllers: [AppController, NotificationsController],
-  providers: [AppService, NotificationsService, WatchlistService, CommunityService, BankComboService],
+  controllers: [AppController, NotificationsController, SupermarketOffersController],
+  providers: [AppService, NotificationsService, WatchlistService, CommunityService, BankComboService, SupermarketOffersService],
 })
 export class AppModule {}
