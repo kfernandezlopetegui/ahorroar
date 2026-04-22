@@ -1,0 +1,232 @@
+{
+  "navState": "c7ha3p",
+  "catId": "",
+  "allResponses": [
+    {
+      "url": "/sitios/cdigi/main.cadba0a05999ee6a.js",
+      "status": 200,
+      "ct": "application/javascript",
+      "size": 2048435,
+      "preview": "(self.webpackChunkcotoweb01=self.webpackChunkcotoweb01||[]).push([[179],{3382:(Ze,qe,N)=>{\"use strict\";var w=N(4836),e=w(N(6690)),M=w(N(9728)),re=N(6409),se=N(6080),te=N(5580),K=N(5960),L=N(1511),V=N(2217),Q=N(206),P=N(6322),W=N(3138).default,be=N(6266),_e=N(5883),ce=N(362),D=function(){var le=[];return P.canUseDOM()||le.push(\"domless\"),typeof process<\"u\"&&typeof process.env<\"u\"&&process.env.BUNDLED&&le.push(\"bundled\"),\"\".concat(\"ciojs-client-\").concat(le.join(\"-\")).concat(le.length?\"-\":\"\").conc",
+      "isJson": false
+    },
+    {
+      "url": "/rest/model/atg/rest/SessionConfirmationActor/getSessionConfirmationNumber",
+      "status": 200,
+      "ct": "application/json",
+      "size": 49,
+      "preview": "{\"sessionConfirmationNumber\":8061683690970696347}",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cProfileActor/getParametros2?idFormulario=PRODUCTO&pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 352,
+      "preview": "{\"codigoError\":\"0\",\"productoDetalle\":[{\"nombre\":\"saltoCantidad\",\"formulario\":\"PRODUCTO\",\"valor\":\"1\"},{\"nombre\":\"saltoCantidadPesable\",\"formulario\":\"PRODUCTO\",\"valor\":\"0.25\"},{\"nombre\":\"cantidadMinima\",\"formulario\":\"PRODUCTO\",\"valor\":\"1\"},{\"nombre\":\"cantidadMinimaPesable\",\"formulario\":\"PRODUCTO\",\"valor\":\"0.25\"}],\"mensajeError\":\"Listado de paràmetros\"}",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cProfileActor/getParametros2?idFormulario=constructor_IO&pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 141,
+      "preview": "{\"codigoError\":\"0\",\"productoDetalle\":[{\"nombre\":\"enabled\",\"formulario\":\"constructor_IO\",\"valor\":\"S\"}],\"mensajeError\":\"Listado de paràmetros\"}",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cProfileActor/getParametros2?idFormulario=NAVIDAD&pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 214,
+      "preview": "{\"codigoError\":\"0\",\"productoDetalle\":[{\"nombre\":\"habilitaAnimacion\",\"formulario\":\"NAVIDAD\",\"valor\":\"N\"},{\"nombre\":\"duracionAnimacion\",\"formulario\":\"NAVIDAD\",\"valor\":\"10000\"}],\"mensajeError\":\"Listado de paràmetros\"}",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cProfileActor/getParametros2?idFormulario=SORTEO&pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 2912,
+      "preview": "{\"codigoError\":\"0\",\"productoDetalle\":[{\"nombre\":\"habilitaConfetti\",\"formulario\":\"SORTEO\",\"valor\":\"0\"},{\"nombre\":\"CHANCESCOMUNIDAD\",\"formulario\":\"SORTEO\",\"valor\":\"1\"},{\"nombre\":\"WEB_HTML\",\"formulario\":\"SORTEO\",\"valor\":\"<div> <div style=\\\"text-align: center; font-family: Open Sans, sans-serif;\\\"> <img style=\\\"border-radius: 10px; width: 100%;\\\" src=\\\"https://static.cotodigital3.com.ar/sitios/cdigi/static/content/images/cdigi/ofertas/cartridge/sorteo-25.png\\\" alt=\\\"\\\"> <h3 style=\\\"font-size: 1.5em;",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cBackOfficeActor/getCategorias?pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 145905,
+      "preview": "{\"output\":[{\"topLevelCategory\":{\"categoryId\":\"\",\"displayName\":\"Ofertas\",\"heroImageDescription\":\"home_cat_oferta\",\"heroImageUrl\":\"http://static.cotodigital.com.ar/sitios/cdigi/static/content/images/categorias/android/home_cat_oferta.png\",\"navigationState\":\"\",\"smallImageUrl\":\"\",\"subCategories\":[{\"categoryId\":\"\",\"displayName\":\"Exclusivas\",\"navigationState\":\"categoria/ofertas-exclusivas/_/N-1nx2iz5?Nf=product.startDate%7CLTEQ+1.7767296E12%7C%7Cproduct.endDate%7CGTEQ+1.7767296E12&Nr=AND%28product.sDi",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cProfileActor/siteNotifications?pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 197,
+      "preview": "{\"codigoError\":\"0\",\"result\":{\"btnClose\":null,\"btnConfirm\":null,\"@class\":\"atg.dto.cvirtual.DtoSiteNotification\",\"description\":null,\"enabled\":false,\"imageIcon\":null,\"title\":null},\"mensajeError\":\"ok\"}",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cProfileActor/init?pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 181,
+      "preview": "{\"codigoError\":\"0\",\"securityStatus\":0,\"lastPasswordUpdate\":\"20260421\",\"emailSuscriptor\":\"yes\",\"idCliente\":\"2644217411\",\"gender\":\"Femenino\",\"cambioCaja\":false,\"orderId\":\"1911779339\"}",
+      "isJson": true
+    },
+    {
+      "url": "https://cdn.evgnet.com/beacon/n55685555553yw3p3gd3n3n3a089562399/cotodigitalprod/scripts/evergage.min.js",
+      "status": 200,
+      "ct": "application/javascript",
+      "size": 224565,
+      "preview": "if (window.Evergage && window.SalesforceInteractions && window.SalesforceInteractions.mcis) {\n    try {\n        window.SalesforceInteractions.log.warn(\"Aborting SDK load since the SalesforceInteractions SDK was already found on this page.\");\n    } catch(e) {}\n} else {\nwindow.evergageBeaconParseTimeStart = (new Date().getTime());\n'use strict';var Evergage=function(l){function vc(c,d){var a=Object.keys(c);if(Object.getOwnPropertySymbols){var b=Object.getOwnPropertySymbols(c);d&&(b=b.filter(functio",
+      "isJson": false
+    },
+    {
+      "url": "/rest/model/atg/actors/cBackOfficeActor/constructorCategories?pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 184586,
+      "preview": "{\"output\":[{\"topLevelCategory\":{\"categoryId\":\"Ofertas\",\"displayName\":\"Ofertas\",\"endecaCategoryId\":\"\",\"heroImageDescription\":\"home_cat_oferta\",\"heroImageUrl\":\"http://static.cotodigital.com.ar/sitios/cdigi/static/content/images/categorias/android/home_cat_oferta.png\",\"navigationState\":\"productos/ofertas\",\"smallImageUrl\":\"\",\"subCategories\":[{\"categoryId\":\"Exclusivas\",\"displayName\":\"Exclusivas\",\"endecaCategoryId\":\"Exclusivas\",\"navigationState\":\"productos/ofertas/Exclusivas\"},{\"categoryId\":\"Miembros ",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cCarritoActor/getCarrito?grp=0&pushSite=CotoDigital",
+      "status": 200,
+      "ct": "application/json",
+      "size": 264,
+      "preview": "{\"codigoError\":\"2\",\"error\":{\"localizedMessage\":\"atg.service.actor.Resources->Atencion: Debe estar logueado para acceder a este recurso (cvActor -> getCarrito\",\"messageCode\":\"USER_NOT_AUTHENTICATED\"},\"mensajeError\":\"Debe estar logueado para acceder a este recurso\"}",
+      "isJson": true
+    },
+    {
+      "url": "/sitios/cdigi/browse?format=json",
+      "status": 200,
+      "ct": "application/json",
+      "size": 509041,
+      "preview": "{\"contents\":[{\"SecondaryContent\":[{\"removeAllAction\":{\"contentPath\":\"/browse\",\"@class\":\"com.endeca.infront.cartridge.model.NavigationAction\",\"label\":null,\"navigationState\":\"?format=json\",\"siteRootPath\":\"/pages\",\"siteState\":{\"@class\":\"com.endeca.infront.site.model.SiteState\",\"contentPath\":\"/browse\",\"matchedUrlPattern\":null,\"properties\":{},\"siteDefinition\":{\"@class\":\"com.endeca.infront.site.model.SiteDefinition\",\"displayName\":\"Coto Digital (Integral)\",\"filterStateConfiguration\":null,\"id\":\"/cdigi\",",
+      "isJson": true
+    },
+    {
+      "url": "https://us.gw.fortiabp.forticloud.com/api/v1/gw/static/js/main.cotodigital_new.qvAq7.v57.js",
+      "status": 200,
+      "ct": "application/javascript",
+      "size": 592413,
+      "preview": "function _0x16bf(){var _0x35b125=['qSk8W5OVtmovga','wmkTW54ZxSkm','ALhdSSkNgbSertLgWQyXsG','umkUW753','W6hcNbJcOWJdImkJW6K','zaTiz2RcIMqQldOQkmojW6W','W7yUW6BdNvRdMG','uIpdVN05e8ovySowfqBcVq','CMvZDefYz3vTzw50CW','WQxcNCoRESkj','WPGCWPqNW53cGq','nJxdPSoBqCoxvCo6pG','krf5W5JcHG','WPuQiNdcJWeVWOnPc191','nSoxW6tdTgFcJXVdSmkTW7BcMNZdVMPpWRtdHNpcHCo2pWiaDtNcQs0','ncldRSogxCoxsCo4','BwvTyMvYswq','cqxdR8oiDa9SWRfqsXe','gHhdRSopFILbWRnu','yxjLv2vpBMXPBMu','BwfYAW','wCk3W5O2wq','WRnYy8o8y8oeeG','y8kEW75/",
+      "isJson": false
+    },
+    {
+      "url": "/rest/model/atg/actors/cBackOfficeActor/getCategorias",
+      "status": 200,
+      "ct": "application/json",
+      "size": 145905,
+      "preview": "{\"output\":[{\"topLevelCategory\":{\"categoryId\":\"\",\"displayName\":\"Ofertas\",\"heroImageDescription\":\"home_cat_oferta\",\"heroImageUrl\":\"http://static.cotodigital.com.ar/sitios/cdigi/static/content/images/categorias/android/home_cat_oferta.png\",\"navigationState\":\"\",\"smallImageUrl\":\"\",\"subCategories\":[{\"categoryId\":\"\",\"displayName\":\"Exclusivas\",\"navigationState\":\"categoria/ofertas-exclusivas/_/N-1nx2iz5?Nf=product.startDate%7CLTEQ+1.7767296E12%7C%7Cproduct.endDate%7CGTEQ+1.7767296E12&Nr=AND%28product.sDi",
+      "isJson": true
+    },
+    {
+      "url": "/sitios/cdigi/main.cadba0a05999ee6a.js",
+      "status": 200,
+      "ct": "application/javascript",
+      "size": 2048435,
+      "preview": "(self.webpackChunkcotoweb01=self.webpackChunkcotoweb01||[]).push([[179],{3382:(Ze,qe,N)=>{\"use strict\";var w=N(4836),e=w(N(6690)),M=w(N(9728)),re=N(6409),se=N(6080),te=N(5580),K=N(5960),L=N(1511),V=N(2217),Q=N(206),P=N(6322),W=N(3138).default,be=N(6266),_e=N(5883),ce=N(362),D=function(){var le=[];return P.canUseDOM()||le.push(\"domless\"),typeof process<\"u\"&&typeof process.env<\"u\"&&process.env.BUNDLED&&le.push(\"bundled\"),\"\".concat(\"ciojs-client-\").concat(le.join(\"-\")).concat(le.length?\"-\":\"\").conc",
+      "isJson": false
+    },
+    {
+      "url": "https://cdn.evgnet.com/beacon/n55685555553yw3p3gd3n3n3a089562399/cotodigitalprod/scripts/evergage.min.js",
+      "status": 200,
+      "ct": "application/javascript",
+      "size": 224565,
+      "preview": "if (window.Evergage && window.SalesforceInteractions && window.SalesforceInteractions.mcis) {\n    try {\n        window.SalesforceInteractions.log.warn(\"Aborting SDK load since the SalesforceInteractions SDK was already found on this page.\");\n    } catch(e) {}\n} else {\nwindow.evergageBeaconParseTimeStart = (new Date().getTime());\n'use strict';var Evergage=function(l){function vc(c,d){var a=Object.keys(c);if(Object.getOwnPropertySymbols){var b=Object.getOwnPropertySymbols(c);d&&(b=b.filter(functio",
+      "isJson": false
+    },
+    {
+      "url": "/rest/model/atg/actors/cProfileActor/getParametros2?idFormulario=constructor_IO&pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 141,
+      "preview": "{\"codigoError\":\"0\",\"productoDetalle\":[{\"nombre\":\"enabled\",\"formulario\":\"constructor_IO\",\"valor\":\"S\"}],\"mensajeError\":\"Listado de paràmetros\"}",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cProfileActor/getParametros2?idFormulario=NAVIDAD&pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 214,
+      "preview": "{\"codigoError\":\"0\",\"productoDetalle\":[{\"nombre\":\"habilitaAnimacion\",\"formulario\":\"NAVIDAD\",\"valor\":\"N\"},{\"nombre\":\"duracionAnimacion\",\"formulario\":\"NAVIDAD\",\"valor\":\"10000\"}],\"mensajeError\":\"Listado de paràmetros\"}",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cProfileActor/getParametros2?idFormulario=SORTEO&pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 2912,
+      "preview": "{\"codigoError\":\"0\",\"productoDetalle\":[{\"nombre\":\"habilitaConfetti\",\"formulario\":\"SORTEO\",\"valor\":\"0\"},{\"nombre\":\"CHANCESCOMUNIDAD\",\"formulario\":\"SORTEO\",\"valor\":\"1\"},{\"nombre\":\"WEB_HTML\",\"formulario\":\"SORTEO\",\"valor\":\"<div> <div style=\\\"text-align: center; font-family: Open Sans, sans-serif;\\\"> <img style=\\\"border-radius: 10px; width: 100%;\\\" src=\\\"https://static.cotodigital3.com.ar/sitios/cdigi/static/content/images/cdigi/ofertas/cartridge/sorteo-25.png\\\" alt=\\\"\\\"> <h3 style=\\\"font-size: 1.5em;",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cBackOfficeActor/getCategorias?pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 145905,
+      "preview": "{\"output\":[{\"topLevelCategory\":{\"categoryId\":\"\",\"displayName\":\"Ofertas\",\"heroImageDescription\":\"home_cat_oferta\",\"heroImageUrl\":\"http://static.cotodigital.com.ar/sitios/cdigi/static/content/images/categorias/android/home_cat_oferta.png\",\"navigationState\":\"\",\"smallImageUrl\":\"\",\"subCategories\":[{\"categoryId\":\"\",\"displayName\":\"Exclusivas\",\"navigationState\":\"categoria/ofertas-exclusivas/_/N-1nx2iz5?Nf=product.startDate%7CLTEQ+1.7767296E12%7C%7Cproduct.endDate%7CGTEQ+1.7767296E12&Nr=AND%28product.sDi",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cProfileActor/init?pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 181,
+      "preview": "{\"codigoError\":\"0\",\"securityStatus\":0,\"lastPasswordUpdate\":\"20260421\",\"emailSuscriptor\":\"yes\",\"idCliente\":\"2644217411\",\"gender\":\"Femenino\",\"cambioCaja\":false,\"orderId\":\"1911779339\"}",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cProfileActor/siteNotifications?pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 197,
+      "preview": "{\"codigoError\":\"0\",\"result\":{\"btnClose\":null,\"btnConfirm\":null,\"@class\":\"atg.dto.cvirtual.DtoSiteNotification\",\"description\":null,\"enabled\":false,\"imageIcon\":null,\"title\":null},\"mensajeError\":\"ok\"}",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cBackOfficeActor/constructorCategories?pushSite=CotoDigital&_dynSessConf=8061683690970696347",
+      "status": 200,
+      "ct": "application/json",
+      "size": 184586,
+      "preview": "{\"output\":[{\"topLevelCategory\":{\"categoryId\":\"Ofertas\",\"displayName\":\"Ofertas\",\"endecaCategoryId\":\"\",\"heroImageDescription\":\"home_cat_oferta\",\"heroImageUrl\":\"http://static.cotodigital.com.ar/sitios/cdigi/static/content/images/categorias/android/home_cat_oferta.png\",\"navigationState\":\"productos/ofertas\",\"smallImageUrl\":\"\",\"subCategories\":[{\"categoryId\":\"Exclusivas\",\"displayName\":\"Exclusivas\",\"endecaCategoryId\":\"Exclusivas\",\"navigationState\":\"productos/ofertas/Exclusivas\"},{\"categoryId\":\"Miembros ",
+      "isJson": true
+    },
+    {
+      "url": "https://us.gw.fortiabp.forticloud.com/api/v1/gw/static/js/main.cotodigital_new.qvAq7.v57.js",
+      "status": 200,
+      "ct": "application/javascript",
+      "size": 592413,
+      "preview": "function _0x16bf(){var _0x35b125=['qSk8W5OVtmovga','wmkTW54ZxSkm','ALhdSSkNgbSertLgWQyXsG','umkUW753','W6hcNbJcOWJdImkJW6K','zaTiz2RcIMqQldOQkmojW6W','W7yUW6BdNvRdMG','uIpdVN05e8ovySowfqBcVq','CMvZDefYz3vTzw50CW','WQxcNCoRESkj','WPGCWPqNW53cGq','nJxdPSoBqCoxvCo6pG','krf5W5JcHG','WPuQiNdcJWeVWOnPc191','nSoxW6tdTgFcJXVdSmkTW7BcMNZdVMPpWRtdHNpcHCo2pWiaDtNcQs0','ncldRSogxCoxsCo4','BwvTyMvYswq','cqxdR8oiDa9SWRfqsXe','gHhdRSopFILbWRnu','yxjLv2vpBMXPBMu','BwfYAW','wCk3W5O2wq','WRnYy8o8y8oeeG','y8kEW75/",
+      "isJson": false
+    },
+    {
+      "url": "/sitios/cdigi/categoria/ofertas-todas-las-ofertas/_/N-c7ha3p?format=json",
+      "status": 200,
+      "ct": "application/json",
+      "size": 371007,
+      "preview": "{\"contents\":[{\"Main\":[{\"urlRedirect\":\"\",\"bannerName\":\"\",\"@type\":\"Category_MediaBanner\",\"externo\":true,\"name\":\"Media Banner top\",\"endeca:auditInfo\":{\"ecr:resourcePath\":\"content/NuevoSitio/Catalogo/No desactivar default/Busqueda Left KW default todas\",\"ecr:innerPath\":\"Main[0]\"},\"modal\":false,\"imageURL\":\"\"},{\"@type\":\"Category_SearchAdjustments\",\"endeca:auditInfo\":{\"ecr:resourcePath\":\"content/NuevoSitio/Catalogo/No desactivar default/Busqueda Left KW default todas\",\"ecr:innerPath\":\"Main[1]\"},\"name\":",
+      "isJson": true
+    },
+    {
+      "url": "https://n55685555553yw3p3gd3n3n3a089562399.us-5.evergage.com/api2/event/cotodigitalprod?event=eyJzb3VyY2UiOnsicGFnZVR5cGUiOiJDb3RvIERpZ2l0YWwgLSBPZmVydGFzIiwidXJsIjoiaHR0cHM6Ly93d3cuY290b2RpZ2l0YWwuY29tLmFyL3NpdGlvcy9jZGlnaS9jYXRlZ29yaWEvb2ZlcnRhcy10b2Rhcy1sYXMtb2ZlcnRhcy9fL04tYzdoYTNwIiwidXJsUmVmZXJyZXIiOiIiLCJjaGFubmVsIjoiV2ViIiwiYmVhY29uVmVyc2lvbiI6MTYsImNvbmZpZ1ZlcnNpb24iOiI5MCIsImNvbnRlbnRab25lcyI6W119LCJ1c2VyIjp7ImFub255bW91c0lkIjoiYTFkZjBjNWRmYWMxYjc4NiJ9LCJpbnRlcmFjdGlvbiI6eyJuYW1lIjoiQ290byBEaWdpdGFsIC0gT2ZlcnRhcyJ9LCJwYWdlVmlldyI6dHJ1ZSwiY29uc2VudHMiOltdLCJhY2NvdW50Ijp7fSwiX3Rvb2xzRXZlbnRMaW5rSWQiOiI3NDI1NjI2Njk5MTcxMjE2IiwiZXhwbGFpbiI6dHJ1ZX0%3D",
+      "status": 200,
+      "ct": "application/json",
+      "size": 137,
+      "preview": "{\"id\":\"69e80fa64dc44b5643383bfb\",\"campaignResponses\":[],\"compiledCampaignTemplates\":[],\"errorCode\":0,\"resolvedUserId\":\"a1df0c5dfac1b786\"}",
+      "isJson": true
+    },
+    {
+      "url": "/rest/model/atg/actors/cCarritoActor/getCarrito?grp=0&pushSite=CotoDigital",
+      "status": 200,
+      "ct": "application/json",
+      "size": 264,
+      "preview": "{\"codigoError\":\"2\",\"error\":{\"localizedMessage\":\"atg.service.actor.Resources->Atencion: Debe estar logueado para acceder a este recurso (cvActor -> getCarrito\",\"messageCode\":\"USER_NOT_AUTHENTICATED\"},\"mensajeError\":\"Debe estar logueado para acceder a este recurso\"}",
+      "isJson": true
+    }
+  ],
+  "workingEndpoints": [],
+  "timestamp": "2026-04-22T00:00:51.910Z"
+}

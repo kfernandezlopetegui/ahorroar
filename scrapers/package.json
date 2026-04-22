@@ -19,7 +19,9 @@
     "scrape:dia": "ts-node src/scrapers/supermarkets/dia.ts",
     "scrape:jumbo": "ts-node src/scrapers/supermarkets/jumbo.ts",
     "scrape:anonima": "ts-node src/scrapers/supermarkets/la-anonima.ts",
-    "scrape:changomas": "ts-node src/scrapers/supermarkets/changomas.ts"
+    "scrape:changomas": "ts-node src/scrapers/supermarkets/changomas.ts",
+    "debug:coto2": "ts-node src/debug-coto2.ts",
+    "debug:anonima2": "ts-node src/debug-anonima2.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",

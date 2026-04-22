@@ -1,9 +1,3 @@
-/**
- * Coto Digital — Oracle ATG Commerce
- * getCategorias funciona y devuelve el árbol de categorías.
- * Estructura: output[].topLevelCategory.{ categoryId, displayName, subCategories[] }
- * Usamos los categoryId para llamar al endpoint de productos.
- */
 import {
   SuperOffer, saveSuperOffers, createBrowser, createPage,
   detectSuperCategory, calcDiscount, today, endOfWeek,
@@ -11,236 +5,56 @@ import {
 
 const CHAIN = 'Coto';
 const BASE  = 'https://www.cotodigital.com.ar';
+const PAGE_SIZE = 24;
+const MAX_PAGES = 25;
 
 export async function scrapeCoto(): Promise<SuperOffer[]> {
-  console.log(`[${CHAIN}] Iniciando scraper (ATG REST - getCategorias + productos)...`);
+  console.log(`[${CHAIN}] Iniciando scraper...`);
   const browser = await createBrowser();
-  const offers:   SuperOffer[] = [];
+  const offers:  SuperOffer[] = [];
 
   try {
     const page = await createPage(browser);
 
-    // Paso 1: Establecer sesión ATG
-    console.log(`[${CHAIN}] Estableciendo sesión...`);
     await page.goto(`${BASE}/sitios/cdigi/browse`, {
-      waitUntil: 'networkidle',
-      timeout:   25_000,
+      waitUntil: 'domcontentloaded', timeout: 20_000,
     });
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(2000);
 
-    // Paso 2: Obtener árbol de categorías
-    const categoriasRaw = await page.evaluate(async (base: string) => {
-      try {
-        const r = await fetch(`${base}/rest/model/atg/actors/cBackOfficeActor/getCategorias`, {
-          method:      'POST',
-          credentials: 'include',
-          headers:     { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body:        JSON.stringify({}),
-        });
-        if (!r.ok) return null;
-        return await r.json();
-      } catch { return null; }
-    }, BASE);
+    const navStates = await getEndecaNavStates(page);
+    console.log(`[${CHAIN}] NavStates: ${navStates.length}`);
 
-    // Extraer IDs del árbol de categorías
-    const catIds = parseCategoryIds(categoriasRaw);
-    console.log(`[${CHAIN}] Categorías encontradas: ${catIds.length} →`, catIds.map(c => c.label).join(', '));
+    for (const { navState, label } of navStates) {
+      let catOffers = 0;
+      let total     = 0;
 
-    if (!catIds.length) {
-      // Fallback con IDs hardcodeados si getCategorias no devuelve IDs útiles
-      catIds.push(
-        { id: 'ofertas',   navState: 'N-c7ha3p', label: 'Ofertas'    },
-        { id: 'almacen',   navState: '',         label: 'Almacén'    },
-        { id: 'lacteos',   navState: '',         label: 'Lácteos'    },
-        { id: 'bebidas',   navState: '',         label: 'Bebidas'    },
-        { id: 'limpieza',  navState: '',         label: 'Limpieza'   },
-        { id: 'perfumeria',navState: '',         label: 'Perfumería' },
-      );
-    }
+      for (let pageNo = 0; pageNo < MAX_PAGES; pageNo++) {
+        const No  = pageNo * PAGE_SIZE;
+        const sep = navState.includes('?') ? '&' : '?';
+        const url = `${BASE}/sitios/cdigi/${navState}${sep}format=json&Nrpp=${PAGE_SIZE}&No=${No}`;
 
-    // Paso 3: Probar endpoints de productos con los categoryIds reales
-    const productEndpoints = [
-      // Actor de catálogo — variantes de nombre comunes en ATG en español
-      (catId: string) => ({ 
-        url: `${BASE}/rest/model/atg/actors/cCatalogoActor/getProductosByCategoria`,
-        body: { categoryId: catId, Nrpp: 50, No: 0 },
-      }),
-      (catId: string) => ({
-        url: `${BASE}/rest/model/atg/actors/cCatalogoActor/getProductos`,
-        body: { categoryId: catId, pageSize: 50, page: 0 },
-      }),
-      (catId: string) => ({
-        url: `${BASE}/rest/model/atg/actors/cBrowseActor/getProductos`,
-        body: { categoryId: catId, Nrpp: 50, No: 0 },
-      }),
-      (catId: string) => ({
-        url: `${BASE}/rest/model/atg/actors/cBrowseActor/browse`,
-        body: { categoryId: catId, Nrpp: 50, No: 0, Dy: 1 },
-      }),
-      // Browse endpoint clásico ATG con categoryId como parámetro GET
-      (catId: string) => ({
-        url: `${BASE}/sitios/cdigi/browse/${catId}?Nrpp=50&No=0&format=json`,
-        body: null,
-      }),
-      // Browse con navState
-      (catId: string) => ({
-        url: `${BASE}/sitios/cdigi/browse?N=${catId}&Nrpp=50&No=0`,
-        body: null,
-      }),
-    ];
+        const json = await navigateAndCapture(page, url);
+        if (!json) { if (pageNo === 0) console.warn(`[${CHAIN}] Sin JSON: ${label}`); break; }
 
-    // Encontrar el endpoint que funciona
-    let workingEndpointIdx = -1;
-
-    for (let i = 0; i < productEndpoints.length; i++) {
-      const firstCat = catIds[0];
-      const { url, body } = productEndpoints[i](firstCat.id || firstCat.navState);
-
-      const result = await page.evaluate(async ({ url, body }: { url: string; body: any }) => {
-        try {
-          const opts: RequestInit = {
-            credentials: 'include',
-            headers:     { Accept: 'application/json', 'Content-Type': 'application/json' },
-          };
-          if (body) {
-            opts.method = 'POST';
-            opts.body   = JSON.stringify(body);
-          }
-          const r = await fetch(url, opts);
-          if (!r.ok) return null;
-          const text = await r.text();
-          if (!text.trim().startsWith('{') && !text.trim().startsWith('[')) return null;
-          return JSON.parse(text);
-        } catch { return null; }
-      }, { url, body });
-
-      if (result) {
-        const products = extractAtgProducts(result);
-        if (products.length > 1) { // más de 1 = lista real de productos
-          console.log(`[${CHAIN}] ✅ Endpoint #${i} funciona: ${url.replace(BASE, '')} → ${products.length} productos`);
-          workingEndpointIdx = i;
-          for (const p of products) {
-            const offer = mapAtgProduct(p);
-            if (offer) offers.push(offer);
-          }
-          break;
+        if (pageNo === 0) {
+          total = extractEndecaTotal(json);
+          if (total > 0) console.log(`[${CHAIN}] ${label}: total=${total}`);
         }
-      }
-    }
 
-    // Paso 4: Si encontramos el endpoint, iterar todas las categorías con paginación
-    if (workingEndpointIdx >= 0) {
-      for (const cat of catIds.slice(1)) {
-        let pageNo = 0;
-        while (true) {
-          const { url, body } = productEndpoints[workingEndpointIdx](cat.id || cat.navState);
-          const paginatedBody = body
-            ? { ...body, No: pageNo * 50, page: pageNo }
-            : null;
-          const paginatedUrl  = body
-            ? url
-            : url.replace('No=0', `No=${pageNo * 50}`).replace('page=0', `page=${pageNo}`);
+        const records = extractEndecaProducts(json);
+        if (!records.length) break;
 
-          const result = await page.evaluate(async ({ url, body }: { url: string; body: any }) => {
-            try {
-              const opts: RequestInit = {
-                credentials: 'include',
-                headers:     { Accept: 'application/json', 'Content-Type': 'application/json' },
-              };
-              if (body) { opts.method = 'POST'; opts.body = JSON.stringify(body); }
-              const r = await fetch(url, opts);
-              if (!r.ok) return null;
-              return await r.json();
-            } catch { return null; }
-          }, { url: paginatedUrl, body: paginatedBody });
-
-          if (!result) break;
-          const products = extractAtgProducts(result);
-          if (!products.length) break;
-
-          for (const p of products) {
-            const offer = mapAtgProduct(p);
-            if (offer) offers.push(offer);
-          }
-
-          const total = result.resultSet?.total ?? result.total ?? 0;
-          if (total && (pageNo + 1) * 50 >= total) break;
-          if (products.length < 50) break;
-          pageNo++;
-          if (pageNo > 20) break;
-          await new Promise(r => setTimeout(r, 300));
+        for (const r of records) {
+          const offer = mapEndecaProduct(r);
+          if (offer) { offers.push(offer); catOffers++; }
         }
-        await new Promise(r => setTimeout(r, 400));
+
+        if (total > 0 && No + PAGE_SIZE >= total) break;
+        if (records.length < PAGE_SIZE) break;
+        await sleep(400);
       }
 
-    } else {
-      // Paso 5: Ningún endpoint funcionó — DOM fallback
-      console.log(`[${CHAIN}] Ningún endpoint de productos encontrado. Intentando DOM...`);
-      await page.goto(
-        `${BASE}/sitios/cdigi/categoria/ofertas-todas-las-ofertas/_/N-c7ha3p`,
-        { waitUntil: 'networkidle', timeout: 20_000 },
-      );
-      await page.waitForTimeout(3000);
-
-      for (let i = 0; i < 12; i++) {
-        await page.evaluate(() => window.scrollBy(0, 1500));
-        await page.waitForTimeout(400);
-      }
-      await page.waitForTimeout(2000);
-
-      // Intentar llamar al endpoint de productos usando el navState de "Ofertas"
-      const ofertasNavState = catIds.find(c => c.label.toLowerCase().includes('oferta'))?.navState ?? 'c7ha3p';
-      const browseResult = await page.evaluate(async ({ base, navState }: { base: string; navState: string }) => {
-        try {
-          const urls = [
-            `${base}/sitios/cdigi/browse?N=${navState}&Nrpp=50&No=0`,
-            `${base}/sitios/cdigi/categoria/ofertas-todas-las-ofertas/_/N-${navState}?Nrpp=50&No=0`,
-          ];
-          for (const url of urls) {
-            const r = await fetch(url, {
-              credentials: 'include',
-              headers:     { Accept: 'application/json, text/plain, */*' },
-            });
-            if (!r.ok) continue;
-            const text = await r.text();
-            try { return JSON.parse(text); } catch { /* no JSON */ }
-          }
-          return null;
-        } catch { return null; }
-      }, { base: BASE, navState: ofertasNavState });
-
-      if (browseResult) {
-        const products = extractAtgProducts(browseResult);
-        console.log(`[${CHAIN}] Browse con navState: ${products.length} productos`);
-        for (const p of products) {
-          const offer = mapAtgProduct(p);
-          if (offer) offers.push(offer);
-        }
-      }
-
-      // DOM como último recurso
-      if (!offers.length) {
-        const domItems = await page.evaluate(() => {
-          const items: any[] = [];
-          document.querySelectorAll(
-            '.product_grid_each, [class*="productCard"], [id*="product_"], ' +
-            '[data-product-id], [class*="product-item"]',
-          ).forEach(el => {
-            const name  = el.querySelector('[class*="descrip"], [class*="display_name"], h3, h2')?.textContent?.trim();
-            const price = el.querySelector('[class*="newPrice"], [class*="sale"], [class*="oferta"]')?.textContent?.trim();
-            const orig  = el.querySelector('[class*="oldPrice"], [class*="lista"], [class*="regular"]')?.textContent?.trim();
-            const ean   = el.getAttribute('data-ean') ?? el.getAttribute('data-product-id');
-            if (name && price) items.push({ name, price, orig, ean });
-          });
-          return items;
-        });
-
-        console.log(`[${CHAIN}] DOM final: ${domItems.length} elementos`);
-        for (const item of domItems) {
-          const offer = mapDomProduct(item);
-          if (offer) offers.push(offer);
-        }
-      }
+      if (catOffers > 0) console.log(`[${CHAIN}] ✅ ${label}: ${catOffers} ofertas`);
     }
 
   } catch (err: any) {
@@ -249,135 +63,182 @@ export async function scrapeCoto(): Promise<SuperOffer[]> {
     await browser.close();
   }
 
-  console.log(`[${CHAIN}] ${offers.length} ofertas encontradas`);
+  console.log(`[${CHAIN}] Total: ${offers.length} ofertas`);
   return offers;
 }
 
-/** Parsea el árbol de categorías de getCategorias */
-function parseCategoryIds(raw: any): { id: string; navState: string; label: string }[] {
-  if (!raw?.output) return [];
-  const result: { id: string; navState: string; label: string }[] = [];
-
-  for (const top of raw.output) {
-    const cat = top.topLevelCategory ?? top;
-    if (!cat) continue;
-
-    const label      = cat.displayName ?? cat.nombre ?? '';
-    const categoryId = cat.categoryId  ?? cat.id     ?? '';
-    const navState   = cat.navigationState ?? '';
-
-    if (categoryId || navState) {
-      result.push({ id: categoryId, navState, label });
-    }
-
-    // Subcategorías
-    for (const sub of cat.subCategories ?? cat.subcategorias ?? []) {
-      const subId  = sub.categoryId ?? sub.id ?? '';
-      const subNav = sub.navigationState ?? '';
-      const subLbl = sub.displayName ?? sub.nombre ?? '';
-      if (subId || subNav) {
-        result.push({ id: subId, navState: subNav, label: subLbl });
+async function getEndecaNavStates(page: any): Promise<{ navState: string; label: string }[]> {
+  // "Todas las Ofertas" siempre primero — la más completa (14628 productos)
+  const result: { navState: string; label: string }[] = [
+    { navState: 'categoria/ofertas-todas-las-ofertas/_/N-c7ha3p', label: 'Todas las Ofertas' },
+  ];
+  try {
+    const data = await page.evaluate(async (base: string) => {
+      const r = await fetch(`${base}/rest/model/atg/actors/cBackOfficeActor/getCategorias`, {
+        method: 'POST', credentials: 'include',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: '{}',
+      });
+      return r.json();
+    }, BASE);
+    for (const top of data?.output ?? []) {
+      const cat = top.topLevelCategory ?? top;
+      if (!cat.displayName?.toLowerCase().includes('oferta')) continue;
+      for (const sub of cat.subCategories ?? []) {
+        const ns = sub.navigationState ?? '';
+        if (!ns || !ns.includes('N-')) continue;
+        if (result.some(r => r.navState === ns)) continue;
+        result.push({ navState: ns, label: sub.displayName ?? ns });
       }
     }
-  }
-
+  } catch { /* usar hardcodeado */ }
   return result;
 }
 
-/** Extrae array de productos de cualquier estructura ATG */
-function extractAtgProducts(json: any): any[] {
-  if (!json || typeof json !== 'object') return [];
-  const candidates = [
-    json.resultSet?.records,
-    json.records,
-    json.output?.records,
-    json.output?.productos,
-    json.output,
-    json.productos,
-    json.products,
-    json.items,
-    json.data?.records,
-    json.data?.productos,
-    Array.isArray(json) ? json : null,
-  ];
-  for (const c of candidates) {
-    if (Array.isArray(c) && c.length > 0) {
-      const first = JSON.stringify(c[0]).toLowerCase();
-      if (first.includes('price') || first.includes('precio') ||
-          first.includes('name')  || first.includes('nombre') ||
-          first.includes('displayname')) {
-        return c;
-      }
-    }
-  }
-  return [];
+async function navigateAndCapture(page: any, url: string): Promise<any | null> {
+  let capturedData: any = null;
+  const handler = async (response: any) => {
+    if (!response.url().includes('format=json')) return;
+    if (response.status() !== 200) return;
+    try {
+      const text = await response.text();
+      if (text.length < 10_000) return;
+      const json = JSON.parse(text);
+      if (json.contents) capturedData = json;
+    } catch { /* ignorar */ }
+  };
+  page.on('response', handler);
+  try {
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15_000 });
+    await page.waitForTimeout(2500);
+  } catch { /* timeout ok */ }
+  page.off('response', handler);
+  return capturedData;
 }
 
-function mapAtgProduct(r: any): SuperOffer | null {
-  const a = r.attributes ?? r.allMeta ?? {};
+function extractEndecaProducts(json: any): any[] {
+  if (!json?.contents) return [];
+  const products: any[] = [];
+  const searchIn = (obj: any, depth = 0) => {
+    if (!obj || typeof obj !== 'object' || depth > 8) return;
+    if (Array.isArray(obj.records) && obj.records.length > 0) {
+      const first = obj.records[0];
+      if (first.attributes || first.detailsAction) {
+        products.push(...obj.records);
+        return;
+      }
+    }
+    for (const val of Object.values(obj)) {
+      if (Array.isArray(val)) {
+        for (const item of val) {
+          if (item && typeof item === 'object') searchIn(item, depth + 1);
+        }
+      } else if (val && typeof val === 'object') {
+        searchIn(val as any, depth + 1);
+      }
+    }
+  };
+  searchIn(json);
+  return products;
+}
 
-  const name = String(
-    a['product.displayName']?.[0] ?? a['displayName']?.[0] ??
-    r.displayName ?? r.nombre ?? r.name ?? r.title ?? '',
-  ).trim();
-  if (!name || name.length < 3) return null;
-
-  const getNum = (keys: string[]) => {
-    for (const k of keys) {
-      const v = a[k]?.[0] ?? r[k];
-      if (v != null) {
-        const n = parseFloat(String(v).replace(/[^\d.,]/g, '').replace(',', '.'));
-        if (n > 0) return n;
+function extractEndecaTotal(json: any): number {
+  const search = (obj: any, d = 0): number => {
+    if (!obj || typeof obj !== 'object' || d > 8) return 0;
+    if (typeof obj.totalNumRecs === 'number') return obj.totalNumRecs;
+    if (typeof obj.numRecs      === 'number') return obj.numRecs;
+    for (const v of Object.values(obj)) {
+      if (v && typeof v === 'object') {
+        const f = search(v as any, d + 1);
+        if (f > 0) return f;
       }
     }
     return 0;
   };
+  return search(json);
+}
 
-  const offerPrice    = getNum(['sku.activePrice','activePrice','price','precio','salePrice','precioVigente']);
-  const originalPrice = getNum(['sku.listPrice','listPrice','originalPrice','precioLista','precioOriginal']);
+function mapEndecaProduct(parentRecord: any): SuperOffer | null {
+  // Combinar atributos parent + sub-record
+  const sub      = parentRecord.records?.[0] ?? {};
+  const allAttrs = { ...parentRecord.attributes ?? {}, ...sub.attributes ?? {} };
+
+  // Extrae primera valor de atributo (siempre es array de 1 elemento en Endeca)
+  const attr = (...keys: string[]): string => {
+    for (const k of keys) {
+      const v = allAttrs[k];
+      if (v != null) return String(Array.isArray(v) ? v[0] : v).trim();
+    }
+    return '';
+  };
+
+  const name = attr('product.displayName', 'sku.displayName');
+  if (!name || name.length < 3) return null;
+
+  // Precio activo (lo que paga el cliente) y precio de referencia (precio original)
+  // Confirmado en la estructura: sku.activePrice=2100, sku.referencePrice=4200
+  const offerPrice    = parsePrice(attr('sku.activePrice'));
+  const originalPrice = parsePrice(attr('sku.referencePrice'));
+
   if (!offerPrice) return null;
 
   const discount = calcDiscount(originalPrice, offerPrice);
-  if (discount < 5 && !originalPrice) return null;
+  if (discount < 0) return null;
+
+  // EAN principal confirmado en estructura
+  const ean = attr('product.eanPrincipal') || null;
+
+  // Imagen: preferir medium, fallback large
+  const imageUrl = attr('product.mediumImage.url', 'product.largeImage.url') || undefined;
+
+  // Texto de descuento desde dtoDescuentos (JSON embebido)
+  let offerDescription = '';
+  try {
+    const dtoJson = attr('product.dtoDescuentos');
+    if (dtoJson && dtoJson !== '[]') {
+      const dtos = JSON.parse(dtoJson);
+      if (dtos.length > 0) {
+        // Ej: "35%Dto" o "2x1"
+        offerDescription = dtos[0].textoDescuento?.trim() ?? '';
+        // También: "Precio Contado: $2100"
+        if (!offerDescription) offerDescription = dtos[0].textoPrecioRegular?.trim() ?? '';
+      }
+    }
+  } catch { /* ignorar */ }
+
+  if (!offerDescription && discount > 0) offerDescription = `${discount}% OFF`;
+  if (!offerDescription) offerDescription = 'Precio especial';
+
+  // Tipo de oferta
+  let offerType: SuperOffer['offer_type'] = 'percent';
+  if (/2x1|2\s*x\s*1/i.test(offerDescription)) offerType = '2x1';
+  else if (/3x2|3\s*x\s*2/i.test(offerDescription)) offerType = '3x2';
+
+  // Categoría del departamento (LDEPAR = ALMACEN, LIMPIEZA, etc.)
+  const depar = attr('product.LDEPAR', 'product.LCLASE', 'product.category');
 
   return {
     chain:             CHAIN,
-    ean:               String(a['product.ean']?.[0] ?? a['ean']?.[0] ?? r.ean ?? r.codigoBarra ?? '') || null,
+    ean:               ean || null,
     product_name:      name.slice(0, 200),
-    category:          detectSuperCategory(name),
-    image_url:         a['product.largeImage']?.[0] ?? r.image ?? r.imageUrl ?? r.imagen ?? undefined,
+    category:          detectSuperCategory(`${name} ${depar}`),
+    image_url:         imageUrl,
     original_price:    originalPrice || null,
     offer_price:       offerPrice,
     discount_pct:      discount || undefined,
-    offer_type:        'percent',
-    offer_description: discount > 0 ? `${discount}% OFF` : 'Precio especial',
+    offer_type:        offerType,
+    offer_description: offerDescription.slice(0, 200),
     valid_from:        today(),
     valid_until:       endOfWeek(),
   };
 }
 
-function mapDomProduct(item: { name: string; price: string; orig?: string; ean?: string | null }): SuperOffer | null {
-  const parseP = (s: string) =>
-    parseFloat((s ?? '').replace(/\s/g,'').replace(/\$/g,'').replace(/\./g,'').replace(',','.')) || 0;
-  const offerPrice    = parseP(item.price);
-  const originalPrice = parseP(item.orig ?? '');
-  if (!offerPrice) return null;
-  const discount = calcDiscount(originalPrice, offerPrice);
-  if (discount < 5 && !item.orig) return null;
-  return {
-    chain:             CHAIN,
-    ean:               item.ean || null,
-    product_name:      item.name.slice(0, 200),
-    category:          detectSuperCategory(item.name),
-    original_price:    originalPrice || null,
-    offer_price:       offerPrice,
-    discount_pct:      discount || undefined,
-    offer_type:        'percent',
-    offer_description: discount > 0 ? `${discount}% OFF` : 'Precio especial',
-    valid_from:        today(),
-    valid_until:       endOfWeek(),
-  };
+function parsePrice(raw: string): number {
+  if (!raw) return 0;
+  return parseFloat(raw.replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
 }
+
+function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
 
 if (require.main === module) {
   scrapeCoto()
