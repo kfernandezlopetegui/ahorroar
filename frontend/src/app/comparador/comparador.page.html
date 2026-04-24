@@ -104,8 +104,8 @@
   }
   }
 
-  <!-- ── DETALLE DE PRECIOS ─────────────────────────────── -->
-  @if (productoSeleccionado()) {
+ <!-- ── DETALLE DE PRECIOS (Precios Claros) ─────────────────────── -->
+@if (productoSeleccionado()) {
   <div style="padding:12px;">
 
     <!-- Header producto -->
@@ -123,140 +123,108 @@
       </div>
       <img [src]="'https://imagenes.preciosclaros.gob.ar/imagenes/productos/'
             + productoSeleccionado()!.id + '.png'"
-        style="width:48px; height:48px; object-fit:contain; border-radius:8px;" onerror="this.style.display='none'" />
+        style="width:48px; height:48px; object-fit:contain; border-radius:8px;"
+        onerror="this.style.display='none'" />
     </div>
-
-    @if (supermarketOffers().length) {
-    <div style="margin-bottom:12px;">
-      <p style="font-weight:700; font-size:13px; color:var(--ion-color-warning-shade);
-               margin:0 0 6px;">
-        🏷️ Ofertas vigentes esta semana
-      </p>
-      <div style="display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding-bottom:4px;">
-        @for (o of supermarketOffers(); track o.chain) {
-        <div style="flex-shrink:0; background:var(--ion-color-warning-tint);
-                     border-radius:10px; padding:10px 12px; min-width:140px;">
-          <p style="font-weight:700; font-size:13px; margin:0; color:var(--ion-color-warning-shade);">
-            {{ o.chain }}
-          </p>
-          <p style="font-size:18px; font-weight:800; margin:4px 0 0;
-                     color:var(--ion-color-success);">
-            ${{ o.offer_price | number }}
-          </p>
-          @if (o.discount_pct) {
-          <ion-badge color="success" style="font-size:11px;">{{ o.discount_pct }}% OFF</ion-badge>
-          }
-          <p style="font-size:10px; color:var(--ion-color-medium); margin:4px 0 0;">
-            hasta {{ o.valid_until }}
-          </p>
-        </div>
-        }
-      </div>
-    </div>
-    }
 
     <!-- Chips contexto -->
     <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
       @if (mejorPrecio()) {
-      <ion-chip color="success">
-        <ion-icon name="trending-down-outline" slot="start" />
-        Mejor: ${{ mejorPrecio()!.preciosProducto.precioLista | number }}
-        en {{ mejorPrecio()!.banderaDescripcion }}
-      </ion-chip>
+        <ion-chip color="success">
+          <ion-icon name="trending-down-outline" slot="start" />
+          Mejor: ${{ mejorPrecio()!.preciosProducto.precioLista | number }}
+          en {{ mejorPrecio()!.banderaDescripcion }}
+        </ion-chip>
       }
       @if (usandoUbicacion()) {
-      <ion-chip color="primary" outline>
-        <ion-icon name="location-outline" slot="start" />
-        Por distancia
-      </ion-chip>
+        <ion-chip color="primary" outline>
+          <ion-icon name="location-outline" slot="start" />
+          Por distancia
+        </ion-chip>
       }
     </div>
 
-    <!-- Loading precios -->
     @if (loadingPrecios()) {
-    <div style="display:flex; justify-content:center; padding:30px;">
-      <ion-spinner name="crescent" />
-    </div>
+      <div style="display:flex; justify-content:center; padding:30px;">
+        <ion-spinner name="crescent" />
+      </div>
     }
 
-    <!-- Lista precios -->
     @for (precio of precios(); track precio.id) {
-    <ion-card style="margin:6px 0; border-radius:12px;" [style.border]="precio === mejorPrecio()
-            ? '1.5px solid var(--ion-color-success)' : ''">
-      <ion-card-content style="padding:12px;">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-          <div style="flex:1;">
-            <p style="font-weight:600; font-size:14px; margin:0;">
-              {{ precio.banderaDescripcion }}
-            </p>
-            <p style="font-size:12px; color:var(--ion-color-medium); margin:2px 0 0;">
-              {{ precio.sucursalNombre | titlecase }} — {{ precio.direccion }}
-            </p>
-            <p style="font-size:11px; color:var(--ion-color-medium); margin:2px 0 0;">
-              {{ precio.localidad }}
-            </p>
-            @if (precio.distancia_km !== undefined) {
-            <p style="font-size:11px; color:var(--ion-color-primary); margin:2px 0 0;">
-              {{ precio.distancia_km | number:'1.1-1' }} km
-            </p>
-            }
-            @if (precio.preciosProducto.promo1?.precio) {
-            <p style="font-size:12px; color:var(--ion-color-warning); margin:4px 0 0;">
-              Promo: ${{ precio.preciosProducto.promo1!.precio | number }}
-              — {{ precio.preciosProducto.promo1!.descripcion }}
-            </p>
-            }
+      <ion-card style="margin:6px 0; border-radius:12px;"
+        [style.border]="precio === mejorPrecio() ? '1.5px solid var(--ion-color-success)' : ''">
+        <ion-card-content style="padding:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div style="flex:1;">
+              <p style="font-weight:600; font-size:14px; margin:0;">{{ precio.banderaDescripcion }}</p>
+              <p style="font-size:12px; color:var(--ion-color-medium); margin:2px 0 0;">
+                {{ precio.sucursalNombre | titlecase }} — {{ precio.direccion }}
+              </p>
+              <p style="font-size:11px; color:var(--ion-color-medium); margin:2px 0 0;">
+                {{ precio.localidad }}
+              </p>
+              @if (precio.distancia_km !== undefined) {
+                <p style="font-size:11px; color:var(--ion-color-primary); margin:2px 0 0;">
+                  {{ precio.distancia_km | number:'1.1-1' }} km
+                </p>
+              }
+              @if (precio.preciosProducto.promo1?.precio) {
+                <p style="font-size:12px; color:var(--ion-color-warning); margin:4px 0 0;">
+                  Promo: ${{ precio.preciosProducto.promo1!.precio | number }}
+                  — {{ precio.preciosProducto.promo1!.descripcion }}
+                </p>
+              }
+            </div>
+            <div style="text-align:right; min-width:80px;">
+              <p style="font-weight:700; font-size:18px; margin:0;"
+                [style.color]="precio === mejorPrecio() ? 'var(--ion-color-success)' : ''">
+                ${{ precio.preciosProducto.precioLista | number }}
+              </p>
+              @if (precio.actualizadoHoy) {
+                <p style="font-size:10px; color:var(--ion-color-success); margin:2px 0 0;">
+                  Actualizado hoy
+                </p>
+              }
+            </div>
           </div>
-          <div style="text-align:right; min-width:80px;">
-            <p style="font-weight:700; font-size:18px; margin:0;" [style.color]="precio === mejorPrecio()
-                    ? 'var(--ion-color-success)' : ''">
-              ${{ precio.preciosProducto.precioLista | number }}
-            </p>
-            @if (precio.actualizadoHoy) {
-            <p style="font-size:10px; color:var(--ion-color-success); margin:2px 0 0;">
-              Actualizado hoy
-            </p>
-            }
-          </div>
-        </div>
-      </ion-card-content>
-    </ion-card>
+        </ion-card-content>
+      </ion-card>
     }
 
     @if (!loadingPrecios() && !precios().length) {
-    <p style="text-align:center; color:var(--ion-color-medium); padding:30px 0;">
-      No se encontraron precios en sucursales cercanas.
-    </p>
+      <p style="text-align:center; color:var(--ion-color-medium); padding:30px 0;">
+        No se encontraron precios en sucursales cercanas.
+      </p>
     }
 
   </div>
-  }
+}
 
-
-  <!-- Botón historial + agregar a lista -->
-  @if (!loadingPrecios() && (precios().length || productoSeleccionado())) {
-  <div style="display:flex; gap:8px; margin:8px 0 4px; flex-wrap:wrap;">
+<!-- Botón historial + agregar a lista -->
+@if (!loadingPrecios() && (precios().length || productoSeleccionado())) {
+  <div style="display:flex; gap:8px; margin:8px 12px 4px; flex-wrap:wrap;">
     <ion-button fill="outline" size="small" (click)="toggleHistorial()" style="flex:1;">
       <ion-icon name="time-outline" slot="start" />
       Historial
     </ion-button>
     @if (productoSeleccionado()) {
-    <ion-button fill="outline" size="small" color="success" (click)="agregarALista(productoSeleccionado()!)">
-      <ion-icon name="cart-outline" slot="start" />
-      + Lista
-    </ion-button>
-    <ion-button fill="outline" size="small"
-      [color]="watchlist.isWatching(productoSeleccionado()!.id) ? 'warning' : 'medium'"
-      (click)="seguirPrecio(productoSeleccionado()!)">
-      <ion-icon name="eye-outline" slot="start" />
-      {{ watchlist.isWatching(productoSeleccionado()!.id) ? 'Siguiendo' : 'Seguir' }}
-    </ion-button>
+      <ion-button fill="outline" size="small" color="success"
+        (click)="agregarALista(productoSeleccionado()!)">
+        <ion-icon name="cart-outline" slot="start" />
+        + Lista
+      </ion-button>
+      <ion-button fill="outline" size="small"
+        [color]="watchlist.isWatching(productoSeleccionado()!.id) ? 'warning' : 'medium'"
+        (click)="seguirPrecio(productoSeleccionado()!)">
+        <ion-icon name="eye-outline" slot="start" />
+        {{ watchlist.isWatching(productoSeleccionado()!.id) ? 'Siguiendo' : 'Seguir' }}
+      </ion-button>
     }
   </div>
-  }
-  <!-- Gráfico historial -->
-  @if (mostrarHistorial()) {
-  <ion-card style="margin: 6px 0; border-radius: 12px;">
+}
+
+@if (mostrarHistorial()) {
+  <ion-card style="margin: 6px 12px; border-radius: 12px;">
     <ion-card-content style="padding: 12px;">
       <p style="font-weight: 600; font-size: 14px; margin: 0 0 8px;">
         Evolución de precios — últimos 30 días
@@ -264,6 +232,5 @@
       <app-price-chart [rows]="historial()" [loading]="loadingHistorial()" />
     </ion-card-content>
   </ion-card>
-  }
-
+}
 </ion-content>

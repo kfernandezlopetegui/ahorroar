@@ -75,26 +75,30 @@ export class PreciosClarosService {
   }
 
   async buscarPorEAN(ean: string, lat = -34.6037, lng = -58.3816) {
+  // Siempre buscar en DB, en paralelo, sin bloquear
+  const supermarketOffersPromise = this.superOffers.findByEan(ean).catch(() => []);
+
+  let producto: any = null;
+  let preciosData: { sucursales: any[] } = { sucursales: [] };
+
+  try {
     const productosData = await this.buscarProductos(ean, lat, lng);
     const productos: any[] = productosData?.productos ?? [];
+    producto = productos.find((p: any) => p.id === ean) ?? productos[0] ?? null;
 
-    const producto =
-      productos.find((p: any) => p.id === ean) ?? productos[0] ?? null;
-
-    if (!producto) return { producto: null, sucursales: [], supermarketOffers: [] };
-
-    // Correr en paralelo: precios de Precios Claros + ofertas de supermercados
-    const [preciosData, supermarketOffers] = await Promise.all([
-      this.buscarPrecios(producto.id, lat, lng),
-      this.superOffers.findByEan(ean).catch(() => []),  // no romper si falla
-    ]);
-
-    this.savePriceSnapshot(producto, preciosData.sucursales ?? []).catch(
-      (err) => console.error('[price_history] Error saving snapshot:', err),
-    );
-
-    return { producto, ...preciosData, supermarketOffers };
+    if (producto) {
+      preciosData = await this.buscarPrecios(producto.id, lat, lng);
+      this.savePriceSnapshot(producto, preciosData.sucursales ?? []).catch(
+        (err) => console.error('[price_history] Error saving snapshot:', err),
+      );
+    }
+  } catch (err) {
+    console.warn('[buscarPorEAN] Precios Claros no disponible:', (err as any)?.message);
   }
+
+  const supermarketOffers = await supermarketOffersPromise;
+  return { producto, ...preciosData, supermarketOffers };
+}
 
   async getHistorial(ean: string, dias = 30) {
     const desde = new Date();

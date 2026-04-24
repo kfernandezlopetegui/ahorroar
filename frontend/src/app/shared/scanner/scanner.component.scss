@@ -15,26 +15,33 @@
   }
 }
 
-// Oculto por defecto, visible cuando la cámara está lista
+// Negro sólido para tapar el placeholder de video roto
 .scanner-container {
   position: relative;
   width: 100%;
   height: 100%;
+  background: #000;          // ← tapa el placeholder mientras carga
+  visibility: hidden;        // ← no renderiza, no hay broken image
+  transition: visibility 0s, opacity 0.3s ease;
   opacity: 0;
-  transition: opacity 0.3s ease;
 
   &.visible {
+    visibility: visible;
     opacity: 1;
   }
 
   zxing-scanner {
+    display: block;
     width: 100%;
     height: 100%;
 
+    // Ocultamos el video nativo hasta que tenga stream
     ::ng-deep video {
       width: 100% !important;
       height: 100% !important;
       object-fit: cover;
+      background: #000 !important; // ← negro en vez de broken image
+      display: block;
     }
   }
 }

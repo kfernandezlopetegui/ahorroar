@@ -60,16 +60,16 @@ const BASE = `${environment.apiUrl}/precios-claros`;
 
 @Injectable({ providedIn: 'root' })
 export class PreciosClarosService {
-  productos         = signal<PCProducto[]>([]);
-  precios           = signal<PCPrecio[]>([]);
-  historial         = signal<PCHistorialRow[]>([]);
+  productos = signal<PCProducto[]>([]);
+  precios = signal<PCPrecio[]>([]);
+  historial = signal<PCHistorialRow[]>([]);
   supermarketOffers = signal<SupermarketOffer[]>([]);
-  loadingProductos  = signal(false);
-  loadingPrecios    = signal(false);
-  loadingHistorial  = signal(false);
-  error             = signal('');
+  loadingProductos = signal(false);
+  loadingPrecios = signal(false);
+  loadingHistorial = signal(false);
+  error = signal('');
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient) { }
 
   async buscarProductos(query: string, lat?: number, lng?: number): Promise<void> {
     if (query.length < 3) return;
@@ -120,13 +120,19 @@ export class PreciosClarosService {
       const res = await firstValueFrom(
         this.http.get<PCResultadoEAN>(`${BASE}/ean/${ean}`, { params }),
       );
+
+      // Siempre guardar ofertas de la DB aunque PC no encuentre el producto
+      this.supermarketOffers.set(res.supermarketOffers ?? []);
+
       if (!res.producto) {
-        this.error.set('Producto no encontrado para este código.');
+        if (!(res.supermarketOffers ?? []).length) {
+          this.error.set('Producto no encontrado para este código.');
+        }
         return null;
       }
+
       this.productos.set([res.producto]);
       this.precios.set(this.sortSucursales(res.sucursales, lat, lng));
-      this.supermarketOffers.set(res.supermarketOffers ?? []);
       return res.producto;
     } catch {
       this.error.set('Error buscando por código EAN.');
@@ -170,14 +176,14 @@ export class PreciosClarosService {
   }
 
   private calcularDistancia(lat1: number, lng1: number, lat2: number, lng2: number): number {
-    const R    = 6371;
+    const R = 6371;
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLng = ((lng2 - lng1) * Math.PI) / 180;
     const a =
       Math.sin(dLat / 2) ** 2 +
       Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLng / 2) ** 2;
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 }
