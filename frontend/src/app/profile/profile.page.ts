@@ -9,7 +9,10 @@ import {
   AlertController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addOutline, trashOutline, cardOutline, logOutOutline } from 'ionicons/icons';
+import {
+  addOutline, trashOutline, cardOutline, logOutOutline,
+  statsChartOutline, hardwareChipOutline,
+} from 'ionicons/icons';
 import { CardsService, BANKS } from '../core/services/cards';
 import { AuthService } from '../core/services/auth';
 
@@ -44,7 +47,10 @@ export class ProfilePage implements OnInit {
     private router: Router,
     private alertCtrl: AlertController
   ) {
-    addIcons({ addOutline, trashOutline, cardOutline, logOutOutline });
+    addIcons({
+      addOutline, trashOutline, cardOutline, logOutOutline,
+      statsChartOutline, hardwareChipOutline,
+    });
   }
 
   ngOnInit() {
@@ -86,6 +92,10 @@ export class ProfilePage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+  goTo(path: string) {
+    this.router.navigateByUrl(path);
   }
 
   async logout() {

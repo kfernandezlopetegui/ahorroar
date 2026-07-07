@@ -11,6 +11,9 @@ export interface PCProducto {
   precioMin: number;
   precioMax: number;
   cantSucursalesDisponible: number;
+  /** Presentes cuando el producto se identificó por una fuente alternativa */
+  imagen?: string | null;
+  fuente?: string;
 }
 
 export interface PCPrecio {
@@ -50,10 +53,22 @@ export interface SupermarketOffer {
   image_url?: string;
 }
 
+export interface OnlinePrice {
+  cadena: string;
+  nombre: string;
+  marca: string | null;
+  precio: number;
+  precioLista: number | null;
+  imagen: string | null;
+  url: string | null;
+  fuente: string;
+}
+
 export interface PCResultadoEAN {
   producto: PCProducto | null;
   sucursales: PCPrecio[];
   supermarketOffers: SupermarketOffer[];
+  onlinePrices: OnlinePrice[];
 }
 
 const BASE = `${environment.apiUrl}/precios-claros`;
@@ -64,6 +79,7 @@ export class PreciosClarosService {
   precios = signal<PCPrecio[]>([]);
   historial = signal<PCHistorialRow[]>([]);
   supermarketOffers = signal<SupermarketOffer[]>([]);
+  onlinePrices = signal<OnlinePrice[]>([]);
   loadingProductos = signal(false);
   loadingPrecios = signal(false);
   loadingHistorial = signal(false);
@@ -113,6 +129,7 @@ export class PreciosClarosService {
     this.loadingPrecios.set(true);
     this.error.set('');
     this.supermarketOffers.set([]);
+    this.onlinePrices.set([]);
     try {
       const params: Record<string, any> = {};
       if (lat != null) params['lat'] = lat;
@@ -121,11 +138,12 @@ export class PreciosClarosService {
         this.http.get<PCResultadoEAN>(`${BASE}/ean/${ean}`, { params }),
       );
 
-      // Siempre guardar ofertas de la DB aunque PC no encuentre el producto
+      // Siempre guardar fuentes alternativas aunque PC no encuentre el producto
       this.supermarketOffers.set(res.supermarketOffers ?? []);
+      this.onlinePrices.set(res.onlinePrices ?? []);
 
       if (!res.producto) {
-        if (!(res.supermarketOffers ?? []).length) {
+        if (!(res.supermarketOffers ?? []).length && !(res.onlinePrices ?? []).length) {
           this.error.set('Producto no encontrado para este código.');
         }
         return null;

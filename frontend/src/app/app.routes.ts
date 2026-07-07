@@ -24,6 +24,8 @@ export const routes: Routes = [
       { path: 'bank-combo', loadComponent: () => import('./bank-combo/bank-combo.page').then(m => m.BankComboPage) },
       { path: 'coupons',    loadComponent: () => import('./coupons/coupons.page').then(m => m.CouponsPage) },
       { path: 'profile',    loadComponent: () => import('./profile/profile.page').then(m => m.ProfilePage) },
+      { path: 'inflacion',  loadComponent: () => import('./inflacion/inflacion.page').then(m => m.InflacionPage) },
+      { path: 'monitor',    loadComponent: () => import('./monitor/monitor.page').then(m => m.MonitorPage) },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
   },

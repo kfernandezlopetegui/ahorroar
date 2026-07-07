@@ -15,7 +15,7 @@ import { addIcons } from 'ionicons';
 import {
   addOutline, thumbsUpOutline, trophyOutline,
   alertCircleOutline, checkmarkCircle, storefront,
-  closeCircle,
+  closeCircle, flagOutline,
 } from 'ionicons/icons';
 import {
   Subject, debounceTime, distinctUntilChanged,
@@ -90,7 +90,7 @@ export class CommunityPage implements OnInit, OnDestroy {
     private supabase: SupabaseService,
     private toastCtrl: ToastController,
   ) {
-    addIcons({ addOutline, thumbsUpOutline, trophyOutline, alertCircleOutline, checkmarkCircle, storefront, closeCircle });
+    addIcons({ addOutline, thumbsUpOutline, trophyOutline, alertCircleOutline, checkmarkCircle, storefront, closeCircle, flagOutline });
   }
 
   ngOnInit() {
@@ -198,6 +198,27 @@ export class CommunityPage implements OnInit, OnDestroy {
 
   async upvote(id: string) {
     await this.svc.upvoteReport(id);
+  }
+
+  async flag(id: string) {
+    if (this.svc.hasFlagged(id)) return;
+    try {
+      const res = await this.svc.flagReport(id);
+      const t = await this.toastCtrl.create({
+        message: res.hidden
+          ? 'Reporte ocultado por la comunidad'
+          : 'Gracias, tu marca ayuda a moderar los reportes',
+        duration: 2500,
+        color: 'medium',
+        position: 'top',
+      });
+      await t.present();
+    } catch {
+      const t = await this.toastCtrl.create({
+        message: 'No se pudo marcar el reporte.', duration: 2500, color: 'danger', position: 'top',
+      });
+      await t.present();
+    }
   }
 
   async submitReport() {

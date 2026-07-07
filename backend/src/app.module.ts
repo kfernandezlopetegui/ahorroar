@@ -18,6 +18,8 @@ import { PromotionsModule } from './promotions/promotions.module';
 import { SupermarketOffersService } from './supermarket-offers/supermarket-offers.service';
 import { SupermarketOffersController } from './supermarket-offers/supermarket-offers.controller';
 import { SupermarketOffersModule } from './supermarket-offers/supermarket-offers.module';
+import { InflationModule } from './inflation/inflation.module';
+import { ScraperMonitorModule } from './scraper-monitor/scraper-monitor.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { SupermarketOffersModule } from './supermarket-offers/supermarket-offers
     JobsModule,
     PromotionsModule,
     SupermarketOffersModule,
+    InflationModule,
+    ScraperMonitorModule,
   ],
   controllers: [AppController, NotificationsController, SupermarketOffersController],
   providers: [AppService, NotificationsService, WatchlistService, CommunityService, BankComboService, SupermarketOffersService],

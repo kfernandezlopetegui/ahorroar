@@ -42,11 +42,18 @@
           <ion-card-title style="font-size:16px; font-weight:600;">
             {{ coupon.title }}
           </ion-card-title>
-          @if (coupon.discount_pct) {
-          <ion-badge color="success" style="font-size:15px; padding:5px 9px;">
-            {{ coupon.discount_pct }}%
-          </ion-badge>
-          }
+          <div style="display:flex; gap:4px; align-items:center;">
+            @if (coupon.is_affiliate) {
+            <ion-badge color="tertiary" style="font-size:11px; padding:4px 7px;">
+              Afiliado
+            </ion-badge>
+            }
+            @if (coupon.discount_pct) {
+            <ion-badge color="success" style="font-size:15px; padding:5px 9px;">
+              {{ coupon.discount_pct }}%
+            </ion-badge>
+            }
+          </div>
         </div>
         <p style="font-size:13px; color:var(--ion-color-medium); margin:4px 0 0;">
           {{ coupon.store }}
@@ -66,6 +73,15 @@
             <ion-icon name="copy-outline" />
           </ion-button>
         </div>
+
+        <!-- Link de afiliado -->
+        @if (coupon.is_affiliate && coupon.affiliate_url) {
+        <ion-button expand="block" fill="outline" size="small" color="tertiary"
+          style="margin-bottom:10px;" (click)="openAffiliateLink(coupon.affiliate_url!)">
+          <ion-icon name="open-outline" slot="start" />
+          Comprar con este link
+        </ion-button>
+        }
 
         <!-- Footer -->
         <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -156,6 +172,15 @@
           <ion-label position="floating">Vence el</ion-label>
           <ion-input type="date" formControlName="valid_until" />
         </ion-item>
+
+        <ion-item style="margin-top:8px;">
+          <ion-label position="floating">Link de afiliado (opcional)</ion-label>
+          <ion-input type="url" formControlName="affiliate_url" placeholder="https://..." />
+        </ion-item>
+        <p style="font-size:12px; color:var(--ion-color-medium); margin:6px 4px 0;">
+          <ion-icon name="cash-outline" style="vertical-align:middle;" />
+          Si es tu cupón de afiliado, te llevás la comisión por cada compra hecha desde tu link.
+        </p>
 
         <ion-button expand="block" type="submit" style="margin-top:24px;" [disabled]="form.invalid || submitting()">
           @if (submitting()) {

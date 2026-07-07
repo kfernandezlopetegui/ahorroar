@@ -108,6 +108,36 @@
   </div>
   }
 
+  <!-- ── PRECIOS ONLINE (sin producto en Precios Claros) ── -->
+  @if (!productoSeleccionado() && !loadingProductos() && !loadingPrecios() && onlinePrices().length) {
+  <div style="padding:0 16px 12px;">
+    <p style="font-weight:700; font-size:13px; color:var(--ion-color-primary); margin:0 0 6px;">
+      🌐 Precios online por cadena
+    </p>
+    <div style="display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding-bottom:4px;">
+      @for (p of onlinePrices(); track p.cadena) {
+      <div style="flex-shrink:0; background:var(--ion-color-light);
+                  border-radius:10px; padding:10px 12px; min-width:140px; max-width:200px;">
+        <p style="font-weight:700; font-size:13px; margin:0; color:var(--ion-color-primary);">
+          {{ p.cadena }}
+        </p>
+        <p style="font-size:12px; margin:2px 0 0; color:var(--ion-color-dark);">
+          {{ p.nombre }}
+        </p>
+        <p style="font-size:18px; font-weight:800; margin:4px 0 0; color:var(--ion-color-success);">
+          ${{ p.precio | number }}
+        </p>
+        @if (p.precioLista) {
+        <p style="font-size:11px; text-decoration:line-through; color:var(--ion-color-medium); margin:2px 0 0;">
+          ${{ p.precioLista | number }}
+        </p>
+        }
+      </div>
+      }
+    </div>
+  </div>
+  }
+
   <!-- ── LISTA DE PRODUCTOS (modo nombre) ─────────────── -->
   @if (!productoSeleccionado() && searchMode() === 'nombre' && !loadingProductos()) {
   @for (p of productos(); track p.id) {
@@ -152,7 +182,8 @@
           {{ productoSeleccionado()!.marca }} · {{ productoSeleccionado()!.presentacion }}
         </p>
       </div>
-      <img [src]="'https://imagenes.preciosclaros.gob.ar/imagenes/productos/'
+      <img [src]="productoSeleccionado()!.imagen
+            || 'https://imagenes.preciosclaros.gob.ar/imagenes/productos/'
             + productoSeleccionado()!.id + '.png'"
         style="width:48px; height:48px; object-fit:contain; border-radius:8px;"
         onerror="this.style.display='none'" />
@@ -183,6 +214,40 @@
         </div>
         }
       </div>
+    </div>
+    }
+
+    <!-- Precios online por cadena (fuentes alternativas) -->
+    @if (onlinePrices().length) {
+    <div style="margin-bottom:12px;">
+      <p style="font-weight:700; font-size:13px; color:var(--ion-color-primary); margin:0 0 6px;">
+        🌐 Precios online por cadena
+      </p>
+      @for (p of onlinePrices(); track p.cadena) {
+      <div style="display:flex; align-items:center; gap:10px; background:var(--ion-color-light);
+                  border-radius:10px; padding:8px 12px; margin-bottom:6px;">
+        @if (p.imagen) {
+        <img [src]="p.imagen" style="width:36px; height:36px; object-fit:contain; border-radius:6px;"
+          onerror="this.style.display='none'" />
+        }
+        <div style="flex:1;">
+          <p style="font-weight:600; font-size:13px; margin:0;">{{ p.cadena }} — tienda online</p>
+          @if (p.marca) {
+          <p style="font-size:11px; color:var(--ion-color-medium); margin:0;">{{ p.marca }}</p>
+          }
+        </div>
+        <div style="text-align:right;">
+          <p style="font-weight:700; font-size:16px; margin:0; color:var(--ion-color-success);">
+            ${{ p.precio | number }}
+          </p>
+          @if (p.precioLista) {
+          <p style="font-size:11px; text-decoration:line-through; color:var(--ion-color-medium); margin:0;">
+            ${{ p.precioLista | number }}
+          </p>
+          }
+        </div>
+      </div>
+      }
     </div>
     }
 

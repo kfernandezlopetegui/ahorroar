@@ -62,6 +62,7 @@ export class ComparadorPage implements OnDestroy {
   get precios()           { return this.pc.precios; }
   get historial()         { return this.pc.historial; }
   get supermarketOffers() { return this.pc.supermarketOffers; }
+  get onlinePrices()      { return this.pc.onlinePrices; }
   get loadingProductos()  { return this.pc.loadingProductos; }
   get loadingPrecios()    { return this.pc.loadingPrecios; }
   get loadingHistorial()  { return this.pc.loadingHistorial; }
@@ -87,6 +88,7 @@ export class ComparadorPage implements OnDestroy {
   ngOnDestroy() {
     this.pc.historial.set([]);
     this.pc.supermarketOffers.set([]);
+    this.pc.onlinePrices.set([]);
   }
 
   onSegmentChange(event: any) {
@@ -140,9 +142,9 @@ export class ComparadorPage implements OnDestroy {
       if (producto) {
         this.productoSeleccionado.set(producto);
         await this.pc.getHistorial(producto.id);
-      } else if (!this.pc.supermarketOffers().length) {
+      } else if (!this.pc.supermarketOffers().length && !this.pc.onlinePrices().length) {
         const toast = await this.toastCtrl.create({
-          message:  `Código ${ean} no encontrado en Precios Claros.`,
+          message:  `Código ${ean} no encontrado en ninguna fuente.`,
           duration: 3000,
           color:    'warning',
         });
@@ -155,6 +157,7 @@ export class ComparadorPage implements OnDestroy {
     this.productoSeleccionado.set(producto);
     this.pc.precios.set([]);
     this.pc.supermarketOffers.set([]);
+    this.pc.onlinePrices.set([]);
     this.mostrarHistorial.set(false);
     await Promise.all([
       this.pc.buscarPrecios(
@@ -227,6 +230,7 @@ export class ComparadorPage implements OnDestroy {
     this.pc.precios.set([]);
     this.pc.historial.set([]);
     this.pc.supermarketOffers.set([]);
+    this.pc.onlinePrices.set([]);
     this.mostrarHistorial.set(false);
   }
 
@@ -314,6 +318,7 @@ export class ComparadorPage implements OnDestroy {
     this.pc.precios.set([]);
     this.pc.historial.set([]);
     this.pc.supermarketOffers.set([]);
+    this.pc.onlinePrices.set([]);
     this.pc.error.set('');
     this.mostrarHistorial.set(false);
   }

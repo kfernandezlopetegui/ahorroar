@@ -11,8 +11,10 @@ import { scrapeDIA }        from './scrapers/supermarkets/dia';
 import { scrapeJumbo, scrapeDisco, scrapeVea } from './scrapers/supermarkets/jumbo';
 import { scrapeLaAnonima }  from './scrapers/supermarkets/la-anonima';
 import { scrapeChangomas }  from './scrapers/supermarkets/changomas';
+import { scrapeFarmacity }  from './scrapers/supermarkets/farmacity';
 import { saveSuperOffers, SuperOffer } from './scrapers/supermarkets/base-super';
 import { supabase }         from './supabase';
+import { logScraperRun }    from './monitor';
 
 
 interface ScraperDef {
@@ -27,6 +29,7 @@ const SCRAPERS: ScraperDef[] = [
   { name: 'Carrefour',  fn: scrapeCarrefour,  chain: 'Carrefour',  group: 1 },
   { name: 'DIA',        fn: scrapeDIA,        chain: 'DIA',        group: 1 },
   { name: 'Changomás',  fn: scrapeChangomas,  chain: 'Changomás',  group: 1 },
+  { name: 'Farmacity',  fn: scrapeFarmacity,  chain: 'Farmacity',  group: 1 },
   // Grupo 2: Cencosud (mismo servidor, no los saturamos)
   { name: 'Jumbo',      fn: scrapeJumbo,      chain: 'Jumbo',      group: 2 },
   { name: 'Disco',      fn: scrapeDisco,      chain: 'Disco',      group: 2 },
@@ -51,9 +54,13 @@ export async function runSuperScraper(def: ScraperDef): Promise<SuperScraperResu
     if (offers.length > 0) {
       await saveSuperOffers(offers, def.chain);
     }
-    return { chain: def.chain, ok: true, count: offers.length, durationMs: Date.now() - start };
+    const result = { chain: def.chain, ok: true, count: offers.length, durationMs: Date.now() - start };
+    await logScraperRun({ scraper: def.chain, kind: 'super', ok: true, count: offers.length, durationMs: result.durationMs });
+    return result;
   } catch (err: any) {
-    return { chain: def.chain, ok: false, count: 0, error: err.message, durationMs: Date.now() - start };
+    const result = { chain: def.chain, ok: false, count: 0, error: err.message, durationMs: Date.now() - start };
+    await logScraperRun({ scraper: def.chain, kind: 'super', ok: false, count: 0, error: err.message, durationMs: result.durationMs });
+    return result;
   }
 }
 

@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { SupabaseService } from '../supabase/supabase.service';
 import { SupermarketOffersService } from '../supermarket-offers/supermarket-offers.service';
+import { EanSourcesService, OnlinePrice } from './ean-sources.service';
 
 
 const BASE_URL = 'https://d3e6htiiul5ek9.cloudfront.net/prod';
@@ -13,6 +14,7 @@ export class PreciosClarosService {
     private readonly http: HttpService,
     private readonly supabase: SupabaseService,
     private readonly superOffers: SupermarketOffersService,
+    private readonly eanSources: EanSourcesService,
   ) { }
 
   private get headers() {
@@ -77,13 +79,22 @@ export class PreciosClarosService {
   async buscarPorEAN(ean: string, lat = -34.6037, lng = -58.3816) {
     const candidatos = this.candidatosEAN(ean);
     if (!candidatos.length) {
-      return { producto: null, sucursales: [], supermarketOffers: [] };
+      return {
+        producto: null,
+        sucursales: [],
+        supermarketOffers: [],
+        onlinePrices: [],
+      };
     }
 
-    // Siempre buscar en DB, en paralelo, sin bloquear
+    // Fuentes alternativas en paralelo, sin bloquear:
+    // ofertas scrapeadas en DB + precios online de las cadenas (VTEX) + Open Food Facts
     const supermarketOffersPromise = this.superOffers
       .findByEan(candidatos)
       .catch(() => []);
+    const eanSourcesPromise = this.eanSources
+      .lookup(candidatos)
+      .catch(() => ({ onlinePrices: [], productInfo: null }));
 
     let producto: any = null;
     let preciosData: { sucursales: any[] } = { sucursales: [] };
@@ -123,14 +134,36 @@ export class PreciosClarosService {
       }
     }
 
+    const { onlinePrices, productInfo } = await eanSourcesPromise;
+
+    // Último fallback: si Precios Claros no encontró nada (o está caído),
+    // armar el producto con lo que devolvieron las otras fuentes
+    if (!producto && productInfo) {
+      const precios = onlinePrices.map((p) => p.precio);
+      producto = {
+        id: candidatos[0],
+        nombre: productInfo.nombre,
+        marca: productInfo.marca ?? '',
+        presentacion: productInfo.presentacion ?? '',
+        precioMin: precios.length ? Math.min(...precios) : 0,
+        precioMax: precios.length ? Math.max(...precios) : 0,
+        cantSucursalesDisponible: 0,
+        imagen: productInfo.imagen,
+        fuente: productInfo.fuente,
+      };
+    }
+
     if (producto) {
       this.savePriceSnapshot(producto, preciosData.sucursales ?? []).catch(
         (err) => console.error('[price_history] Error saving snapshot:', err),
       );
+      this.saveOnlineSnapshot(producto, onlinePrices).catch((err) =>
+        console.error('[price_history] Error saving online snapshot:', err),
+      );
     }
 
     const supermarketOffers = await supermarketOffersPromise;
-    return { producto, ...preciosData, supermarketOffers };
+    return { producto, ...preciosData, supermarketOffers, onlinePrices };
   }
 
   /**
@@ -199,6 +232,32 @@ export class PreciosClarosService {
       .filter((r) => r.precio_lista !== null);
 
     if (!rows.length) return;
+
+    const { error } = await this.supabase.client
+      .from('price_history')
+      .insert(rows);
+
+    if (error) throw error;
+  }
+
+  /** Guarda los precios online de las cadenas también en el historial */
+  private async saveOnlineSnapshot(producto: any, onlinePrices: OnlinePrice[]) {
+    if (!onlinePrices.length) return;
+
+    const rows = onlinePrices.map((p) => ({
+      ean: producto.id,
+      producto_nombre: producto.nombre,
+      sucursal_id: `online:${p.cadena}`,
+      cadena: `${p.cadena} (online)`,
+      sucursal_nombre: 'Tienda online',
+      direccion: null,
+      localidad: null,
+      lat: null,
+      lng: null,
+      precio_lista: p.precioLista ?? p.precio,
+      precio_promo: p.precioLista ? p.precio : null,
+      descripcion_promo: null,
+    }));
 
     const { error } = await this.supabase.client
       .from('price_history')

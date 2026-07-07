@@ -9,7 +9,7 @@ import {
 } from '@ionic/angular/standalone';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { addIcons } from 'ionicons';
-import { addOutline, thumbsUpOutline, copyOutline, timeOutline } from 'ionicons/icons';
+import { addOutline, thumbsUpOutline, copyOutline, timeOutline, openOutline, cashOutline } from 'ionicons/icons';
 import { CouponsService, COUPON_CATEGORIES } from '../core/services/coupons';
 import { Clipboard } from '@angular/cdk/clipboard';
 
@@ -45,12 +45,14 @@ export class CouponsPage implements OnInit {
   });
 
   form = this.fb.group({
-    title:       ['', Validators.required],
-    code:        ['', Validators.required],
-    store:       ['', Validators.required],
-    category:    ['otros', Validators.required],
-    discount_pct:[null],
-    valid_until: ['', Validators.required],
+    title:        ['', Validators.required],
+    code:         ['', Validators.required],
+    store:        ['', Validators.required],
+    category:     ['otros', Validators.required],
+    discount_pct: [null],
+    valid_until:  ['', Validators.required],
+    // Link de afiliado (opcional): quien publica gana comisión por las compras
+    affiliate_url: ['', Validators.pattern(/^https?:\/\/.+/)],
   });
 
   get loading() { return this.svc.loading; }
@@ -62,7 +64,7 @@ export class CouponsPage implements OnInit {
     private clipboard: Clipboard,
     private toastCtrl: ToastController
   ) {
-    addIcons({ addOutline, thumbsUpOutline, copyOutline, timeOutline });
+    addIcons({ addOutline, thumbsUpOutline, copyOutline, timeOutline, openOutline, cashOutline });
   }
 
   ngOnInit() {
@@ -91,6 +93,10 @@ export class CouponsPage implements OnInit {
 
   async upvote(id: string) {
     await this.svc.upvote(id);
+  }
+
+  openAffiliateLink(url: string) {
+    window.open(url, '_blank', 'noopener');
   }
 
   async submitCoupon() {

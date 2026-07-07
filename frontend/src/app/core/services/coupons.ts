@@ -14,6 +14,9 @@ export interface Coupon {
   is_community: boolean;
   upvotes: number;
   created_at: string;
+  /** Cupón de afiliado: quien lo publica gana comisión por las compras con su link */
+  is_affiliate?: boolean;
+  affiliate_url?: string | null;
 }
 
 export const COUPON_CATEGORIES = [
@@ -68,6 +71,8 @@ export class CouponsService {
       .from('coupons')
       .insert({
         ...coupon,
+        affiliate_url: coupon.affiliate_url?.trim() || null,
+        is_affiliate: !!coupon.affiliate_url?.trim(),
         user_id: user?.id ?? null,
         is_community: true,
         upvotes: 0,
