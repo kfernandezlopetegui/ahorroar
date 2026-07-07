@@ -30,6 +30,7 @@ export class CommunityService {
     let query = this.supabase.client
       .from('price_reports')
       .select('*')
+      .eq('hidden', false)
       .order('created_at', { ascending: false })
       .limit(limit);
     if (ean) query = query.eq('ean', ean);
@@ -68,6 +69,53 @@ export class CommunityService {
       await this.awardPoints(report.user_id, 5, 'upvote');
     }
     return { ok: true };
+  }
+
+  /**
+   * Moderación comunitaria: cualquier usuario puede marcar un reporte como
+   * incorrecto. Con 3 marcas el reporte se oculta automáticamente y el autor
+   * pierde los puntos que había ganado.
+   */
+  async flagReport(userId: string, reportId: string) {
+    const { error: flagErr } = await this.supabase.client
+      .from('report_flags')
+      .upsert(
+        { report_id: reportId, user_id: userId },
+        { onConflict: 'report_id,user_id', ignoreDuplicates: true },
+      );
+    if (flagErr) throw flagErr;
+
+    const { count, error: countErr } = await this.supabase.client
+      .from('report_flags')
+      .select('*', { count: 'exact', head: true })
+      .eq('report_id', reportId);
+    if (countErr) throw countErr;
+
+    const flags = count ?? 0;
+    let hidden = false;
+
+    if (flags >= 3) {
+      const { data: report } = await this.supabase.client
+        .from('price_reports')
+        .update({ hidden: true, flags_count: flags })
+        .eq('id', reportId)
+        .eq('hidden', false)
+        .select('user_id')
+        .maybeSingle();
+
+      hidden = true;
+      // Solo penaliza la primera vez que se oculta
+      if (report?.user_id) {
+        await this.awardPoints(report.user_id, -10, 'moderation');
+      }
+    } else {
+      await this.supabase.client
+        .from('price_reports')
+        .update({ flags_count: flags })
+        .eq('id', reportId);
+    }
+
+    return { ok: true, flags, hidden };
   }
 
   async getLeaderboard(limit = 10) {
@@ -164,7 +212,7 @@ export class CommunityService {
       .eq('user_id', userId)
       .single();
 
-    const newPoints  = (existing?.points ?? 0) + pts;
+    const newPoints  = Math.max(0, (existing?.points ?? 0) + pts);
     const newReports = reason === 'report'
       ? (existing?.reports_count ?? 0) + 1
       : (existing?.reports_count ?? 0);

@@ -1,0 +1,123 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/profile" />
+    </ion-buttons>
+    <ion-title>Inflación personal</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [value]="meses().toString()" (ionChange)="onMesesChange($event)">
+      <ion-segment-button value="3"><ion-label>3 meses</ion-label></ion-segment-button>
+      <ion-segment-button value="6"><ion-label>6 meses</ion-label></ion-segment-button>
+      <ion-segment-button value="12"><ion-label>12 meses</ion-label></ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  @if (loading()) {
+  <div style="display:flex; justify-content:center; padding:40px;">
+    <ion-spinner name="crescent" />
+  </div>
+  }
+
+  @if (error()) {
+  <ion-text color="danger">
+    <p style="text-align:center; padding:20px;">{{ error() }}</p>
+  </ion-text>
+  }
+
+  @if (!loading() && data()) {
+
+    <!-- Resumen -->
+    <div style="display:flex; gap:8px; margin-bottom:12px;">
+      <ion-card style="flex:1; margin:0; border-radius:12px;">
+        <ion-card-content style="text-align:center; padding:12px;">
+          <p style="font-size:12px; color:var(--ion-color-medium); margin:0;">Tu canasta</p>
+          @if (acumuladoCanasta() !== null) {
+          <p style="font-size:22px; font-weight:800; margin:4px 0 0;"
+            [style.color]="acumuladoCanasta()! >= 0 ? 'var(--ion-color-danger)' : 'var(--ion-color-success)'">
+            {{ acumuladoCanasta()! >= 0 ? '+' : '' }}{{ acumuladoCanasta() | number:'1.1-1' }}%
+          </p>
+          } @else {
+          <p style="font-size:16px; color:var(--ion-color-medium); margin:4px 0 0;">—</p>
+          }
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card style="flex:1; margin:0; border-radius:12px;">
+        <ion-card-content style="text-align:center; padding:12px;">
+          <p style="font-size:12px; color:var(--ion-color-medium); margin:0;">IPC oficial (INDEC)</p>
+          @if (acumuladoIpc() !== null) {
+          <p style="font-size:22px; font-weight:800; margin:4px 0 0; color:var(--ion-color-primary);">
+            {{ acumuladoIpc()! >= 0 ? '+' : '' }}{{ acumuladoIpc() | number:'1.1-1' }}%
+          </p>
+          } @else {
+          <p style="font-size:16px; color:var(--ion-color-medium); margin:4px 0 0;">—</p>
+          }
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    @if (data()!.mensaje) {
+    <ion-card style="border-radius:12px; margin:0 0 12px;">
+      <ion-card-content>
+        <p style="font-size:13px; color:var(--ion-color-medium); margin:0;">
+          <ion-icon name="stats-chart-outline" style="vertical-align:middle;" />
+          {{ data()!.mensaje }}
+        </p>
+      </ion-card-content>
+    </ion-card>
+    }
+
+    <!-- Gráfico -->
+    @if (lines().length) {
+    <ion-card style="border-radius:12px; margin:0 0 12px;">
+      <ion-card-content>
+        <p style="font-weight:600; font-size:14px; margin:0 0 8px;">
+          Índice acumulado (base 100)
+        </p>
+        <svg [attr.viewBox]="'0 0 ' + chartW + ' ' + chartH" style="width:100%; height:auto;">
+          @for (line of lines(); track line.label) {
+          <path [attr.d]="line.path" [attr.stroke]="line.color" fill="none" stroke-width="2" />
+          @for (p of line.points; track p.point.periodo) {
+          <circle [attr.cx]="p.x" [attr.cy]="p.y" r="3" [attr.fill]="line.color" />
+          }
+          }
+        </svg>
+        <div style="display:flex; gap:16px; justify-content:center; margin-top:8px;">
+          @for (line of lines(); track line.label) {
+          <span style="font-size:12px; display:flex; align-items:center; gap:4px;">
+            <span [style.background]="line.color"
+              style="width:10px; height:10px; border-radius:50%; display:inline-block;"></span>
+            {{ line.label }}
+          </span>
+          }
+        </div>
+      </ion-card-content>
+    </ion-card>
+    }
+
+    <!-- Detalle mensual -->
+    @if (data()!.canasta.puntos.length) {
+    <ion-card style="border-radius:12px; margin:0;">
+      <ion-card-content>
+        <p style="font-weight:600; font-size:14px; margin:0 0 8px;">Variación mensual de tu canasta</p>
+        @for (p of data()!.canasta.puntos; track p.periodo) {
+        <div style="display:flex; justify-content:space-between; padding:6px 0;
+                    border-bottom:1px solid var(--ion-color-light);">
+          <span style="font-size:13px;">{{ p.periodo }}</span>
+          <span style="font-size:13px; font-weight:700;"
+            [style.color]="p.variacion_pct >= 0 ? 'var(--ion-color-danger)' : 'var(--ion-color-success)'">
+            <ion-icon [name]="p.variacion_pct >= 0 ? 'trending-up-outline' : 'trending-down-outline'"
+              style="vertical-align:middle;" />
+            {{ p.variacion_pct >= 0 ? '+' : '' }}{{ p.variacion_pct | number:'1.1-1' }}%
+          </span>
+        </div>
+        }
+      </ion-card-content>
+    </ion-card>
+    }
+  }
+</ion-content>

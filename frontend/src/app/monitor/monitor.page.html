@@ -1,0 +1,102 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/profile" />
+    </ion-buttons>
+    <ion-title>Monitor de scrapers</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  @if (loading() && !status()) {
+  <div style="display:flex; justify-content:center; padding:40px;">
+    <ion-spinner name="crescent" />
+  </div>
+  }
+
+  @if (error()) {
+  <ion-text color="danger">
+    <p style="text-align:center; padding:20px;">{{ error() }}</p>
+  </ion-text>
+  }
+
+  @if (status(); as st) {
+  <div style="padding:12px;">
+
+    <!-- Resumen -->
+    <ion-card style="margin:0 0 12px; border-radius:12px;"
+      [style.border]="st.healthy ? '1.5px solid var(--ion-color-success)' : '1.5px solid var(--ion-color-danger)'">
+      <ion-card-content style="display:flex; align-items:center; gap:12px;">
+        <ion-icon [name]="st.healthy ? 'checkmark-circle-outline' : 'close-circle-outline'"
+          [color]="st.healthy ? 'success' : 'danger'" style="font-size:36px;" />
+        <div>
+          <p style="font-weight:700; font-size:16px; margin:0;">
+            {{ st.healthy ? 'Todos los scrapers OK' : st.brokenCount + ' scraper(s) con problemas' }}
+          </p>
+          <p style="font-size:12px; color:var(--ion-color-medium); margin:2px 0 0;">
+            {{ st.total }} scrapers registrados
+          </p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    @if (!st.scrapers.length) {
+    <p style="text-align:center; color:var(--ion-color-medium); padding:30px 0;">
+      Todavía no hay corridas registradas. Los scrapers reportan acá en cada ejecución.
+    </p>
+    }
+
+    <!-- Bancos -->
+    @if (banks().length) {
+    <p style="font-weight:700; font-size:13px; margin:12px 4px 6px; color:var(--ion-color-medium);">
+      🏦 BANCOS
+    </p>
+    @for (s of banks(); track s.scraper) {
+    <ng-container *ngTemplateOutlet="scraperCard; context: { $implicit: s }" />
+    }
+    }
+
+    <!-- Supermercados -->
+    @if (supers().length) {
+    <p style="font-weight:700; font-size:13px; margin:16px 4px 6px; color:var(--ion-color-medium);">
+      🛒 SUPERMERCADOS Y FARMACIAS
+    </p>
+    @for (s of supers(); track s.scraper) {
+    <ng-container *ngTemplateOutlet="scraperCard; context: { $implicit: s }" />
+    }
+    }
+
+  </div>
+  }
+
+  <ng-template #scraperCard let-s>
+    <ion-card style="margin:6px 0; border-radius:12px;">
+      <ion-card-content style="display:flex; align-items:center; gap:10px; padding:12px;">
+        <ion-icon [name]="s.ok && !s.stale ? 'checkmark-circle-outline' : 'close-circle-outline'"
+          [color]="s.ok && !s.stale ? 'success' : (s.ok ? 'warning' : 'danger')" style="font-size:24px;" />
+        <div style="flex:1;">
+          <p style="font-weight:600; font-size:14px; margin:0;">{{ s.scraper }}</p>
+          <p style="font-size:12px; color:var(--ion-color-medium); margin:2px 0 0;">
+            <ion-icon name="time-outline" style="vertical-align:middle;" />
+            {{ timeAgo(s.ran_at) }} · {{ s.duration_ms }}ms
+          </p>
+          @if (s.error) {
+          <p style="font-size:11px; color:var(--ion-color-danger); margin:2px 0 0;">{{ s.error }}</p>
+          }
+          @if (s.stale) {
+          <p style="font-size:11px; color:var(--ion-color-warning); margin:2px 0 0;">
+            Sin corridas en las últimas 48hs
+          </p>
+          }
+        </div>
+        <ion-badge [color]="s.ok ? 'success' : 'danger'">
+          {{ s.items_count }} items
+        </ion-badge>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+</ion-content>

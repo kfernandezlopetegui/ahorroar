@@ -47,6 +47,12 @@ export class CommunityController {
     return this.svc.upvoteReport(req.user.id, id);
   }
 
+  @Post('reports/:id/flag')
+  @UseGuards(JwtGuard)
+  flagReport(@Req() req: any, @Param('id') id: string) {
+    return this.svc.flagReport(req.user.id, id);
+  }
+
   @Get('stats')
   @UseGuards(JwtGuard)
   getUserStats(@Req() req: any) {

@@ -94,4 +94,27 @@
     </ion-button>
   </div>
 
+  <!-- Herramientas -->
+  <ion-list style="margin-top: 24px;">
+    <ion-list-header>
+      <ion-label style="font-weight: 600;">Herramientas</ion-label>
+    </ion-list-header>
+
+    <ion-item button detail (click)="goTo('/tabs/inflacion')">
+      <ion-icon name="stats-chart-outline" slot="start" color="danger" />
+      <ion-label>
+        <h3>Inflación personal</h3>
+        <p>Tu canasta vs el IPC oficial del INDEC</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item button detail (click)="goTo('/tabs/monitor')">
+      <ion-icon name="hardware-chip-outline" slot="start" color="medium" />
+      <ion-label>
+        <h3>Monitor de scrapers</h3>
+        <p>Estado de las fuentes de datos</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
 </ion-content>

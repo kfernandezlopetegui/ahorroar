@@ -92,6 +92,34 @@ export class CommunityService {
     );
   }
 
+  /** Marca un reporte como incorrecto; con 3 marcas se oculta */
+  async flagReport(id: string): Promise<{ flags: number; hidden: boolean }> {
+    const headers = await this.authHeaders();
+    const res = await firstValueFrom(
+      this.http.post<{ ok: boolean; flags: number; hidden: boolean }>(
+        `${BASE}/reports/${id}/flag`, {}, { headers },
+      ),
+    );
+    this.markAsFlagged(id);
+    if (res.hidden) {
+      this.reports.update(list => list.filter(r => r.id !== id));
+    }
+    return res;
+  }
+
+  hasFlagged(id: string): boolean {
+    return (
+      JSON.parse(localStorage.getItem('flagged_reports') ?? '[]') as string[]
+    ).includes(id);
+  }
+
+  private markAsFlagged(id: string) {
+    const flagged = JSON.parse(
+      localStorage.getItem('flagged_reports') ?? '[]',
+    ) as string[];
+    localStorage.setItem('flagged_reports', JSON.stringify([...flagged, id]));
+  }
+
   async loadUserStats() {
     try {
       const headers = await this.authHeaders();

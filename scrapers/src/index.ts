@@ -9,6 +9,7 @@ import { scrapeNaranjaX }  from './scrapers/naranja';
 import { scrapeBBVA }      from './scrapers/bbva';
 import { savePromos, ScrapedPromo } from './scrapers/base';
 import { runAllSuperScrapers, SuperScraperResult } from './supermarkets-index';
+import { logScraperRun } from './monitor';
 
 // ── Tipos ────────────────────────────────────────────────────────────────────
 
@@ -45,6 +46,7 @@ async function runBankScraper(
       bank, ok: true, count: promos.length, durationMs: Date.now() - start,
     };
     lastRunBanks[bank] = result;
+    await logScraperRun({ scraper: bank, kind: 'bank', ok: true, count: promos.length, durationMs: result.durationMs });
     return result;
   } catch (err: any) {
     const result: BankScraperResult = {
@@ -52,6 +54,7 @@ async function runBankScraper(
     };
     lastRunBanks[bank] = result;
     console.error(`[${bank}] ❌ Error: ${err.message}`);
+    await logScraperRun({ scraper: bank, kind: 'bank', ok: false, count: 0, error: err.message, durationMs: result.durationMs });
     return result;
   }
 }

@@ -73,12 +73,20 @@
                 <p style="font-weight:800; font-size:20px; color:var(--ion-color-success); margin:0;">
                   ${{ r.precio | number }}
                 </p>
-                <ion-button fill="clear" size="small" (click)="upvote(r.id)"
-                  [disabled]="svc.hasUpvoted(r.id)" style="height:28px; margin-top:4px;">
-                  <ion-icon name="thumbs-up-outline" slot="start"
-                    [color]="svc.hasUpvoted(r.id) ? 'primary' : 'medium'" />
-                  <span style="font-size:12px;">{{ r.upvotes }}</span>
-                </ion-button>
+                <div style="display:flex; align-items:center; justify-content:flex-end;">
+                  <ion-button fill="clear" size="small" (click)="upvote(r.id)"
+                    [disabled]="svc.hasUpvoted(r.id)" style="height:28px; margin-top:4px;">
+                    <ion-icon name="thumbs-up-outline" slot="start"
+                      [color]="svc.hasUpvoted(r.id) ? 'primary' : 'medium'" />
+                    <span style="font-size:12px;">{{ r.upvotes }}</span>
+                  </ion-button>
+                  <ion-button fill="clear" size="small" (click)="flag(r.id)"
+                    [disabled]="svc.hasFlagged(r.id)" style="height:28px; margin-top:4px;"
+                    title="Marcar como incorrecto">
+                    <ion-icon name="flag-outline" slot="icon-only"
+                      [color]="svc.hasFlagged(r.id) ? 'danger' : 'medium'" />
+                  </ion-button>
+                </div>
               </div>
             </div>
           </ion-card-content>
