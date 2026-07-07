@@ -1,4 +1,4 @@
-import { Component, signal, OnDestroy } from '@angular/core';
+import { Component, signal, OnDestroy, ElementRef } from '@angular/core';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BarcodeFormat } from '@zxing/library';
 import {
@@ -24,7 +24,7 @@ import { closeOutline, cameraOutline } from 'ionicons/icons';
 export class ScannerComponent implements OnDestroy {
   hasPermission  = signal<boolean | null>(null);
   scannerEnabled = signal(false);
-  camaraLista    = signal(false); // ← nuevo: ocultar video hasta que esté listo
+  camaraLista    = signal(false); // el video queda oculto hasta que el stream arranca
 
   allowedFormats = [
     BarcodeFormat.EAN_13,
@@ -34,9 +34,13 @@ export class ScannerComponent implements OnDestroy {
     BarcodeFormat.CODE_128,
   ];
 
+  private videoWatchTimer?: ReturnType<typeof setTimeout>;
+  private destruido = false;
+
   constructor(
     private readonly modalCtrl: ModalController,
     private readonly platform: Platform,
+    private readonly host: ElementRef<HTMLElement>,
   ) {
     addIcons({ closeOutline, cameraOutline });
     this.solicitarPermiso();
@@ -53,18 +57,49 @@ export class ScannerComponent implements OnDestroy {
         this.hasPermission.set(false);
       }
     } else {
+      // En web el permiso lo pide el propio <zxing-scanner> vía getUserMedia:
+      // habilitamos el scanner y esperamos su (permissionResponse).
+      this.hasPermission.set(true);
       this.scannerEnabled.set(true);
     }
   }
 
   onCamerasFound(cameras: MediaDeviceInfo[]) {
-    // La cámara encontró dispositivos → ya se puede mostrar
-    if (cameras?.length) this.camaraLista.set(true);
+    // Hay cámara, pero el stream todavía puede tardar en arrancar:
+    // esperamos a que el <video> esté reproduciendo para mostrarlo
+    // (si se muestra antes aparece el placeholder de video roto).
+    if (cameras?.length) this.esperarVideoListo();
+  }
+
+  onCamerasNotFound() {
+    this.hasPermission.set(false);
   }
 
   onPermissionResponse(permission: boolean) {
     this.hasPermission.set(permission);
     if (!permission) this.scannerEnabled.set(false);
+  }
+
+  private esperarVideoListo(intentos = 0) {
+    if (this.destruido || this.camaraLista()) return;
+
+    const video = this.host.nativeElement.querySelector('video');
+    if (video) {
+      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && !video.paused) {
+        this.camaraLista.set(true);
+        return;
+      }
+      video.addEventListener('playing', () => this.camaraLista.set(true), { once: true });
+      // Red de seguridad: si 'playing' nunca llega, mostrar igual a los 4s
+      this.videoWatchTimer = setTimeout(() => this.camaraLista.set(true), 4000);
+      return;
+    }
+
+    if (intentos < 50) {
+      this.videoWatchTimer = setTimeout(() => this.esperarVideoListo(intentos + 1), 100);
+    } else {
+      this.camaraLista.set(true);
+    }
   }
 
   onScanSuccess(result: string) {
@@ -79,6 +114,8 @@ export class ScannerComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destruido = true;
+    if (this.videoWatchTimer) clearTimeout(this.videoWatchTimer);
     this.scannerEnabled.set(false);
   }
 }

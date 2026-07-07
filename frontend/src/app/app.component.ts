@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
   constructor(private push: PushNotificationsService) {}
 
   ngOnInit() {
-    this.push.init();
+    // No bloquear el arranque de la app si el push falla (ej: Firebase sin configurar)
+    this.push.init().catch(err => console.warn('[Push] init falló:', err));
   }
 }

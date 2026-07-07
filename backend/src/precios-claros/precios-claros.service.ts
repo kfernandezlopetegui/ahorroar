@@ -75,30 +75,93 @@ export class PreciosClarosService {
   }
 
   async buscarPorEAN(ean: string, lat = -34.6037, lng = -58.3816) {
-  // Siempre buscar en DB, en paralelo, sin bloquear
-  const supermarketOffersPromise = this.superOffers.findByEan(ean).catch(() => []);
+    const candidatos = this.candidatosEAN(ean);
+    if (!candidatos.length) {
+      return { producto: null, sucursales: [], supermarketOffers: [] };
+    }
 
-  let producto: any = null;
-  let preciosData: { sucursales: any[] } = { sucursales: [] };
+    // Siempre buscar en DB, en paralelo, sin bloquear
+    const supermarketOffersPromise = this.superOffers
+      .findByEan(candidatos)
+      .catch(() => []);
 
-  try {
-    const productosData = await this.buscarProductos(ean, lat, lng);
-    const productos: any[] = productosData?.productos ?? [];
-    producto = productos.find((p: any) => p.id === ean) ?? productos[0] ?? null;
+    let producto: any = null;
+    let preciosData: { sucursales: any[] } = { sucursales: [] };
+
+    try {
+      const productosData = await this.buscarProductos(candidatos[0], lat, lng);
+      const productos: any[] = productosData?.productos ?? [];
+      producto =
+        productos.find((p: any) => candidatos.includes(String(p.id))) ??
+        productos[0] ??
+        null;
+
+      if (producto) {
+        preciosData = await this.buscarPrecios(producto.id, lat, lng);
+      }
+    } catch (err) {
+      console.warn('[buscarPorEAN] Búsqueda por texto falló:', (err as any)?.message);
+    }
+
+    // Fallback: consultar el endpoint /producto directamente con el EAN como id,
+    // por si la búsqueda de texto no indexa códigos de barras
+    if (!producto) {
+      for (const candidato of candidatos) {
+        try {
+          const data = await this.buscarPrecios(candidato, lat, lng);
+          if (data?.sucursales?.length) {
+            producto = this.productoDesdeRespuesta(data, candidato);
+            preciosData = data;
+            break;
+          }
+        } catch (err) {
+          console.warn(
+            `[buscarPorEAN] Lookup directo ${candidato} falló:`,
+            (err as any)?.message,
+          );
+        }
+      }
+    }
 
     if (producto) {
-      preciosData = await this.buscarPrecios(producto.id, lat, lng);
       this.savePriceSnapshot(producto, preciosData.sucursales ?? []).catch(
         (err) => console.error('[price_history] Error saving snapshot:', err),
       );
     }
-  } catch (err) {
-    console.warn('[buscarPorEAN] Precios Claros no disponible:', (err as any)?.message);
+
+    const supermarketOffers = await supermarketOffersPromise;
+    return { producto, ...preciosData, supermarketOffers };
   }
 
-  const supermarketOffers = await supermarketOffersPromise;
-  return { producto, ...preciosData, supermarketOffers };
-}
+  /**
+   * Variantes válidas de un código escaneado o tipeado:
+   * el original limpio, la versión EAN-13 de un UPC-A (12 dígitos) y viceversa.
+   */
+  private candidatosEAN(ean: string): string[] {
+    const limpio = (ean ?? '').replace(/\D/g, '');
+    if (limpio.length < 8) return [];
+    const set = new Set<string>([limpio]);
+    if (limpio.length === 12) set.add('0' + limpio);
+    if (limpio.length === 13 && limpio.startsWith('0')) set.add(limpio.slice(1));
+    return [...set];
+  }
+
+  private productoDesdeRespuesta(data: any, ean: string) {
+    const p = data?.producto ?? {};
+    const sucursales: any[] = data?.sucursales ?? [];
+    const precios = sucursales
+      .map((s: any) => s?.preciosProducto?.precioLista)
+      .filter((v: any) => typeof v === 'number');
+    return {
+      id: String(p.id ?? ean),
+      nombre: p.nombre ?? p.descripcion ?? `Producto ${ean}`,
+      marca: p.marca ?? '',
+      presentacion: p.presentacion ?? '',
+      precioMin: precios.length ? Math.min(...precios) : 0,
+      precioMax: precios.length ? Math.max(...precios) : 0,
+      cantSucursalesDisponible: sucursales.length,
+    };
+  }
 
   async getHistorial(ean: string, dias = 30) {
     const desde = new Date();

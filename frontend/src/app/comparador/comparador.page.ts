@@ -106,8 +106,8 @@ export class ComparadorPage implements OnDestroy {
   }
 
   async buscarPorEAN() {
-    const ean = this.eanInput().trim();
-    if (!ean) return;
+    const ean = this.eanInput().trim().replace(/\D/g, '');
+    if (ean.length < 8) return;
     this.resetResultados();
     const producto = await this.pc.buscarPorEAN(
       ean,
@@ -116,7 +116,7 @@ export class ComparadorPage implements OnDestroy {
     );
     if (producto) {
       this.productoSeleccionado.set(producto);
-      await this.pc.getHistorial(ean);
+      await this.pc.getHistorial(producto.id);
     }
   }
 
@@ -128,20 +128,21 @@ export class ComparadorPage implements OnDestroy {
     await modal.present();
     const { data } = await modal.onDidDismiss<{ ean: string } | null>();
     if (data?.ean) {
+      const ean = data.ean.trim().replace(/\D/g, '');
       this.searchMode.set('ean');
-      this.eanInput.set(data.ean);
+      this.eanInput.set(ean);
       this.resetResultados();
       const producto = await this.pc.buscarPorEAN(
-        data.ean,
+        ean,
         this.userLat() ?? undefined,
         this.userLng() ?? undefined,
       );
       if (producto) {
         this.productoSeleccionado.set(producto);
-        await this.pc.getHistorial(data.ean);
-      } else {
+        await this.pc.getHistorial(producto.id);
+      } else if (!this.pc.supermarketOffers().length) {
         const toast = await this.toastCtrl.create({
-          message:  `Código ${data.ean} no encontrado en Precios Claros.`,
+          message:  `Código ${ean} no encontrado en Precios Claros.`,
           duration: 3000,
           color:    'warning',
         });
