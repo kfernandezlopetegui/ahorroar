@@ -55,15 +55,19 @@ export class SupermarketOffersService {
   }
 
   /**
-   * Buscar ofertas por EAN — usado por el comparador para enriquecer resultados
+   * Buscar ofertas por EAN — usado por el comparador para enriquecer resultados.
+   * Acepta varios candidatos (ej: EAN-13 y su variante UPC-A sin el 0 inicial).
    */
-  async findByEan(ean: string) {
+  async findByEan(ean: string | string[]) {
+    const eans = (Array.isArray(ean) ? ean : [ean]).filter(Boolean);
+    if (!eans.length) return [];
+
     const today = new Date().toISOString().split('T')[0];
 
     const { data, error } = await this.supabase.client
       .from('supermarket_offers')
       .select('chain, product_name, offer_price, original_price, discount_pct, offer_type, offer_description, valid_until, image_url')
-      .eq('ean', ean)
+      .in('ean', eans)
       .eq('is_active', true)
       .gte('valid_until', today)
       .order('discount_pct', { ascending: false });

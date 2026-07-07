@@ -42,7 +42,7 @@
 
     <ion-item style="border-radius: 12px; margin-bottom: 12px;">
       <ion-label position="floating">Código EAN</ion-label>
-      <ion-input type="number" inputmode="numeric" [value]="eanInput()"
+      <ion-input type="text" inputmode="numeric" maxlength="14" [value]="eanInput()"
         (ionInput)="eanInput.set($event.detail.value ?? '')" placeholder="Ej: 7790070009019" />
     </ion-item>
 
@@ -75,6 +75,37 @@
   <ion-text color="danger">
     <p style="text-align:center; padding:20px;">{{ error() }}</p>
   </ion-text>
+  }
+
+  <!-- ── OFERTAS SCRAPEADAS (sin producto en Precios Claros) ── -->
+  @if (!productoSeleccionado() && !loadingProductos() && !loadingPrecios() && supermarketOffers().length) {
+  <div style="padding:0 16px 12px;">
+    <p style="font-weight:700; font-size:13px; color:var(--ion-color-warning-shade); margin:0 0 6px;">
+      🏷️ Ofertas vigentes para este código
+    </p>
+    <div style="display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding-bottom:4px;">
+      @for (o of supermarketOffers(); track o.chain + o.product_name) {
+      <div style="flex-shrink:0; background:var(--ion-color-warning-tint);
+                  border-radius:10px; padding:10px 12px; min-width:140px; max-width:200px;">
+        <p style="font-weight:700; font-size:13px; margin:0; color:var(--ion-color-warning-shade);">
+          {{ o.chain }}
+        </p>
+        <p style="font-size:12px; margin:2px 0 0; color:var(--ion-color-dark);">
+          {{ o.product_name }}
+        </p>
+        <p style="font-size:18px; font-weight:800; margin:4px 0 0; color:var(--ion-color-success);">
+          ${{ o.offer_price | number }}
+        </p>
+        @if (o.discount_pct) {
+        <ion-badge color="success" style="font-size:11px;">{{ o.discount_pct }}% OFF</ion-badge>
+        }
+        <p style="font-size:10px; color:var(--ion-color-medium); margin:4px 0 0;">
+          hasta {{ o.valid_until }}
+        </p>
+      </div>
+      }
+    </div>
+  </div>
   }
 
   <!-- ── LISTA DE PRODUCTOS (modo nombre) ─────────────── -->
@@ -126,6 +157,34 @@
         style="width:48px; height:48px; object-fit:contain; border-radius:8px;"
         onerror="this.style.display='none'" />
     </div>
+
+    <!-- Ofertas scrapeadas del producto -->
+    @if (supermarketOffers().length) {
+    <div style="margin-bottom:12px;">
+      <p style="font-weight:700; font-size:13px; color:var(--ion-color-warning-shade); margin:0 0 6px;">
+        🏷️ Ofertas vigentes esta semana
+      </p>
+      <div style="display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding-bottom:4px;">
+        @for (o of supermarketOffers(); track o.chain + o.product_name) {
+        <div style="flex-shrink:0; background:var(--ion-color-warning-tint);
+                    border-radius:10px; padding:10px 12px; min-width:140px;">
+          <p style="font-weight:700; font-size:13px; margin:0; color:var(--ion-color-warning-shade);">
+            {{ o.chain }}
+          </p>
+          <p style="font-size:18px; font-weight:800; margin:4px 0 0; color:var(--ion-color-success);">
+            ${{ o.offer_price | number }}
+          </p>
+          @if (o.discount_pct) {
+          <ion-badge color="success" style="font-size:11px;">{{ o.discount_pct }}% OFF</ion-badge>
+          }
+          <p style="font-size:10px; color:var(--ion-color-medium); margin:4px 0 0;">
+            hasta {{ o.valid_until }}
+          </p>
+        </div>
+        }
+      </div>
+    </div>
+    }
 
     <!-- Chips contexto -->
     <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">

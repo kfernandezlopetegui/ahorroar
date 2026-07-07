@@ -47,7 +47,8 @@
         [formats]="allowedFormats"
         (scanSuccess)="onScanSuccess($event)"
         (permissionResponse)="onPermissionResponse($event)"
-        (camerasFound)="onCamerasFound($event)" />
+        (camerasFound)="onCamerasFound($event)"
+        (camerasNotFound)="onCamerasNotFound()" />
 
       <div class="reticle-overlay" [class.visible]="camaraLista()">
         <div class="reticle">
