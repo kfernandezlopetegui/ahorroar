@@ -1,22 +1,22 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-title>Mis alertas</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <div class="page-wrap">
 
   @if (loading()) {
-    <div style="display:flex; justify-content:center; padding:40px;">
+    <div class="spinner-center">
       <ion-spinner name="crescent" />
     </div>
   }
 
   @if (!loading() && !items().length) {
-    <div style="display:flex; flex-direction:column; align-items:center;
-                justify-content:center; height:60vh; gap:16px; text-align:center;">
-      <ion-icon name="notifications-outline" style="font-size:72px; color:var(--ion-color-light-shade);" />
-      <p style="color:var(--ion-color-medium); font-size:15px; margin:0;">
+    <div class="empty-state">
+      <ion-icon name="notifications-outline" />
+      <p>
         No seguís ningún producto todavía.<br>
         Buscá en el <strong>Comparador</strong> y tocá <strong>Seguir</strong>.
       </p>
@@ -26,44 +26,37 @@
     </div>
   }
 
-  <div style="padding-bottom:16px;">
+  <div class="watch-list card-grid">
     @for (item of items(); track item.id) {
-      <ion-card style="margin:8px 0; border-radius:12px;">
-        <ion-card-content style="padding:14px;">
+      <ion-card class="watch-card">
+        <ion-card-content>
 
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+          <div class="row-between-start">
 
-            <div style="flex:1; min-width:0;">
-              <p style="font-weight:600; font-size:14px; margin:0;
-                         white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                {{ item.producto_nombre }}
-              </p>
-              <p style="font-size:11px; color:var(--ion-color-medium); margin:2px 0 6px;">
-                EAN: {{ item.ean }}
-              </p>
+            <div class="grow">
+              <p class="product-name ellipsis">{{ item.producto_nombre }}</p>
+              <p class="text-xs watch-ean">EAN: {{ item.ean }}</p>
 
               <!-- Modo de alerta -->
               @if (item.alert_on_promo) {
-                <ion-chip color="success" style="height:26px; font-size:12px;">
+                <ion-chip color="success" class="alert-chip">
                   <ion-icon name="pricetag-outline" slot="start" />
                   Alerta en cualquier oferta
                 </ion-chip>
               } @else {
-                <ion-chip color="primary" style="height:26px; font-size:12px;">
+                <ion-chip color="primary" class="alert-chip">
                   <ion-icon name="trending-down-outline" slot="start" />
                   Objetivo: ${{ item.precio_objetivo | number }}
                 </ion-chip>
               }
 
               @if (item.last_notified_at) {
-                <p style="font-size:11px; color:var(--ion-color-medium); margin:6px 0 0;">
-                  Última alerta: {{ timeAgo(item.last_notified_at) }}
-                </p>
+                <p class="text-xs watch-last">Última alerta: {{ timeAgo(item.last_notified_at) }}</p>
               }
             </div>
 
             <!-- Acciones -->
-            <div style="display:flex; flex-direction:column; gap:2px; align-items:center;">
+            <div class="watch-actions shrink-0">
               <ion-button fill="clear" size="small" (click)="editAlert(item)">
                 <ion-icon name="create-outline" />
               </ion-button>
@@ -79,4 +72,5 @@
     }
   </div>
 
+  </div>
 </ion-content>

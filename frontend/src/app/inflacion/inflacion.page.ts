@@ -1,13 +1,12 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
 import {
   IonContent, IonHeader, IonToolbar, IonTitle,
-  IonCard, IonCardContent, IonSpinner, IonText,
-  IonSegment, IonSegmentButton, IonLabel, IonIcon,
+  IonCard, IonCardContent, IonSpinner, IonSegment, IonSegmentButton, IonLabel, IonIcon,
   IonButtons, IonBackButton,
 } from '@ionic/angular/standalone';
 import { DecimalPipe } from '@angular/common';
 import { addIcons } from 'ionicons';
-import { trendingUpOutline, trendingDownOutline, statsChartOutline } from 'ionicons/icons';
+import { trendingUpOutline, trendingDownOutline, statsChartOutline, chevronBackOutline } from 'ionicons/icons';
 import { InflationService, MonthPoint } from '../core/services/inflation';
 
 interface ChartLine {
@@ -27,8 +26,7 @@ const PAD = { top: 12, right: 12, bottom: 24, left: 36 };
   imports: [
     DecimalPipe,
     IonContent, IonHeader, IonToolbar, IonTitle,
-    IonCard, IonCardContent, IonSpinner, IonText,
-    IonSegment, IonSegmentButton, IonLabel, IonIcon,
+    IonCard, IonCardContent, IonSpinner, IonSegment, IonSegmentButton, IonLabel, IonIcon,
     IonButtons, IonBackButton,
   ],
   templateUrl: './inflacion.page.html',
@@ -51,8 +49,8 @@ export class InflacionPage implements OnInit {
     if (!d) return [];
 
     const series = [
-      { label: 'Tu canasta', color: '#eb445a', puntos: d.canasta.puntos },
-      { label: 'IPC (INDEC)', color: '#3880ff', puntos: d.ipc },
+      { label: 'Tu canasta', color: '#C65D4A', puntos: d.canasta.puntos },
+      { label: 'IPC (INDEC)', color: '#9CAF88', puntos: d.ipc },
     ].filter(s => s.puntos.length >= 2);
 
     if (!series.length) return [];
@@ -87,7 +85,7 @@ export class InflacionPage implements OnInit {
   });
 
   constructor(public svc: InflationService) {
-    addIcons({ trendingUpOutline, trendingDownOutline, statsChartOutline });
+    addIcons({ trendingUpOutline, trendingDownOutline, statsChartOutline, chevronBackOutline });
   }
 
   ngOnInit() {

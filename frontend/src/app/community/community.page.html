@@ -1,8 +1,8 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-title>Comunidad</ion-title>
     @if (userStats()) {
-      <ion-chip slot="end" color="primary" style="margin-right:8px; height:28px; font-size:13px;">
+      <ion-chip slot="end" color="primary" class="points-chip">
         <ion-icon name="trophy-outline" slot="start" />
         {{ userStats()!.points.points }} pts
       </ion-chip>
@@ -23,11 +23,12 @@
 </ion-header>
 
 <ion-content>
+  <div class="page-wrap">
 
   @if (userStats()?.badges?.length) {
-    <div style="display:flex; gap:8px; padding:12px 16px 4px; overflow-x:auto; scrollbar-width:none;">
+    <div class="chip-row">
       @for (b of userStats()!.badges; track b.badge) {
-        <ion-chip [color]="badgeInfo[b.badge]?.color ?? 'medium'" style="white-space:nowrap; height:28px; font-size:12px;">
+        <ion-chip [color]="badgeInfo[b.badge]?.color ?? 'medium'" class="badge-chip">
           {{ badgeInfo[b.badge]?.icon }} {{ badgeInfo[b.badge]?.label }}
         </ion-chip>
       }
@@ -35,53 +36,47 @@
   }
 
   @if (loading()) {
-    <div style="display:flex; justify-content:center; padding:40px;">
+    <div class="spinner-center">
       <ion-spinner name="crescent" />
     </div>
   }
 
   <!-- REPORTES -->
   @if (activeSegment() === 'reportes') {
-    <div style="padding:8px 12px 80px;">
+    <div class="feed card-grid">
       @if (!loading() && !reports().length) {
-        <p style="text-align:center; color:var(--ion-color-medium); padding:40px 0;">
-          Sé el primero en reportar un precio 🏷️
-        </p>
+        <p class="empty-note">Sé el primero en reportar un precio 🏷️</p>
       }
       @for (r of reports(); track r.id) {
-        <ion-card style="margin:8px 0; border-radius:12px;">
-          <ion-card-content style="padding:12px;">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
-              <div style="flex:1; min-width:0;">
-                <p style="font-weight:600; font-size:14px; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                  {{ r.producto_nombre }}
-                </p>
-                <p style="font-size:12px; color:var(--ion-color-medium); margin:4px 0 0;">
+        <ion-card class="report-card">
+          <ion-card-content>
+            <div class="row-between-start">
+              <div class="grow">
+                <p class="product-name ellipsis">{{ r.producto_nombre }}</p>
+                <p class="text-soft">
                   {{ r.cadena }}@if (r.sucursal) { · {{ r.sucursal }} }
                 </p>
                 @if (r.direccion) {
-                  <p style="font-size:11px; color:var(--ion-color-medium); margin:2px 0 0;">{{ r.direccion }}</p>
+                  <p class="text-xs">{{ r.direccion }}</p>
                 }
-                <div style="display:flex; align-items:center; gap:6px; margin-top:4px;">
-                  <span style="font-size:11px; color:var(--ion-color-medium);">{{ timeAgo(r.created_at) }}</span>
+                <div class="row report-meta">
+                  <span class="text-xs">{{ timeAgo(r.created_at) }}</span>
                   @if (r.verified) {
-                    <ion-badge color="success" style="font-size:10px;">✓ Verificado</ion-badge>
+                    <ion-badge color="success" class="mini-badge">✓ Verificado</ion-badge>
                   }
                 </div>
               </div>
-              <div style="text-align:right; min-width:80px; flex-shrink:0;">
-                <p style="font-weight:800; font-size:20px; color:var(--ion-color-success); margin:0;">
-                  ${{ r.precio | number }}
-                </p>
-                <div style="display:flex; align-items:center; justify-content:flex-end;">
+              <div class="price-col shrink-0">
+                <p class="app-price app-price--green">${{ r.precio | number }}</p>
+                <div class="row report-actions">
                   <ion-button fill="clear" size="small" (click)="upvote(r.id)"
-                    [disabled]="svc.hasUpvoted(r.id)" style="height:28px; margin-top:4px;">
+                    [disabled]="svc.hasUpvoted(r.id)">
                     <ion-icon name="thumbs-up-outline" slot="start"
                       [color]="svc.hasUpvoted(r.id) ? 'primary' : 'medium'" />
-                    <span style="font-size:12px;">{{ r.upvotes }}</span>
+                    <span class="upvote-count">{{ r.upvotes }}</span>
                   </ion-button>
                   <ion-button fill="clear" size="small" (click)="flag(r.id)"
-                    [disabled]="svc.hasFlagged(r.id)" style="height:28px; margin-top:4px;"
+                    [disabled]="svc.hasFlagged(r.id)"
                     title="Marcar como incorrecto">
                     <ion-icon name="flag-outline" slot="icon-only"
                       [color]="svc.hasFlagged(r.id) ? 'danger' : 'medium'" />
@@ -97,20 +92,19 @@
 
   <!-- RANKING -->
   @if (activeSegment() === 'ranking') {
-    <div style="padding:8px 12px 80px;">
+    <div class="feed card-grid">
       @for (user of leaderboard(); track user.user_id; let i = $index) {
-        <ion-card style="margin:8px 0; border-radius:12px;"
-          [style.border]="i < 3 ? '1px solid var(--ion-color-warning)' : ''">
-          <ion-card-content style="padding:12px;">
-            <div style="display:flex; align-items:center; gap:12px;">
-              <span style="font-size:26px; min-width:36px; text-align:center;">
+        <ion-card class="rank-card" [class.rank-card--top]="i < 3">
+          <ion-card-content>
+            <div class="row">
+              <span class="rank-medal">
                 {{ i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '#' + (i + 1) }}
               </span>
-              <div style="flex:1;">
-                <p style="font-weight:600; font-size:14px; margin:0;">Usuario {{ user.user_id.slice(0,8) }}...</p>
-                <p style="font-size:12px; color:var(--ion-color-medium); margin:2px 0 0;">{{ user.reports_count }} reportes</p>
+              <div class="grow">
+                <p class="product-name">Usuario {{ user.user_id.slice(0,8) }}...</p>
+                <p class="text-xs">{{ user.reports_count }} reportes</p>
               </div>
-              <ion-chip color="primary" style="height:28px; font-size:14px; font-weight:700;">
+              <ion-chip color="primary" class="points-chip">
                 {{ user.points }} pts
               </ion-chip>
             </div>
@@ -119,6 +113,8 @@
       }
     </div>
   }
+
+  </div>
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="openModal()">
@@ -131,22 +127,23 @@
 <!-- ── Modal: reportar precio ─────────────────────────────────────────────── -->
 <ion-modal [isOpen]="isModalOpen()" (didDismiss)="isModalOpen.set(false)">
   <ng-template>
-    <ion-header>
+    <ion-header class="ion-no-border">
       <ion-toolbar>
         <ion-title>Reportar precio</ion-title>
         <ion-button slot="end" fill="clear" (click)="isModalOpen.set(false)">Cerrar</ion-button>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
+      <div class="page-wrap">
 
-      <p style="font-size:13px; color:var(--ion-color-medium); margin-bottom:16px;">
-        <ion-icon name="trophy-outline" /> Ganás <strong>+10 puntos</strong> por cada precio reportado.
+      <p class="text-soft reward-hint">
+        <ion-icon name="trophy-outline" class="icon-inline" /> Ganás <strong>+10 puntos</strong> por cada precio reportado.
       </p>
 
       <form [formGroup]="form" (ngSubmit)="submitReport()">
 
         <!-- EAN con lookup automático -->
-        <ion-item>
+        <ion-item class="input-item" lines="none">
           <ion-label position="stacked">EAN / Código de barras *</ion-label>
           <ion-input
             type="number"
@@ -155,7 +152,7 @@
             placeholder="ej: 7790070009084"
             (ionInput)="onEanInput($event)" />
           @if (loadingProduct()) {
-            <ion-spinner slot="end" name="crescent" style="width:20px;height:20px;" />
+            <ion-spinner slot="end" name="crescent" class="input-spinner" />
           }
           @if (productFound()) {
             <ion-icon slot="end" name="checkmark-circle" color="success" />
@@ -164,57 +161,56 @@
 
         <!-- Preview del producto encontrado -->
         @if (productFound()) {
-          <div style="display:flex; align-items:center; gap:10px; padding:10px 16px;
-                       background:var(--ion-color-light); border-radius:8px; margin:6px 0;">
-            <img [src]="productFound()!.imagen" style="width:44px; height:44px; object-fit:contain;"
+          <div class="row soft-panel--selected soft-panel product-preview">
+            <img [src]="productFound()!.imagen" class="thumb-sm"
                  onerror="this.style.display='none'" />
             <div>
-              <p style="font-weight:600; font-size:13px; margin:0;">{{ productFound()!.nombre }}</p>
+              <p class="product-name">{{ productFound()!.nombre }}</p>
               @if (productFound()!.marca) {
-                <p style="font-size:11px; color:var(--ion-color-medium); margin:2px 0 0;">{{ productFound()!.marca }}</p>
+                <p class="text-xs">{{ productFound()!.marca }}</p>
               }
             </div>
           </div>
         }
         @if (eanTouched() && !productFound() && !loadingProduct()) {
-          <ion-note color="medium" style="padding:0 16px; font-size:12px;">
+          <p class="text-xs not-found-note">
             No encontrado en Precios Claros — completá el nombre manualmente.
-          </ion-note>
+          </p>
         }
 
         <!-- Nombre del producto (editable / pre-llenado) -->
-        <ion-item style="margin-top:8px;">
+        <ion-item class="input-item" lines="none">
           <ion-label position="stacked">Nombre del producto *</ion-label>
           <ion-input formControlName="producto_nombre" placeholder="ej: Leche La Serenísima 1L" />
         </ion-item>
 
         <!-- Precio -->
-        <ion-item style="margin-top:8px;">
+        <ion-item class="input-item" lines="none">
           <ion-label position="stacked">Precio que viste ($) *</ion-label>
           <ion-input type="number" inputmode="decimal" formControlName="precio" placeholder="ej: 1250" />
         </ion-item>
 
         <!-- Sucursal: búsqueda con autocomplete -->
-        <ion-item style="margin-top:8px;">
+        <ion-item class="input-item" lines="none">
           <ion-label position="stacked">Sucursal (opcional)</ion-label>
           <ion-input
             formControlName="branch_query"
             placeholder="Nombre, dirección o número de sucursal"
             (ionInput)="onBranchInput($event)" />
           @if (loadingBranch()) {
-            <ion-spinner slot="end" name="crescent" style="width:20px;height:20px;" />
+            <ion-spinner slot="end" name="crescent" class="input-spinner" />
           }
         </ion-item>
 
         <!-- Dropdown sucursales -->
         @if (branchResults().length > 0) {
-          <ion-list style="border-radius:8px; margin:0 0 8px;">
+          <ion-list class="branch-dropdown">
             @for (b of branchResults(); track b.id) {
-              <ion-item button (click)="selectBranch(b)" lines="full">
+              <ion-item button (click)="selectBranch(b)" lines="none">
                 <ion-icon name="storefront" slot="start" color="medium" />
                 <ion-label>
-                  <p style="font-size:13px; font-weight:600;">{{ b.cadena }} — {{ b.nombre }}</p>
-                  <p style="font-size:11px; color:var(--ion-color-medium);">{{ b.direccion }}</p>
+                  <p class="branch-name">{{ b.cadena }} — {{ b.nombre }}</p>
+                  <p class="text-xs">{{ b.direccion }}</p>
                 </ion-label>
               </ion-item>
             }
@@ -223,10 +219,9 @@
 
         <!-- Sucursal seleccionada -->
         @if (selectedBranch()) {
-          <div style="display:flex; align-items:center; gap:8px; padding:8px 16px;
-                       background:var(--ion-color-success-tint); border-radius:8px; margin-bottom:8px;">
+          <div class="row item-selected branch-selected">
             <ion-icon name="checkmark-circle" color="success" />
-            <span style="flex:1; font-size:12px;">{{ selectedBranch()!.cadena }} — {{ selectedBranch()!.direccion }}</span>
+            <span class="grow branch-selected-text">{{ selectedBranch()!.cadena }} — {{ selectedBranch()!.direccion }}</span>
             <ion-button fill="clear" size="small" (click)="clearBranch()">
               <ion-icon name="close-circle" color="medium" />
             </ion-button>
@@ -235,9 +230,9 @@
 
         <!-- Si no hay autocomplete, input manual de cadena -->
         @if (!selectedBranch()) {
-          <ion-item style="margin-top:4px;">
-            <ion-label>Cadena *</ion-label>
-            <ion-select formControlName="cadena" placeholder="Seleccioná">
+          <ion-item class="input-item" lines="none">
+            <ion-label position="stacked">Cadena *</ion-label>
+            <ion-select formControlName="cadena" placeholder="Seleccioná" interface="popover">
               @for (c of CADENAS; track c) {
                 <ion-select-option [value]="c">{{ c }}</ion-select-option>
               }
@@ -247,13 +242,14 @@
 
         <ion-button
           expand="block" type="submit"
-          style="margin-top:24px;"
+          class="form-submit"
           [disabled]="form.invalid || submitting()">
           @if (submitting()) { <ion-spinner name="crescent" /> }
           @else { Reportar precio }
         </ion-button>
 
       </form>
+      </div>
     </ion-content>
   </ng-template>
 </ion-modal>

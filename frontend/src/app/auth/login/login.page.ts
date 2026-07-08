@@ -3,8 +3,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import {
   IonContent, IonButton, IonInput, IonItem,
-  IonLabel, IonSpinner, IonText,
-} from '@ionic/angular/standalone';
+  IonLabel, IonSpinner, } from '@ionic/angular/standalone';
 import { AuthService } from '../../core/services/auth';
 
 @Component({
@@ -13,8 +12,7 @@ import { AuthService } from '../../core/services/auth';
   imports: [
     ReactiveFormsModule, RouterLink,
     IonContent, IonButton, IonInput, IonItem,
-    IonLabel, IonSpinner, IonText,
-  ],
+    IonLabel, IonSpinner, ],
   templateUrl: './login.page.html',
 })
 export class LoginPage {

@@ -1,8 +1,7 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
 import {
   IonContent, IonHeader, IonToolbar, IonTitle,
-  IonCard, IonCardContent, IonSpinner, IonText,
-  IonBadge, IonIcon, IonRefresher, IonRefresherContent,
+  IonCard, IonCardContent, IonSpinner, IonBadge, IonIcon, IonRefresher, IonRefresherContent,
   IonButtons, IonBackButton,
 } from '@ionic/angular/standalone';
 import { NgTemplateOutlet } from '@angular/common';
@@ -11,7 +10,7 @@ import { firstValueFrom } from 'rxjs';
 import { addIcons } from 'ionicons';
 import {
   checkmarkCircleOutline, closeCircleOutline,
-  timeOutline, hardwareChipOutline,
+  timeOutline, hardwareChipOutline, chevronBackOutline,
 } from 'ionicons/icons';
 import { environment } from '../../environments/environment';
 import { SupabaseService } from '../core/services/supabase';
@@ -40,8 +39,7 @@ interface MonitorStatus {
   imports: [
     NgTemplateOutlet,
     IonContent, IonHeader, IonToolbar, IonTitle,
-    IonCard, IonCardContent, IonSpinner, IonText,
-    IonBadge, IonIcon, IonRefresher, IonRefresherContent,
+    IonCard, IonCardContent, IonSpinner, IonBadge, IonIcon, IonRefresher, IonRefresherContent,
     IonButtons, IonBackButton,
   ],
   templateUrl: './monitor.page.html',
@@ -58,7 +56,7 @@ export class MonitorPage implements OnInit {
     private readonly http: HttpClient,
     private readonly supabase: SupabaseService,
   ) {
-    addIcons({ checkmarkCircleOutline, closeCircleOutline, timeOutline, hardwareChipOutline });
+    addIcons({ checkmarkCircleOutline, closeCircleOutline, timeOutline, hardwareChipOutline, chevronBackOutline });
   }
 
   ngOnInit() {

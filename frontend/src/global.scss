@@ -1,12 +1,10 @@
 /*
- * App Global CSS
+ * AhorroAR — Global styles
  * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
+ * Sistema de diseño "soft premium": tokens en src/theme/variables.scss,
+ * tipografía serif (Playfair Display) + sans (Inter) cargadas como assets
+ * locales (offline-first, sin CDN), overrides de componentes Ionic y
+ * clases utilitarias (.app-card, .app-price, .card-dark, .item-selected…).
  */
 
 /* Core CSS required for Ionic components to work properly */
@@ -25,21 +23,1504 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+/* Modo oscuro deshabilitado por ahora: tema claro forzado (ver variables.scss) */
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* ══════════════════════════════════════════════════════════════════════════
+   1. FUENTES LOCALES (variable fonts, subset latin)
+   ══════════════════════════════════════════════════════════════════════════ */
 
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('./assets/fonts/inter-latin.woff2') format('woff2');
+}
 
-// Scanner modal full screen
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('./assets/fonts/playfair-display-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('./assets/fonts/playfair-display-italic-latin.woff2') format('woff2');
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   2. TIPOGRAFÍA BASE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+html {
+  font-family: var(--app-font-sans);
+}
+
+body {
+  color: var(--app-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3,
+ion-title,
+ion-card-title,
+.price, .total {
+  font-family: var(--app-font-serif);
+  color: var(--app-ink);
+  letter-spacing: -0.01em;
+}
+
+h1 { font-weight: 700; }
+h2, h3 { font-weight: 600; }
+
+p, span, ion-label, ion-note, button, input, textarea {
+  font-family: var(--app-font-sans);
+}
+
+a {
+  color: var(--ion-color-primary-shade);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ion-color-primary-shade);
+  outline-offset: 2px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   3. HEADER / NAVEGACIÓN
+   ══════════════════════════════════════════════════════════════════════════ */
+
+ion-header {
+  box-shadow: none;
+
+  &::after { display: none; }   /* sin sombra/borde Material bajo el header */
+
+  ion-toolbar {
+    --background: var(--app-bg);
+    --border-width: 0;
+    --border-color: transparent;
+    --color: var(--app-ink);
+    --padding-start: 8px;
+    --padding-end: 8px;
+  }
+}
+
+ion-title {
+  /* Serif, grande, alineado a la izquierda en todas las plataformas */
+  font-size: clamp(22px, 6vw, 26px);
+  font-weight: 600;
+  color: var(--app-ink);
+  text-align: left;
+  padding-inline: 12px;
+
+  /* anula el centrado absoluto de iOS */
+  position: static;
+  transform: none;
+}
+
+ion-back-button {
+  --color: var(--app-ink);
+  --icon-font-size: 22px;
+}
+
+ion-buttons ion-button,
+ion-toolbar ion-button {
+  --color: var(--app-ink);
+}
+
+/* Tab bar: blanco, borde superior fino, iconos outline */
+ion-tab-bar {
+  --background: var(--app-bg);
+  --border: 1px solid var(--app-border);
+  height: 60px;
+  padding-top: 2px;
+}
+
+ion-tab-button {
+  --color: var(--app-ink-soft);
+  --color-selected: var(--ion-color-primary-shade);
+  --ripple-color: var(--ion-color-primary);
+  background: transparent;
+
+  ion-label {
+    font-family: var(--app-font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  ion-icon { font-size: 22px; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   4. BOTONES
+   ══════════════════════════════════════════════════════════════════════════ */
+
+ion-button {
+  --border-radius: var(--app-radius-pill);
+  --box-shadow: none;
+  --background-activated: var(--ion-color-primary-shade);
+  --background-hover: var(--ion-color-primary-shade);
+  font-family: var(--app-font-sans);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+  min-height: 44px;   /* área táctil mínima */
+
+  &::part(native) {
+    border-radius: var(--app-radius-pill);
+  }
+}
+
+/* Acción principal: pill llena, 52px, sombra apenas perceptible */
+ion-button[expand="block"] {
+  height: 52px;
+  font-size: 16px;
+  --box-shadow: var(--app-shadow-soft);
+  margin-inline: 0;
+}
+
+/* Secundario / ghost */
+ion-button[fill="outline"] {
+  --border-color: var(--app-border);
+  --border-width: 1px;
+  --color: var(--app-ink);
+  --background-hover: var(--app-bg-soft);
+  --background-activated: var(--app-bg-soft);
+
+  ion-icon { color: var(--ion-color-primary-shade); }
+}
+
+ion-button[fill="clear"] {
+  --color: var(--app-ink);
+  min-height: 40px;
+}
+
+ion-button[size="small"] {
+  min-height: 36px;
+  font-size: 13px;
+}
+
+/* FAB coherente con la marca */
+ion-fab-button {
+  --background: var(--ion-color-primary);
+  --background-activated: var(--ion-color-primary-shade);
+  --box-shadow: var(--app-shadow-card);
+  --border-radius: 50%;
+  --color: #fff;
+}
+
+/* Steppers y botones de icono cuadrados (+/− en la lista) */
+.btn-icon-square {
+  width: 34px;
+  height: 34px;
+  min-height: 34px;
+  margin: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  --border-radius: var(--app-radius-sm);
+  --border-color: var(--app-border);
+  --border-style: solid;
+  --border-width: 1px;
+  --background: var(--app-bg);
+  --color: var(--ion-color-primary-shade);
+
+  &::part(native) {
+    border-radius: var(--app-radius-sm);
+  }
+
+  ion-icon { font-size: 18px; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   5. FORMULARIOS: items, inputs, selects, searchbar
+   ══════════════════════════════════════════════════════════════════════════ */
+
+ion-item {
+  --background: transparent;
+  --border-color: var(--app-border);
+  --padding-top: 6px;
+  --padding-bottom: 6px;
+  --min-height: 48px;
+  font-family: var(--app-font-sans);
+}
+
+ion-list { background: transparent; }
+
+ion-list-header ion-label {
+  font-family: var(--app-font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--app-ink);
+}
+
+/* Caja de input: borde fino, radio 14px, fondo blanco, sin línea Material.
+   Se aplica a los ion-item que envuelven controles de formulario. */
+.input-item,
+form ion-item {
+  --background: var(--app-bg);
+  --border-width: 0;
+  --inner-border-width: 0;
+  --highlight-height: 0;
+  --border-radius: 14px;
+  --padding-start: 16px;
+  --inner-padding-end: 12px;
+  --min-height: 58px;
+  border: 1px solid var(--app-border);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  transition: border-color 0.15s ease;
+
+  &:focus-within,
+  &.item-has-focus {
+    border-color: var(--ion-color-primary);
+  }
+
+  ion-label {
+    font-family: var(--app-font-sans);
+    color: var(--app-ink-soft) !important;
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  /* label flotante/apilado: siempre arriba, chico y gris */
+  ion-label[position="stacked"],
+  ion-label[position="floating"] {
+    transform: none !important;
+    font-size: 13px !important;
+    margin-bottom: 2px;
+  }
+
+  ion-input, ion-select, ion-textarea {
+    --padding-top: 6px;
+    --padding-bottom: 10px;
+    --placeholder-color: var(--app-ink-soft);
+    --placeholder-opacity: 0.7;
+    font-size: 15px;
+    color: var(--app-ink);
+  }
+}
+
+ion-select {
+  --placeholder-color: var(--app-ink-soft);
+  color: var(--app-ink);
+}
+
+/* Searchbar: mismo tratamiento que inputs */
+ion-searchbar {
+  --background: var(--app-bg-soft);
+  --border-radius: 14px;
+  --box-shadow: none;
+  --color: var(--app-ink);
+  --placeholder-color: var(--app-ink-soft);
+  --icon-color: var(--app-ink-soft);
+  --clear-button-color: var(--app-ink-soft);
+  padding-inline: 16px;
+  padding-bottom: 10px;
+}
+
+/* Segment: minimal, fondo suave, botón activo blanco con sombra */
+ion-segment {
+  --background: var(--app-bg-soft);
+  border-radius: var(--app-radius-pill);
+  margin: 2px 16px 10px;
+  padding: 3px;
+  width: auto;
+}
+
+ion-segment-button {
+  --background-checked: var(--app-bg);
+  --color: var(--app-ink-soft);
+  --color-checked: var(--app-ink);
+  --indicator-color: var(--app-bg);
+  --indicator-box-shadow: var(--app-shadow-soft);
+  --border-radius: var(--app-radius-pill);
+  --border-width: 0;
+  --padding-top: 6px;
+  --padding-bottom: 6px;
+  min-height: 40px;
+  font-family: var(--app-font-sans);
+  font-weight: 500;
+  font-size: 13px;
+  text-transform: none;
+  letter-spacing: 0;
+
+  ion-icon { font-size: 18px; }
+  ion-label { margin-top: 2px; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   6. CARDS, CHIPS, BADGES
+   ══════════════════════════════════════════════════════════════════════════ */
+
+ion-card {
+  background: var(--app-bg);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+  box-shadow: var(--app-shadow-soft);
+  margin: 8px 0;
+  color: var(--app-ink);
+}
+
+ion-card-header { padding: 16px 16px 6px; }
+
+ion-card-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--app-ink);
+}
+
+ion-card-content {
+  padding: 12px 16px 16px;
+  font-size: 14px;
+  color: var(--app-ink);
+}
+
+ion-chip {
+  font-family: var(--app-font-sans);
+  font-weight: 500;
+  border-radius: var(--app-radius-pill);
+  min-height: 34px;
+}
+
+/* Chips de filtro (outline = no seleccionado) */
+ion-chip.ion-color-medium {
+  --background: var(--app-bg);
+  border: 1px solid var(--app-border);
+  color: var(--app-ink-soft);
+}
+
+ion-badge {
+  font-family: var(--app-font-sans);
+  font-weight: 600;
+  border-radius: var(--app-radius-pill);
+  padding: 5px 10px;
+  letter-spacing: 0;
+}
+
+/* Contadores circulares (carrito, notificaciones) */
+.badge-count {
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  background: var(--ion-color-primary);
+  color: #fff;
+  border-radius: 50%;
+  font-family: var(--app-font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   7. OVERLAYS: modales, toasts, alerts, skeletons
+   ══════════════════════════════════════════════════════════════════════════ */
+
+ion-modal {
+  ion-toolbar { --background: var(--app-bg); }
+}
+
+ion-toast {
+  --border-radius: var(--app-radius-md);
+  --background: var(--app-ink);
+  --color: #fff;
+  --button-color: var(--ion-color-primary-tint);
+  font-family: var(--app-font-sans);
+}
+
+ion-alert {
+  --backdrop-opacity: 0.35;
+
+  .alert-wrapper {
+    border-radius: var(--app-radius-md) !important;
+    box-shadow: var(--app-shadow-card) !important;
+  }
+
+  .alert-title {
+    font-family: var(--app-font-serif) !important;
+    font-weight: 600 !important;
+    color: var(--app-ink) !important;
+  }
+
+  .alert-button {
+    color: var(--ion-color-primary-shade) !important;
+    font-family: var(--app-font-sans) !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+  }
+
+  .alert-button-role-cancel {
+    color: var(--app-ink-soft) !important;
+  }
+}
+
+ion-skeleton-text {
+  --background: var(--app-bg-soft);
+  --background-rgb: 232, 232, 230;
+  border-radius: var(--app-radius-sm);
+}
+
+ion-spinner { color: var(--ion-color-primary); }
+
+ion-refresher-content,
+ion-infinite-scroll-content {
+  color: var(--app-ink-soft);
+  font-family: var(--app-font-sans);
+}
+
+/* Scanner modal full screen */
 .scanner-modal {
   --width: 100%;
   --height: 100%;
   --border-radius: 0;
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   8. CLASES UTILITARIAS DEL SISTEMA
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Card blanca estándar */
+.app-card {
+  background: var(--app-bg);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+  box-shadow: var(--app-shadow-soft);
+  padding: 16px;
+}
+
+/* Precio de producto: serif */
+.app-price {
+  font-family: var(--app-font-serif);
+  font-weight: 600;
+  font-size: clamp(18px, 4.5vw, 21px);
+  color: var(--app-ink);
+  letter-spacing: -0.01em;
+}
+
+.app-price--green { color: var(--app-price); }
+
+/* Total destacado: serif bold en verde oscuro */
+.app-total {
+  font-family: var(--app-font-serif);
+  font-weight: 700;
+  font-size: clamp(22px, 5.5vw, 26px);
+  color: var(--app-price);
+  letter-spacing: -0.01em;
+}
+
+.price-strike {
+  font-size: 12px;
+  color: var(--app-ink-soft);
+  text-decoration: line-through;
+}
+
+/* Tarjeta bancaria oscura (wallet / mejor opción) */
+.card-dark {
+  position: relative;
+  background: var(--app-card-dark);
+  color: #fff;
+  border: none;
+  border-radius: var(--app-radius-lg);
+  padding: 20px;
+  box-shadow: var(--app-shadow-card);
+
+  .micro-label { color: rgba(255, 255, 255, 0.55); }
+  .text-soft, .text-xs { color: rgba(255, 255, 255, 0.65); }
+  .app-price, .app-total, h3 { color: #fff; }
+}
+
+/* Tarjeta bancaria clara (no seleccionada) */
+.card-light {
+  position: relative;
+  background: var(--app-bg);
+  color: var(--app-ink-soft);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-lg);
+  padding: 20px;
+  box-shadow: none;
+}
+
+/* Check de selección superpuesto (mitad afuera de la esquina) */
+.check-bubble {
+  position: absolute;
+  right: 14px;
+  bottom: -14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ion-color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--app-shadow-soft);
+  border: 2px solid var(--app-bg);
+
+  ion-icon { font-size: 15px; }
+}
+
+/* Item seleccionado en listas */
+.item-selected {
+  background: var(--app-surface-selected);
+  border: none;
+  border-radius: var(--app-radius-sm);
+}
+
+/* Micro-label uppercase (única excepción de mayúsculas sostenidas) */
+.micro-label {
+  font-family: var(--app-font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--app-ink-soft);
+}
+
+/* Texto secundario */
+.text-soft {
+  font-family: var(--app-font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--app-ink-soft);
+}
+
+.text-xs {
+  font-family: var(--app-font-sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--app-ink-soft);
+}
+
+.text-danger { color: var(--app-danger); }
+
+/* Título de sección dentro de una página */
+.section-title {
+  font-family: var(--app-font-serif);
+  font-size: clamp(17px, 4.5vw, 19px);
+  font-weight: 600;
+  color: var(--app-ink);
+  margin: 20px 0 10px;
+}
+
+/* Layout helpers */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.row-start { display: flex; align-items: flex-start; gap: 10px; }
+
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.row-between-start {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.grow { flex: 1; min-width: 0; }
+.shrink-0 { flex-shrink: 0; }
+.ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Contenedor de página: limita el ancho en pantallas grandes */
+.page-wrap {
+  width: 100%;
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+/* Grilla fluida de cards: 1 columna en móvil, se adapta al ancho disponible */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
+  gap: 4px 12px;
+  align-items: start;
+}
+
+/* Fila de chips con scroll horizontal */
+.chip-row {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+
+  ion-chip {
+    white-space: nowrap;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+}
+
+/* Carrusel horizontal de mini-cards */
+.h-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 6px;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.mini-card {
+  flex-shrink: 0;
+  background: var(--app-bg);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+  padding: 12px 14px;
+  min-width: clamp(140px, 40vw, 180px);
+  max-width: 220px;
+  box-shadow: var(--app-shadow-soft);
+}
+
+.mini-card--soft {
+  background: var(--app-bg-soft);
+  box-shadow: none;
+}
+
+/* Tile de información (grillas del detalle de promo, resumen inflación) */
+.info-tile {
+  background: var(--app-bg-soft);
+  border-radius: var(--app-radius-sm);
+  padding: 14px;
+
+  .tile-label {
+    font-size: 12px;
+    color: var(--app-ink-soft);
+    margin: 0 0 3px;
+  }
+
+  .tile-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--app-ink);
+    margin: 0;
+  }
+}
+
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: 10px;
+}
+
+/* Imagen de producto redondeada */
+.thumb {
+  width: clamp(48px, 13vw, 60px);
+  height: clamp(48px, 13vw, 60px);
+  object-fit: cover;
+  border-radius: var(--app-radius-sm);
+  background: var(--app-bg-soft);
+  flex-shrink: 0;
+}
+
+.thumb--contain { object-fit: contain; }
+
+.thumb-sm {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: var(--app-radius-sm);
+  background: var(--app-bg-soft);
+  flex-shrink: 0;
+}
+
+/* Spinner centrado */
+.spinner-center {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+/* Estado vacío */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 55vh;
+  gap: 16px;
+  text-align: center;
+  padding: 0 24px;
+
+  ion-icon {
+    font-size: 64px;
+    color: var(--app-border);
+  }
+
+  p {
+    color: var(--app-ink-soft);
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+.empty-note {
+  text-align: center;
+  color: var(--app-ink-soft);
+  padding: 40px 24px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.error-note {
+  text-align: center;
+  color: var(--app-danger);
+  padding: 20px 24px;
+  font-size: 14px;
+}
+
+/* Paso numerado (instrucciones "cómo usarla") */
+.step-dot {
+  background: var(--ion-color-primary);
+  color: #fff;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+
+  &.step-dot--warn { background: var(--ion-color-warning); }
+  &.step-dot--ok { background: var(--app-price); }
+}
+
+/* Código de cupón */
+.coupon-code {
+  background: var(--app-bg-soft);
+  border: 1px dashed var(--app-border);
+  padding: 10px 14px;
+  border-radius: var(--app-radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  flex: 1;
+  text-align: center;
+  color: var(--app-ink);
+}
+
+/* Fila de detalle precio/valor con separador suave */
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--app-bg-soft);
+
+  &:last-child { border-bottom: none; }
+}
+
+/* Panel suave de aviso (items no disponibles, previews) */
+.soft-panel {
+  background: var(--app-bg-soft);
+  border-radius: var(--app-radius-sm);
+  padding: 12px 14px;
+}
+
+.soft-panel--selected { background: var(--app-surface-selected); }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   9. ESTILOS POR PÁGINA
+   (los .scss locales no están referenciados por los componentes standalone,
+   así que las reglas de página viven acá, con prefijos por pantalla)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Auth (login / register) ─────────────────────────────────────────────── */
+
+.auth-wrap {
+  max-width: 400px;
+  margin: clamp(40px, 12vh, 96px) auto 0;
+}
+
+.auth-title {
+  font-size: clamp(30px, 9vw, 36px);
+  margin: 0 0 6px;
+}
+
+.auth-sub {
+  color: var(--app-ink-soft);
+  font-size: 15px;
+  margin: 0 0 36px;
+}
+
+.auth-submit { margin-top: 24px; }
+
+.auth-switch {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  color: var(--app-ink-soft);
+}
+
+.auth-success {
+  text-align: center;
+  padding: 24px 20px;
+  margin-bottom: 24px;
+  border-radius: var(--app-radius-md);
+}
+
+.auth-success-emoji { font-size: 26px; margin: 0 0 8px; }
+.auth-success-title { font-weight: 600; margin: 0 0 4px; }
+
+.field-error {
+  font-size: 12px;
+  color: var(--app-danger);
+  margin: 2px 6px 12px;
+}
+
+/* ── Compartidos entre páginas ───────────────────────────────────────────── */
+
+.toolbar-icon-btn { position: relative; }
+
+.icon-inline { vertical-align: -2px; }
+
+.form-submit { margin-top: 24px; }
+
+.product-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--app-ink);
+  margin: 0;
+}
+
+.price-col {
+  text-align: right;
+  flex-shrink: 0;
+
+  p { margin: 0; }
+}
+
+.mini-badge { font-size: 11px; padding: 4px 8px; }
+
+.input-spinner { width: 20px; height: 20px; }
+
+.input-uppercase { text-transform: uppercase; }
+
+.btn-spinner { margin-right: 8px; }
+
+.upvote-count { font-size: 13px; }
+
+/* ── Home / Promociones ──────────────────────────────────────────────────── */
+
+.my-banks-hint {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ion-color-primary-shade);
+  padding: 6px 16px 0;
+  margin: 0;
+}
+
+.promo-list { padding: 4px 16px 8px; }
+
+.promo-card {
+  cursor: pointer;
+  margin: 6px 0;
+
+  &.promo-card--mine { border-color: var(--ion-color-primary); }
+}
+
+.promo-mine-badge {
+  font-size: 10px;
+  margin-bottom: 6px;
+  display: inline-block;
+}
+
+.promo-title {
+  font-size: 17px;
+  margin: 0 0 2px;
+}
+
+.promo-desc {
+  font-size: 13px;
+  color: var(--app-ink);
+  margin: 10px 0 8px;
+  line-height: 1.5;
+}
+
+.promo-meta { flex-wrap: wrap; }
+
+/* Modal detalle de promo */
+.detail-head { margin-bottom: 18px; }
+
+.detail-title {
+  font-size: clamp(20px, 6vw, 24px);
+  margin: 0 0 4px;
+}
+
+.detail-tiles { margin-bottom: 22px; }
+
+.detail-category { text-transform: capitalize; }
+
+.detail-section { margin-bottom: 22px; }
+
+.detail-desc {
+  font-size: 14px;
+  color: var(--app-ink);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.detail-howto {
+  padding: 16px;
+  margin-bottom: 22px;
+  border-radius: var(--app-radius-md);
+
+  .section-title { margin-top: 0; }
+}
+
+.howto-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.howto-text {
+  font-size: 13px;
+  margin: 3px 0 0;
+  line-height: 1.5;
+}
+
+/* ── Comparador ──────────────────────────────────────────────────────────── */
+
+.ean-box { padding: 20px 16px; }
+.ean-hint { margin: 0 0 16px; }
+.ean-actions { margin-top: 6px; }
+
+.offers-section { padding: 0 16px 12px; }
+.offers-section--inline { padding: 0 0 12px; }
+
+.offers-label {
+  display: block;
+  margin: 0 0 8px;
+}
+
+.mini-card-chain {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--app-ink);
+  margin: 0 0 2px;
+}
+
+.mini-card-price { display: block; margin: 6px 0 4px; }
+.mini-card-until { margin: 6px 0 0; }
+
+.product-results { padding: 0 16px; }
+
+.product-card {
+  cursor: pointer;
+  margin: 6px 0;
+
+  ion-card-content { align-items: center; }
+}
+
+.detail-wrap { padding: 12px 16px; }
+
+.product-head { margin-bottom: 14px; }
+
+.online-price-row { margin-bottom: 8px; }
+
+.context-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.price-card {
+  margin: 6px 0;
+
+  &.price-card--best { border-color: var(--ion-color-primary); }
+}
+
+.distance-note { color: var(--ion-color-primary-shade); }
+
+.promo-note {
+  font-size: 12px;
+  color: var(--ion-color-warning-shade);
+  margin: 6px 0 0;
+}
+
+.fresh-note { color: var(--app-price); margin-top: 2px; }
+
+.detail-actions {
+  display: flex;
+  gap: 8px;
+  margin: 8px 16px 4px;
+  flex-wrap: wrap;
+}
+
+.watch-active {
+  --border-color: var(--ion-color-primary);
+  --color: var(--ion-color-primary-shade);
+}
+
+.history-card { margin: 8px 16px; }
+.history-title { margin-top: 0; font-size: 15px; }
+
+/* ── Cupones ─────────────────────────────────────────────────────────────── */
+
+.coupon-list { padding: 0 16px 90px; }
+
+.coupon-card { margin: 8px 0; }
+
+.coupon-store { margin: 6px 0 0; }
+
+.coupon-code-row { margin-bottom: 12px; }
+
+.affiliate-btn { margin-bottom: 12px; }
+
+.expiry-row { gap: 5px; }
+.expiry-icon { font-size: 15px; }
+.expiry-soon { color: var(--ion-color-warning-shade); }
+
+.affiliate-hint { margin: 4px 6px 0; }
+
+/* ── Lista inteligente ───────────────────────────────────────────────────── */
+
+.title-badge {
+  margin-left: 8px;
+  vertical-align: 4px;
+  font-size: 12px;
+}
+
+.lista-items { margin-bottom: 16px; }
+
+.lista-card {
+  margin: 6px 0;
+
+  ion-card-content {
+    align-items: center;
+    padding: 12px 14px;
+  }
+}
+
+.from-price {
+  font-size: 12px;
+  color: var(--app-ink-soft);
+  margin: 4px 0 0;
+
+  .app-price--green {
+    font-family: var(--app-font-serif);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--app-price);
+  }
+}
+
+.qty-controls { gap: 6px; }
+
+.qty-value {
+  font-weight: 600;
+  min-width: 22px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.calc-btn { margin: 4px 0 14px; }
+
+.location-hint {
+  text-align: center;
+  margin: -6px 0 12px;
+  font-size: 12px;
+}
+
+.result-card {
+  margin: 6px 0;
+
+  &.result-card--best { border-color: var(--ion-color-primary); }
+}
+
+.result-head { margin-bottom: 12px; }
+
+.result-chain {
+  font-family: var(--app-font-serif);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--app-ink);
+  margin: 0;
+}
+
+.best-chip {
+  height: 24px;
+  font-size: 11px;
+  margin: 6px 0 0;
+}
+
+.detail-price {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.missing-panel { margin-top: 10px; }
+
+.missing-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ion-color-warning-shade);
+  margin: 0 0 4px;
+}
+
+.missing-item { margin: 2px 0; }
+
+/* ── Watchlist / Alertas ─────────────────────────────────────────────────── */
+
+.watch-list { padding-bottom: 16px; }
+
+.watch-card { margin: 8px 0; }
+
+.watch-ean { margin: 3px 0 8px; }
+
+.alert-chip {
+  height: 28px;
+  font-size: 12px;
+  margin: 0;
+}
+
+.watch-last { margin: 8px 0 0; }
+
+.watch-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+}
+
+/* ── Comunidad ───────────────────────────────────────────────────────────── */
+
+.points-chip {
+  height: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.badge-chip {
+  height: 28px;
+  font-size: 12px;
+}
+
+.feed { padding: 8px 16px 90px; }
+
+.report-card { margin: 8px 0; }
+
+.report-meta {
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.report-actions { gap: 0; justify-content: flex-end; }
+
+.rank-card {
+  margin: 8px 0;
+
+  &.rank-card--top { border-color: var(--ion-color-primary-tint); }
+}
+
+.rank-medal {
+  font-size: 24px;
+  min-width: 36px;
+  text-align: center;
+}
+
+.reward-hint { margin-bottom: 16px; }
+
+.product-preview {
+  margin: 2px 0 12px;
+  border-radius: var(--app-radius-sm);
+}
+
+.not-found-note { margin: 0 6px 12px; }
+
+.branch-dropdown {
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-sm);
+  margin: 0 0 12px;
+  overflow: hidden;
+
+  ion-item { --min-height: 52px; }
+}
+
+.branch-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--app-ink);
+}
+
+.branch-selected {
+  padding: 10px 14px;
+  margin-bottom: 12px;
+}
+
+.branch-selected-text { font-size: 12px; }
+
+/* ── Combo banco (wallet) ────────────────────────────────────────────────── */
+
+.intro-text { margin: 4px 0 20px; }
+
+.results-section { margin-top: 20px; }
+
+.wallet-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 20px;
+}
+
+.wallet-card {
+  width: 100%;
+
+  .micro-label {
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
+.wallet-head { margin-bottom: 14px; }
+
+.wallet-bank {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0 0 3px;
+}
+
+.card-dark .wallet-bank { color: #fff; }
+.card-light .wallet-bank { color: var(--app-ink); }
+
+.wallet-promo { margin: 0 0 4px; }
+
+/* Descuento en serif, estilo "*** 1234" de tarjeta */
+.wallet-pct {
+  font-family: var(--app-font-serif);
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+.card-dark .wallet-pct { color: #fff; }
+.card-light .wallet-pct { color: var(--app-price); }
+
+.wallet-foot {
+  margin-top: 6px;
+  align-items: flex-end;
+}
+
+.wallet-savings { font-size: 12px; font-weight: 500; }
+.card-dark .wallet-savings { color: var(--ion-color-primary-tint); }
+.card-light .wallet-savings { color: var(--app-price); }
+
+.wallet-total {
+  font-family: var(--app-font-serif);
+  font-weight: 700;
+  font-size: clamp(22px, 6vw, 26px);
+}
+
+.card-dark .wallet-total { color: #fff; }
+
+/* ── Perfil ──────────────────────────────────────────────────────────────── */
+
+.profile-email { margin: 4px 0 8px; }
+
+.wallet-sliding {
+  border-radius: var(--app-radius-lg);
+}
+
+.wallet-item {
+  --background: transparent;
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-start: 0;
+  --inner-padding-end: 0;
+  --border-width: 0;
+  --inner-border-width: 0;
+
+  /* el check va inset porque ion-item-sliding recorta el overflow */
+  .check-bubble {
+    right: 16px;
+    bottom: 16px;
+    border-color: transparent;
+  }
+}
+
+.wallet-name {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0 0 22px;
+}
+
+.card-dark .wallet-name { color: #fff; }
+.card-light .wallet-name { color: var(--app-ink); }
+
+.wallet-bank-serif {
+  font-family: var(--app-font-serif);
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.card-dark .wallet-bank-serif { color: #fff; }
+.card-light .wallet-bank-serif { color: var(--app-ink-soft); }
+
+.wallet-network {
+  font-size: 26px;
+  opacity: 0.75;
+}
+
+.add-card-section { margin-top: 8px; }
+
+.add-card-btn {
+  margin-top: 8px;
+  --border-style: dashed;
+}
+
+.tools-section { margin-top: 28px; }
+
+.tool-item {
+  --min-height: 60px;
+  --border-radius: var(--app-radius-md);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+  margin-bottom: 10px;
+
+  ion-icon[slot="start"] {
+    color: var(--ion-color-primary-shade);
+    margin-inline-end: 14px;
+  }
+
+  h3 {
+    font-family: var(--app-font-sans);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--app-ink);
+  }
+
+  p {
+    font-size: 12px;
+    color: var(--app-ink-soft);
+  }
+}
+
+/* ── Inflación ───────────────────────────────────────────────────────────── */
+
+.stat-tiles { margin-bottom: 14px; }
+
+.stat-tile { text-align: center; }
+
+.stat-value {
+  font-family: var(--app-font-serif);
+  font-weight: 700;
+  font-size: clamp(22px, 6vw, 26px);
+  margin: 4px 0 0;
+}
+
+.stat-value--up { color: var(--app-danger); }
+.stat-value--down { color: var(--app-price); }
+.stat-value--brand { color: var(--ion-color-primary-shade); }
+
+.stat-empty {
+  font-size: 16px;
+  color: var(--app-ink-soft);
+  margin: 4px 0 0;
+}
+
+.message-panel { margin-bottom: 14px; }
+
+.chart-card, .monthly-card { margin: 0 0 14px; }
+
+.chart-title {
+  margin-top: 0;
+  font-size: 15px;
+}
+
+.inflation-chart {
+  width: 100%;
+  height: auto;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.legend-entry {
+  font-size: 12px;
+  color: var(--app-ink-soft);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.variation {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.variation--up { color: var(--app-danger); }
+.variation--down { color: var(--app-price); }
+
+/* ── Monitor de scrapers ─────────────────────────────────────────────────── */
+
+.monitor-wrap { padding: 0 16px; }
+
+.monitor-content { padding: 12px 0; }
+
+.health-card {
+  margin: 0 0 12px;
+  border-color: var(--ion-color-primary-tint);
+
+  &.health-card--broken { border-color: var(--app-danger); }
+}
+
+.health-icon { font-size: 34px; }
+
+.health-title {
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0;
+}
+
+.group-label {
+  display: block;
+  margin: 18px 4px 8px;
+}
+
+.scraper-card { margin: 6px 0; }
+
+.scraper-status-icon { font-size: 24px; }
+
+.stale-note { color: var(--ion-color-warning-shade); }

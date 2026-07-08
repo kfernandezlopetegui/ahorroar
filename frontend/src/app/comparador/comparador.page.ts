@@ -2,8 +2,7 @@ import { Component, signal, computed, OnDestroy } from '@angular/core';
 import {
   IonContent, IonHeader, IonToolbar, IonTitle,
   IonSearchbar, IonCard, IonCardContent,
-  IonButton, IonIcon, IonSpinner, IonText,
-  IonChip, IonSegment, IonSegmentButton, IonLabel,
+  IonButton, IonIcon, IonSpinner, IonChip, IonSegment, IonSegmentButton, IonLabel,
   IonItem, IonInput, IonBadge,
   ToastController, ModalController, AlertController,
 } from '@ionic/angular/standalone';
@@ -13,7 +12,7 @@ import { addIcons } from 'ionicons';
 import {
   locationOutline, scanOutline, searchOutline,
   barcodeOutline, cameraOutline, trendingDownOutline,
-  timeOutline, cartOutline, eyeOutline,
+  timeOutline, cartOutline, eyeOutline, chevronBackOutline,
 } from 'ionicons/icons';
 import { Geolocation } from '@capacitor/geolocation';
 import { Platform } from '@ionic/angular/standalone';
@@ -32,8 +31,7 @@ type SearchMode = 'nombre' | 'ean';
     FormsModule, DecimalPipe, TitleCasePipe,
     IonContent, IonHeader, IonToolbar, IonTitle,
     IonSearchbar, IonCard, IonCardContent,
-    IonButton, IonIcon, IonSpinner, IonText,
-    IonChip, IonSegment, IonSegmentButton,
+    IonButton, IonIcon, IonSpinner, IonChip, IonSegment, IonSegmentButton,
     IonLabel, IonItem, IonInput, IonBadge,
     PriceChartComponent,
   ],
@@ -80,7 +78,7 @@ export class ComparadorPage implements OnDestroy {
     addIcons({
       locationOutline, scanOutline, searchOutline,
       barcodeOutline, cameraOutline, trendingDownOutline,
-      timeOutline, cartOutline, eyeOutline,
+      timeOutline, cartOutline, eyeOutline, chevronBackOutline,
     });
     this.watchlist.load();
   }

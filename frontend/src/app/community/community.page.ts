@@ -5,8 +5,7 @@ import {
   IonSpinner, IonText, IonChip, IonBadge,
   IonSegment, IonSegmentButton, IonLabel,
   IonFab, IonFabButton, IonModal, IonItem, IonInput,
-  IonSelect, IonSelectOption, IonList, IonNote,
-  ToastController,
+  IonSelect, IonSelectOption, IonList, ToastController,
 } from '@ionic/angular/standalone';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
@@ -43,8 +42,7 @@ interface BranchResult {
     IonSpinner, IonChip, IonBadge,
     IonSegment, IonSegmentButton, IonLabel,
     IonFab, IonFabButton, IonModal, IonItem, IonInput,
-    IonSelect, IonSelectOption, IonList, IonNote,
-  ],
+    IonSelect, IonSelectOption, IonList, ],
   templateUrl: './community.page.html',
 })
 export class CommunityPage implements OnInit, OnDestroy {

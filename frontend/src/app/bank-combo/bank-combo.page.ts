@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import {
   IonContent, IonHeader, IonToolbar, IonTitle,
-  IonButton, IonIcon, IonSpinner, IonText,
-  IonCard, IonCardContent, IonBadge, IonChip,
+  IonButton, IonIcon, IonSpinner, IonChip,
   IonItem, IonLabel, IonInput, IonSelect, IonSelectOption,
 } from '@ionic/angular/standalone';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
 import { addIcons } from 'ionicons';
-import { calculatorOutline, cardOutline, trendingDownOutline, checkmarkCircleOutline } from 'ionicons/icons';
+import { calculatorOutline, cardOutline, trendingDownOutline, checkmarkCircleOutline, checkmark } from 'ionicons/icons';
 import { BankComboService } from '../core/services/bank-combo';
 import { CATEGORIES } from '../core/services/promotions';
 
@@ -18,9 +17,7 @@ import { CATEGORIES } from '../core/services/promotions';
   imports: [
     ReactiveFormsModule, DecimalPipe,
     IonContent, IonHeader, IonToolbar, IonTitle,
-    IonButton, IonIcon, IonSpinner, IonText,
-    IonCard, IonCardContent, IonBadge, 
-    IonItem, IonLabel, IonInput, IonSelect, IonSelectOption
+    IonButton, IonIcon, IonSpinner, IonItem, IonLabel, IonInput, IonSelect, IonSelectOption
   ],
   templateUrl: './bank-combo.page.html',
 })
@@ -38,7 +35,7 @@ export class BankComboPage {
   get error()   { return this.svc.error; }
 
   constructor(public svc: BankComboService, private fb: FormBuilder) {
-    addIcons({ calculatorOutline, cardOutline, trendingDownOutline, checkmarkCircleOutline });
+    addIcons({ calculatorOutline, cardOutline, trendingDownOutline, checkmarkCircleOutline, checkmark });
   }
 
   async calcular() {

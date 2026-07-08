@@ -3,15 +3,14 @@ import { Router } from '@angular/router';
 import {
   IonContent, IonHeader, IonToolbar, IonTitle,
   IonButton, IonIcon, IonItem, IonLabel,
-  IonList, IonListHeader, IonSelect, IonSelectOption,
-  IonSpinner, IonText, IonItemSliding,
-  IonItemOptions, IonItemOption, IonNote,
-  AlertController
+  IonSelect, IonSelectOption,
+  IonSpinner, IonItemSliding,
+  IonItemOptions, IonItemOption, AlertController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   addOutline, trashOutline, cardOutline, logOutOutline,
-  statsChartOutline, hardwareChipOutline,
+  statsChartOutline, hardwareChipOutline, checkmark,
 } from 'ionicons/icons';
 import { CardsService, BANKS } from '../core/services/cards';
 import { AuthService } from '../core/services/auth';
@@ -22,9 +21,9 @@ import { AuthService } from '../core/services/auth';
   imports: [
     IonContent, IonHeader, IonToolbar, IonTitle,
     IonButton, IonIcon, IonItem, IonLabel,
-    IonList, IonListHeader, IonSelect, IonSelectOption,
-    IonSpinner, IonText, IonItemSliding,
-    IonItemOptions, IonItemOption, IonNote
+    IonSelect, IonSelectOption,
+    IonSpinner, IonItemSliding,
+    IonItemOptions, IonItemOption
   ],
   templateUrl: './profile.page.html',
 })
@@ -49,7 +48,7 @@ export class ProfilePage implements OnInit {
   ) {
     addIcons({
       addOutline, trashOutline, cardOutline, logOutOutline,
-      statsChartOutline, hardwareChipOutline,
+      statsChartOutline, hardwareChipOutline, checkmark,
     });
   }
 

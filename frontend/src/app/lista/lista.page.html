@@ -1,9 +1,9 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-title>
       Mi lista
       @if (total() > 0) {
-        <ion-badge color="primary" style="margin-left:8px;">{{ total() }}</ion-badge>
+        <ion-badge color="primary" class="title-badge">{{ total() }}</ion-badge>
       }
     </ion-title>
     <ion-button slot="end" fill="clear" (click)="activarUbicacion()">
@@ -19,12 +19,12 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <div class="page-wrap">
 
   @if (!items().length) {
-    <div style="display:flex; flex-direction:column; align-items:center;
-                justify-content:center; height:60vh; gap:16px; text-align:center;">
-      <ion-icon name="cart-outline" style="font-size:72px; color:var(--ion-color-light-shade);" />
-      <p style="color:var(--ion-color-medium); font-size:15px; margin:0;">
+    <div class="empty-state">
+      <ion-icon name="cart-outline" />
+      <p>
         Tu lista está vacía.<br>
         Buscá un producto en el <strong>Comparador</strong> y tocá <strong>+ Lista</strong>.
       </p>
@@ -36,39 +36,28 @@
 
   @if (items().length) {
     <!-- Items de la lista -->
-    <div style="margin-bottom: 16px;">
+    <div class="lista-items card-grid">
       @for (item of items(); track item.producto.id) {
-        <ion-card style="margin:6px 0; border-radius:12px;">
-          <ion-card-content style="padding:10px 12px;">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <img
-                [src]="'https://imagenes.preciosclaros.gob.ar/imagenes/productos/' + item.producto.id + '.png'"
-                style="width:44px; height:44px; object-fit:contain; border-radius:8px; flex-shrink:0;"
-                onerror="this.style.display='none'" />
-              <div style="flex:1; min-width:0;">
-                <p style="font-weight:600; font-size:13px; margin:0; white-space:nowrap;
-                           overflow:hidden; text-overflow:ellipsis;">
-                  {{ item.producto.nombre }}
-                </p>
-                <p style="font-size:11px; color:var(--ion-color-medium); margin:2px 0 0;">
-                  {{ item.producto.marca }} · {{ item.producto.presentacion }}
-                </p>
-                <p style="font-size:11px; color:var(--ion-color-success); margin:2px 0 0;">
-                  desde ${{ item.producto.precioMin | number }}
-                </p>
-              </div>
-              <!-- Controles cantidad -->
-              <div style="display:flex; align-items:center; gap:4px; flex-shrink:0;">
-                <ion-button fill="clear" size="small" (click)="cambiarCantidad(item.producto.id, -1)">
-                  <ion-icon name="remove-outline" />
-                </ion-button>
-                <span style="font-weight:700; min-width:20px; text-align:center;">
-                  {{ item.cantidad }}
-                </span>
-                <ion-button fill="clear" size="small" (click)="cambiarCantidad(item.producto.id, 1)">
-                  <ion-icon name="add-outline" />
-                </ion-button>
-              </div>
+        <ion-card class="lista-card">
+          <ion-card-content class="row">
+            <img
+              [src]="'https://imagenes.preciosclaros.gob.ar/imagenes/productos/' + item.producto.id + '.png'"
+              class="thumb thumb--contain"
+              onerror="this.style.display='none'" />
+            <div class="grow">
+              <p class="product-name ellipsis">{{ item.producto.nombre }}</p>
+              <p class="text-xs">{{ item.producto.marca }} · {{ item.producto.presentacion }}</p>
+              <p class="from-price">desde <span class="app-price--green">${{ item.producto.precioMin | number }}</span></p>
+            </div>
+            <!-- Controles cantidad -->
+            <div class="row qty-controls shrink-0">
+              <ion-button fill="clear" class="btn-icon-square" (click)="cambiarCantidad(item.producto.id, -1)">
+                <ion-icon name="remove-outline" />
+              </ion-button>
+              <span class="qty-value">{{ item.cantidad }}</span>
+              <ion-button fill="clear" class="btn-icon-square" (click)="cambiarCantidad(item.producto.id, 1)">
+                <ion-icon name="add-outline" />
+              </ion-button>
             </div>
           </ion-card-content>
         </ion-card>
@@ -78,11 +67,11 @@
     <!-- Botón calcular -->
     <ion-button
       expand="block"
+      class="calc-btn"
       [disabled]="calculando()"
-      (click)="calcular()"
-      style="margin-bottom:16px;">
+      (click)="calcular()">
       @if (calculando()) {
-        <ion-spinner name="crescent" style="margin-right:8px;" />
+        <ion-spinner name="crescent" class="btn-spinner" />
         Calculando...
       } @else {
         <ion-icon name="calculator-outline" slot="start" />
@@ -91,65 +80,56 @@
     </ion-button>
 
     @if (!usandoUbicacion() && !resultado().length) {
-      <p style="font-size:12px; color:var(--ion-color-medium); text-align:center; margin-top:-8px;">
+      <p class="text-soft location-hint">
         Activá la ubicación para priorizar sucursales cercanas
       </p>
     }
 
     @if (error()) {
-      <ion-text color="danger">
-        <p style="text-align:center;">{{ error() }}</p>
-      </ion-text>
+      <p class="error-note">{{ error() }}</p>
     }
 
     <!-- Resultados -->
     @if (resultado().length) {
-      <p style="font-weight:700; font-size:16px; margin:16px 0 8px;">
-        Resultado por supermercado
-      </p>
+      <h2 class="section-title">Resultado por supermercado</h2>
 
       @for (res of resultado(); track res.cadena; let i = $index) {
-        <ion-card style="margin:6px 0; border-radius:12px;"
-          [style.border]="i === 0 && res.itemsNoDisponibles.length === 0
-            ? '2px solid var(--ion-color-success)' : ''">
-          <ion-card-content style="padding:14px;">
+        <ion-card class="result-card"
+          [class.result-card--best]="i === 0 && res.itemsNoDisponibles.length === 0">
+          <ion-card-content>
 
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <div class="row-between result-head">
               <div>
-                <p style="font-weight:700; font-size:16px; margin:0;">{{ res.cadena }}</p>
+                <p class="result-chain">{{ res.cadena }}</p>
                 @if (i === 0 && res.itemsNoDisponibles.length === 0) {
-                  <ion-chip color="success" style="height:22px; font-size:11px; margin-top:4px;">
+                  <ion-chip color="success" class="best-chip">
                     <ion-icon name="checkmark-circle-outline" slot="start" />
                     Mejor opción
                   </ion-chip>
                 }
               </div>
-              <div style="text-align:right;">
-                <p style="font-size:12px; color:var(--ion-color-medium); margin:0;">Total estimado</p>
-                <p style="font-weight:800; font-size:22px; color:var(--ion-color-success); margin:0;">
-                  ${{ res.total | number }}
-                </p>
+              <div class="price-col">
+                <p class="text-xs">Total estimado</p>
+                <p class="app-total">${{ res.total | number }}</p>
               </div>
             </div>
 
             <!-- Items con precio -->
             @for (it of res.items; track it.productoId) {
-              <div style="display:flex; justify-content:space-between;
-                           font-size:13px; padding:3px 0; border-bottom:1px solid var(--ion-color-light);">
-                <span style="color:var(--ion-color-dark);">{{ it.nombre }}</span>
-                <span style="font-weight:600;">${{ it.precio | number }}</span>
+              <div class="detail-row">
+                <span>{{ it.nombre }}</span>
+                <span class="detail-price">${{ it.precio | number }}</span>
               </div>
             }
 
             <!-- Items no disponibles -->
             @if (res.itemsNoDisponibles.length) {
-              <div style="margin-top:8px; padding:8px; background:var(--ion-color-warning-tint);
-                           border-radius:8px;">
-                <p style="font-size:12px; font-weight:600; margin:0 0 4px; color:var(--ion-color-warning-shade);">
-                  <ion-icon name="alert-circle-outline" /> Sin precio para:
+              <div class="soft-panel missing-panel">
+                <p class="missing-title">
+                  <ion-icon name="alert-circle-outline" class="icon-inline" /> Sin precio para:
                 </p>
                 @for (n of res.itemsNoDisponibles; track n) {
-                  <p style="font-size:12px; margin:2px 0; color:var(--ion-color-warning-shade);">· {{ n }}</p>
+                  <p class="text-xs missing-item">· {{ n }}</p>
                 }
               </div>
             }
@@ -160,4 +140,5 @@
     }
   }
 
+  </div>
 </ion-content>

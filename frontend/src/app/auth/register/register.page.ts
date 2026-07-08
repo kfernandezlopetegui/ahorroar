@@ -3,8 +3,7 @@ import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl, Validati
 import { RouterLink } from '@angular/router';
 import {
   IonContent, IonButton, IonInput, IonItem,
-  IonLabel, IonSpinner, IonText,
-} from '@ionic/angular/standalone';
+  IonLabel, IonSpinner, } from '@ionic/angular/standalone';
 import { AuthService } from '../../core/services/auth';
 
 function passwordsMatch(control: AbstractControl): ValidationErrors | null {
@@ -19,8 +18,7 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   imports: [
     ReactiveFormsModule, RouterLink,
     IonContent, IonButton, IonInput, IonItem,
-    IonLabel, IonSpinner, IonText,
-  ],
+    IonLabel, IonSpinner, ],
   templateUrl: './register.page.html',
 })
 export class RegisterPage {
