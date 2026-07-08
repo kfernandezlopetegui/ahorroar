@@ -2,9 +2,8 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   IonContent, IonHeader, IonToolbar, IonTitle,
-  IonSearchbar, IonChip, IonCard, IonCardHeader,
-  IonCardTitle, IonCardContent, IonBadge, IonSpinner,
-  IonText, IonButton, IonIcon, IonRefresher,
+  IonSearchbar, IonChip, IonCard, IonCardContent, IonBadge, IonSpinner,
+  IonButton, IonIcon, IonRefresher,
   IonRefresherContent, IonInfiniteScroll,
   IonInfiniteScrollContent, IonModal, IonNote,
 } from '@ionic/angular/standalone';
@@ -25,9 +24,8 @@ import { ListaService } from '../core/services/lista';
   imports: [
     DecimalPipe, SlicePipe, RouterLink,
     IonContent, IonHeader, IonToolbar, IonTitle,
-    IonSearchbar, IonChip, IonCard, IonCardHeader,
-    IonCardTitle, IonCardContent, IonBadge, IonSpinner,
-    IonText, IonButton, IonIcon, IonRefresher,
+    IonSearchbar, IonChip, IonCard, IonCardContent, IonBadge, IonSpinner,
+    IonButton, IonIcon, IonRefresher,
     IonRefresherContent, IonInfiniteScroll,
     IonInfiniteScrollContent, IonModal,
   ],

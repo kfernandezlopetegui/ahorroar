@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-title>Comparador</ion-title>
     <ion-button slot="end" fill="clear" (click)="usarUbicacion()">
@@ -32,22 +32,21 @@
 </ion-header>
 
 <ion-content>
+  <div class="page-wrap">
 
   <!-- ── MODO EAN ──────────────────────────────────────── -->
   @if (searchMode() === 'ean' && !productoSeleccionado()) {
-  <div style="padding: 24px 16px;">
-    <p style="color: var(--ion-color-medium); font-size: 14px; margin-bottom: 16px;">
-      Ingresá el código o usá la cámara para escanearlo.
-    </p>
+  <div class="ean-box">
+    <p class="text-soft ean-hint">Ingresá el código o usá la cámara para escanearlo.</p>
 
-    <ion-item style="border-radius: 12px; margin-bottom: 12px;">
-      <ion-label position="floating">Código EAN</ion-label>
+    <ion-item class="input-item" lines="none">
+      <ion-label position="stacked">Código EAN</ion-label>
       <ion-input type="text" inputmode="numeric" maxlength="14" [value]="eanInput()"
         (ionInput)="eanInput.set($event.detail.value ?? '')" placeholder="Ej: 7790070009019" />
     </ion-item>
 
-    <div style="display: flex; gap: 8px;">
-      <ion-button expand="block" style="flex: 1;"
+    <div class="row ean-actions">
+      <ion-button expand="block" class="grow"
         [disabled]="eanInput().length < 8 || loadingProductos() || loadingPrecios()" (click)="buscarPorEAN()">
         @if (loadingProductos() || loadingPrecios()) {
         <ion-spinner name="crescent" />
@@ -66,42 +65,29 @@
 
   <!-- ── ESTADOS GLOBALES ─────────────────────────────── -->
   @if ((loadingProductos() || loadingPrecios()) && !productoSeleccionado()) {
-  <div style="display:flex; justify-content:center; padding:40px;">
+  <div class="spinner-center">
     <ion-spinner name="crescent" />
   </div>
   }
 
   @if (error()) {
-  <ion-text color="danger">
-    <p style="text-align:center; padding:20px;">{{ error() }}</p>
-  </ion-text>
+  <p class="error-note">{{ error() }}</p>
   }
 
   <!-- ── OFERTAS SCRAPEADAS (sin producto en Precios Claros) ── -->
   @if (!productoSeleccionado() && !loadingProductos() && !loadingPrecios() && supermarketOffers().length) {
-  <div style="padding:0 16px 12px;">
-    <p style="font-weight:700; font-size:13px; color:var(--ion-color-warning-shade); margin:0 0 6px;">
-      🏷️ Ofertas vigentes para este código
-    </p>
-    <div style="display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding-bottom:4px;">
+  <div class="offers-section">
+    <p class="micro-label offers-label">Ofertas vigentes para este código</p>
+    <div class="h-scroll">
       @for (o of supermarketOffers(); track o.chain + o.product_name) {
-      <div style="flex-shrink:0; background:var(--ion-color-warning-tint);
-                  border-radius:10px; padding:10px 12px; min-width:140px; max-width:200px;">
-        <p style="font-weight:700; font-size:13px; margin:0; color:var(--ion-color-warning-shade);">
-          {{ o.chain }}
-        </p>
-        <p style="font-size:12px; margin:2px 0 0; color:var(--ion-color-dark);">
-          {{ o.product_name }}
-        </p>
-        <p style="font-size:18px; font-weight:800; margin:4px 0 0; color:var(--ion-color-success);">
-          ${{ o.offer_price | number }}
-        </p>
+      <div class="mini-card">
+        <p class="mini-card-chain">{{ o.chain }}</p>
+        <p class="text-soft">{{ o.product_name }}</p>
+        <p class="app-price app-price--green mini-card-price">${{ o.offer_price | number }}</p>
         @if (o.discount_pct) {
-        <ion-badge color="success" style="font-size:11px;">{{ o.discount_pct }}% OFF</ion-badge>
+        <ion-badge color="success" class="mini-badge">{{ o.discount_pct }}% OFF</ion-badge>
         }
-        <p style="font-size:10px; color:var(--ion-color-medium); margin:4px 0 0;">
-          hasta {{ o.valid_until }}
-        </p>
+        <p class="text-xs mini-card-until">hasta {{ o.valid_until }}</p>
       </div>
       }
     </div>
@@ -110,27 +96,16 @@
 
   <!-- ── PRECIOS ONLINE (sin producto en Precios Claros) ── -->
   @if (!productoSeleccionado() && !loadingProductos() && !loadingPrecios() && onlinePrices().length) {
-  <div style="padding:0 16px 12px;">
-    <p style="font-weight:700; font-size:13px; color:var(--ion-color-primary); margin:0 0 6px;">
-      🌐 Precios online por cadena
-    </p>
-    <div style="display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding-bottom:4px;">
+  <div class="offers-section">
+    <p class="micro-label offers-label">Precios online por cadena</p>
+    <div class="h-scroll">
       @for (p of onlinePrices(); track p.cadena) {
-      <div style="flex-shrink:0; background:var(--ion-color-light);
-                  border-radius:10px; padding:10px 12px; min-width:140px; max-width:200px;">
-        <p style="font-weight:700; font-size:13px; margin:0; color:var(--ion-color-primary);">
-          {{ p.cadena }}
-        </p>
-        <p style="font-size:12px; margin:2px 0 0; color:var(--ion-color-dark);">
-          {{ p.nombre }}
-        </p>
-        <p style="font-size:18px; font-weight:800; margin:4px 0 0; color:var(--ion-color-success);">
-          ${{ p.precio | number }}
-        </p>
+      <div class="mini-card mini-card--soft">
+        <p class="mini-card-chain">{{ p.cadena }}</p>
+        <p class="text-soft">{{ p.nombre }}</p>
+        <p class="app-price app-price--green mini-card-price">${{ p.precio | number }}</p>
         @if (p.precioLista) {
-        <p style="font-size:11px; text-decoration:line-through; color:var(--ion-color-medium); margin:2px 0 0;">
-          ${{ p.precioLista | number }}
-        </p>
+        <p class="price-strike">${{ p.precioLista | number }}</p>
         }
       </div>
       }
@@ -140,77 +115,63 @@
 
   <!-- ── LISTA DE PRODUCTOS (modo nombre) ─────────────── -->
   @if (!productoSeleccionado() && searchMode() === 'nombre' && !loadingProductos()) {
+  <div class="card-grid product-results">
   @for (p of productos(); track p.id) {
-  <ion-card style="margin:6px 12px; border-radius:12px; cursor:pointer;" (click)="seleccionarProducto(p)">
-    <ion-card-content style="display:flex; align-items:center; gap:12px; padding:12px;">
+  <ion-card class="product-card" (click)="seleccionarProducto(p)">
+    <ion-card-content class="row">
       <img [src]="'https://imagenes.preciosclaros.gob.ar/imagenes/productos/' + p.id + '.png'"
-        style="width:56px; height:56px; object-fit:contain; border-radius:8px;" onerror="this.style.display='none'" />
-      <div style="flex:1;">
-        <p style="font-weight:600; font-size:14px; margin:0;">{{ p.nombre }}</p>
-        <p style="font-size:12px; color:var(--ion-color-medium); margin:2px 0 0;">
-          {{ p.marca }} · {{ p.presentacion }}
-        </p>
-        <p style="font-size:11px; color:var(--ion-color-medium); margin:2px 0 0;">
-          {{ p.cantSucursalesDisponible }} sucursales
-        </p>
+        class="thumb thumb--contain" onerror="this.style.display='none'" />
+      <div class="grow">
+        <p class="product-name">{{ p.nombre }}</p>
+        <p class="text-soft">{{ p.marca }} · {{ p.presentacion }}</p>
+        <p class="text-xs">{{ p.cantSucursalesDisponible }} sucursales</p>
       </div>
-      <div style="text-align:right;">
-        <p style="font-size:12px; color:var(--ion-color-medium); margin:0;">desde</p>
-        <p style="font-weight:700; font-size:16px; color:var(--ion-color-success); margin:0;">
-          ${{ p.precioMin | number }}
-        </p>
+      <div class="price-col shrink-0">
+        <p class="text-xs">desde</p>
+        <p class="app-price app-price--green">${{ p.precioMin | number }}</p>
       </div>
     </ion-card-content>
   </ion-card>
   }
+  </div>
   }
 
  <!-- ── DETALLE DE PRECIOS (Precios Claros) ─────────────────────── -->
 @if (productoSeleccionado()) {
-  <div style="padding:12px;">
+  <div class="detail-wrap">
 
     <!-- Header producto -->
-    <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+    <div class="row product-head">
       <ion-button fill="clear" size="small" (click)="volverAResultados()">
-        ‹ Volver
+        <ion-icon name="chevron-back-outline" slot="start" />
+        Volver
       </ion-button>
-      <div style="flex:1;">
-        <p style="font-weight:600; font-size:15px; margin:0;">
-          {{ productoSeleccionado()!.nombre }}
-        </p>
-        <p style="font-size:12px; color:var(--ion-color-medium); margin:0;">
+      <div class="grow">
+        <p class="product-name">{{ productoSeleccionado()!.nombre }}</p>
+        <p class="text-soft">
           {{ productoSeleccionado()!.marca }} · {{ productoSeleccionado()!.presentacion }}
         </p>
       </div>
       <img [src]="productoSeleccionado()!.imagen
             || 'https://imagenes.preciosclaros.gob.ar/imagenes/productos/'
             + productoSeleccionado()!.id + '.png'"
-        style="width:48px; height:48px; object-fit:contain; border-radius:8px;"
+        class="thumb thumb--contain"
         onerror="this.style.display='none'" />
     </div>
 
     <!-- Ofertas scrapeadas del producto -->
     @if (supermarketOffers().length) {
-    <div style="margin-bottom:12px;">
-      <p style="font-weight:700; font-size:13px; color:var(--ion-color-warning-shade); margin:0 0 6px;">
-        🏷️ Ofertas vigentes esta semana
-      </p>
-      <div style="display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding-bottom:4px;">
+    <div class="offers-section offers-section--inline">
+      <p class="micro-label offers-label">Ofertas vigentes esta semana</p>
+      <div class="h-scroll">
         @for (o of supermarketOffers(); track o.chain + o.product_name) {
-        <div style="flex-shrink:0; background:var(--ion-color-warning-tint);
-                    border-radius:10px; padding:10px 12px; min-width:140px;">
-          <p style="font-weight:700; font-size:13px; margin:0; color:var(--ion-color-warning-shade);">
-            {{ o.chain }}
-          </p>
-          <p style="font-size:18px; font-weight:800; margin:4px 0 0; color:var(--ion-color-success);">
-            ${{ o.offer_price | number }}
-          </p>
+        <div class="mini-card">
+          <p class="mini-card-chain">{{ o.chain }}</p>
+          <p class="app-price app-price--green mini-card-price">${{ o.offer_price | number }}</p>
           @if (o.discount_pct) {
-          <ion-badge color="success" style="font-size:11px;">{{ o.discount_pct }}% OFF</ion-badge>
+          <ion-badge color="success" class="mini-badge">{{ o.discount_pct }}% OFF</ion-badge>
           }
-          <p style="font-size:10px; color:var(--ion-color-medium); margin:4px 0 0;">
-            hasta {{ o.valid_until }}
-          </p>
+          <p class="text-xs mini-card-until">hasta {{ o.valid_until }}</p>
         </div>
         }
       </div>
@@ -219,31 +180,23 @@
 
     <!-- Precios online por cadena (fuentes alternativas) -->
     @if (onlinePrices().length) {
-    <div style="margin-bottom:12px;">
-      <p style="font-weight:700; font-size:13px; color:var(--ion-color-primary); margin:0 0 6px;">
-        🌐 Precios online por cadena
-      </p>
+    <div class="offers-section offers-section--inline">
+      <p class="micro-label offers-label">Precios online por cadena</p>
       @for (p of onlinePrices(); track p.cadena) {
-      <div style="display:flex; align-items:center; gap:10px; background:var(--ion-color-light);
-                  border-radius:10px; padding:8px 12px; margin-bottom:6px;">
+      <div class="row online-price-row soft-panel">
         @if (p.imagen) {
-        <img [src]="p.imagen" style="width:36px; height:36px; object-fit:contain; border-radius:6px;"
-          onerror="this.style.display='none'" />
+        <img [src]="p.imagen" class="thumb-sm" onerror="this.style.display='none'" />
         }
-        <div style="flex:1;">
-          <p style="font-weight:600; font-size:13px; margin:0;">{{ p.cadena }} — tienda online</p>
+        <div class="grow">
+          <p class="product-name">{{ p.cadena }} — tienda online</p>
           @if (p.marca) {
-          <p style="font-size:11px; color:var(--ion-color-medium); margin:0;">{{ p.marca }}</p>
+          <p class="text-xs">{{ p.marca }}</p>
           }
         </div>
-        <div style="text-align:right;">
-          <p style="font-weight:700; font-size:16px; margin:0; color:var(--ion-color-success);">
-            ${{ p.precio | number }}
-          </p>
+        <div class="price-col">
+          <p class="app-price app-price--green">${{ p.precio | number }}</p>
           @if (p.precioLista) {
-          <p style="font-size:11px; text-decoration:line-through; color:var(--ion-color-medium); margin:0;">
-            ${{ p.precioLista | number }}
-          </p>
+          <p class="price-strike">${{ p.precioLista | number }}</p>
           }
         </div>
       </div>
@@ -252,7 +205,7 @@
     }
 
     <!-- Chips contexto -->
-    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+    <div class="context-chips">
       @if (mejorPrecio()) {
         <ion-chip color="success">
           <ion-icon name="trending-down-outline" slot="start" />
@@ -269,56 +222,48 @@
     </div>
 
     @if (loadingPrecios()) {
-      <div style="display:flex; justify-content:center; padding:30px;">
+      <div class="spinner-center">
         <ion-spinner name="crescent" />
       </div>
     }
 
+    <div class="card-grid">
     @for (precio of precios(); track precio.id) {
-      <ion-card style="margin:6px 0; border-radius:12px;"
-        [style.border]="precio === mejorPrecio() ? '1.5px solid var(--ion-color-success)' : ''">
-        <ion-card-content style="padding:12px;">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-            <div style="flex:1;">
-              <p style="font-weight:600; font-size:14px; margin:0;">{{ precio.banderaDescripcion }}</p>
-              <p style="font-size:12px; color:var(--ion-color-medium); margin:2px 0 0;">
+      <ion-card class="price-card" [class.price-card--best]="precio === mejorPrecio()">
+        <ion-card-content>
+          <div class="row-between-start">
+            <div class="grow">
+              <p class="product-name">{{ precio.banderaDescripcion }}</p>
+              <p class="text-soft">
                 {{ precio.sucursalNombre | titlecase }} — {{ precio.direccion }}
               </p>
-              <p style="font-size:11px; color:var(--ion-color-medium); margin:2px 0 0;">
-                {{ precio.localidad }}
-              </p>
+              <p class="text-xs">{{ precio.localidad }}</p>
               @if (precio.distancia_km !== undefined) {
-                <p style="font-size:11px; color:var(--ion-color-primary); margin:2px 0 0;">
-                  {{ precio.distancia_km | number:'1.1-1' }} km
-                </p>
+                <p class="text-xs distance-note">{{ precio.distancia_km | number:'1.1-1' }} km</p>
               }
               @if (precio.preciosProducto.promo1?.precio) {
-                <p style="font-size:12px; color:var(--ion-color-warning); margin:4px 0 0;">
+                <p class="promo-note">
                   Promo: ${{ precio.preciosProducto.promo1!.precio | number }}
                   — {{ precio.preciosProducto.promo1!.descripcion }}
                 </p>
               }
             </div>
-            <div style="text-align:right; min-width:80px;">
-              <p style="font-weight:700; font-size:18px; margin:0;"
-                [style.color]="precio === mejorPrecio() ? 'var(--ion-color-success)' : ''">
+            <div class="price-col shrink-0">
+              <p class="app-price" [class.app-price--green]="precio === mejorPrecio()">
                 ${{ precio.preciosProducto.precioLista | number }}
               </p>
               @if (precio.actualizadoHoy) {
-                <p style="font-size:10px; color:var(--ion-color-success); margin:2px 0 0;">
-                  Actualizado hoy
-                </p>
+                <p class="text-xs fresh-note">Actualizado hoy</p>
               }
             </div>
           </div>
         </ion-card-content>
       </ion-card>
     }
+    </div>
 
     @if (!loadingPrecios() && !precios().length) {
-      <p style="text-align:center; color:var(--ion-color-medium); padding:30px 0;">
-        No se encontraron precios en sucursales cercanas.
-      </p>
+      <p class="empty-note">No se encontraron precios en sucursales cercanas.</p>
     }
 
   </div>
@@ -326,19 +271,19 @@
 
 <!-- Botón historial + agregar a lista -->
 @if (!loadingPrecios() && (precios().length || productoSeleccionado())) {
-  <div style="display:flex; gap:8px; margin:8px 12px 4px; flex-wrap:wrap;">
-    <ion-button fill="outline" size="small" (click)="toggleHistorial()" style="flex:1;">
+  <div class="detail-actions">
+    <ion-button fill="outline" size="small" (click)="toggleHistorial()" class="grow">
       <ion-icon name="time-outline" slot="start" />
       Historial
     </ion-button>
     @if (productoSeleccionado()) {
-      <ion-button fill="outline" size="small" color="success"
+      <ion-button fill="outline" size="small"
         (click)="agregarALista(productoSeleccionado()!)">
         <ion-icon name="cart-outline" slot="start" />
         + Lista
       </ion-button>
       <ion-button fill="outline" size="small"
-        [color]="watchlist.isWatching(productoSeleccionado()!.id) ? 'warning' : 'medium'"
+        [class.watch-active]="watchlist.isWatching(productoSeleccionado()!.id)"
         (click)="seguirPrecio(productoSeleccionado()!)">
         <ion-icon name="eye-outline" slot="start" />
         {{ watchlist.isWatching(productoSeleccionado()!.id) ? 'Siguiendo' : 'Seguir' }}
@@ -348,13 +293,12 @@
 }
 
 @if (mostrarHistorial()) {
-  <ion-card style="margin: 6px 12px; border-radius: 12px;">
-    <ion-card-content style="padding: 12px;">
-      <p style="font-weight: 600; font-size: 14px; margin: 0 0 8px;">
-        Evolución de precios — últimos 30 días
-      </p>
+  <ion-card class="history-card">
+    <ion-card-content>
+      <h3 class="section-title history-title">Evolución de precios — últimos 30 días</h3>
       <app-price-chart [rows]="historial()" [loading]="loadingHistorial()" />
     </ion-card-content>
   </ion-card>
 }
+  </div>
 </ion-content>

@@ -24,8 +24,8 @@ export class PriceChartComponent implements OnChanges, AfterViewInit {
   series: { cadena: string; color: string; points: ChartPoint[] }[] = [];
 
   private readonly COLORS = [
-    '#3880ff', '#2dd36f', '#eb445a', '#ffc409',
-    '#92949c', '#7044ff', '#0cd1e8',
+    '#9CAF88', '#1A1A1A', '#C65D4A', '#C9A24B',
+    '#A99E8B', '#66784F', '#7C8B99',
   ];
 
   ngOnChanges(changes: SimpleChanges) {
@@ -101,23 +101,23 @@ export class PriceChartComponent implements OnChanges, AfterViewInit {
       pad.top + plotH - ((p - minP) / (maxP - minP)) * plotH;
 
     // Grid lines
-    ctx.strokeStyle = 'rgba(128,128,128,0.15)';
+    ctx.strokeStyle = 'rgba(232,232,230,0.9)';
     ctx.lineWidth = 1;
     for (let gi = 0; gi <= 4; gi++) {
       const y = pad.top + (plotH / 4) * gi;
       ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + plotW, y); ctx.stroke();
       const label = Math.round(maxP - ((maxP - minP) / 4) * gi);
-      ctx.fillStyle = 'rgba(128,128,128,0.8)';
-      ctx.font = '10px sans-serif';
+      ctx.fillStyle = '#8A8A8A';
+      ctx.font = "10px 'Inter', sans-serif";
       ctx.textAlign = 'right';
       ctx.fillText(`$${label.toLocaleString('es-AR')}`, pad.left - 6, y + 4);
     }
 
     // Eje X — fechas
     const step = Math.max(1, Math.floor(allDates.length / 5));
-    ctx.fillStyle = 'rgba(128,128,128,0.8)';
+    ctx.fillStyle = '#8A8A8A';
     ctx.textAlign = 'center';
-    ctx.font = '10px sans-serif';
+    ctx.font = "10px 'Inter', sans-serif";
     allDates.forEach((d: string, idx: number) => {
       if (idx % step === 0) {
         const x = xScale(d);

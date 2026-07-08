@@ -1,8 +1,7 @@
 import { Component, signal } from '@angular/core';
 import {
   IonContent, IonHeader, IonToolbar, IonTitle,
-  IonButton, IonIcon, IonSpinner, IonText,
-  IonCard, IonCardContent, IonChip, IonBadge,
+  IonButton, IonIcon, IonSpinner, IonCard, IonCardContent, IonChip, IonBadge,
   IonItem, IonLabel, IonNote,
   ToastController,
 } from '@ionic/angular/standalone';
@@ -23,8 +22,7 @@ import { Geolocation } from '@capacitor/geolocation';
   imports: [
     DecimalPipe, RouterLink,
     IonContent, IonHeader, IonToolbar, IonTitle,
-    IonButton, IonIcon, IonSpinner, IonText,
-    IonCard, IonCardContent, IonChip, IonBadge,
+    IonButton, IonIcon, IonSpinner, IonCard, IonCardContent, IonChip, IonBadge,
 
   ],
   templateUrl: './lista.page.html',

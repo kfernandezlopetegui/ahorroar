@@ -73,11 +73,12 @@
     height: 28px;
     border-color: #fff;
     border-style: solid;
+    border-radius: 2px;
 
-    &.tl { top: 0;    left: 0;  border-width: 3px 0 0 3px; }
-    &.tr { top: 0;    right: 0; border-width: 3px 3px 0 0; }
-    &.bl { bottom: 0; left: 0;  border-width: 0 0 3px 3px; }
-    &.br { bottom: 0; right: 0; border-width: 0 3px 3px 0; }
+    &.tl { top: 0;    left: 0;  border-width: 2px 0 0 2px; }
+    &.tr { top: 0;    right: 0; border-width: 2px 2px 0 0; }
+    &.bl { bottom: 0; left: 0;  border-width: 0 0 2px 2px; }
+    &.br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
   }
 
   .scan-line {
@@ -85,7 +86,7 @@
     left: 4px;
     right: 4px;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #00e676, transparent);
+    background: linear-gradient(90deg, transparent, var(--ion-color-primary, #9CAF88), transparent);
     animation: scan 2s ease-in-out infinite;
     top: 0;
   }

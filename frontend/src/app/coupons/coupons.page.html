@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-title>Cupones</ion-title>
   </ion-toolbar>
@@ -8,67 +8,53 @@
 </ion-header>
 
 <ion-content>
+  <div class="page-wrap">
 
   <!-- Filtros -->
-  <div style="display:flex; gap:8px; padding:12px 16px; overflow-x:auto; scrollbar-width:none;">
+  <div class="chip-row">
     @for (cat of categories; track cat.value) {
     <ion-chip [color]="selectedCategory() === cat.value ? 'primary' : 'medium'"
-      [outline]="selectedCategory() !== cat.value" (click)="selectCategory(cat.value)"
-      style="white-space:nowrap; cursor:pointer;">
+      [outline]="selectedCategory() !== cat.value" (click)="selectCategory(cat.value)">
       {{ cat.label }}
     </ion-chip>
     }
   </div>
 
   @if (loading()) {
-  <div style="display:flex; justify-content:center; padding:40px;">
+  <div class="spinner-center">
     <ion-spinner name="crescent" />
   </div>
   }
 
   @if (!loading()) {
-  <div style="padding: 0 12px 80px;">
+  <div class="coupon-list card-grid">
 
     @if (filteredCoupons().length === 0) {
-    <p style="text-align:center; color:var(--ion-color-medium); padding:40px 0;">
-      No hay cupones en esta categoría.
-    </p>
+    <p class="empty-note">No hay cupones en esta categoría.</p>
     }
 
     @for (coupon of filteredCoupons(); track coupon.id) {
-    <ion-card style="margin:8px 0; border-radius:12px;">
-      <ion-card-header style="padding-bottom:4px;">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-          <ion-card-title style="font-size:16px; font-weight:600;">
-            {{ coupon.title }}
-          </ion-card-title>
-          <div style="display:flex; gap:4px; align-items:center;">
+    <ion-card class="coupon-card">
+      <ion-card-header>
+        <div class="row-between-start">
+          <ion-card-title class="grow">{{ coupon.title }}</ion-card-title>
+          <div class="row shrink-0">
             @if (coupon.is_affiliate) {
-            <ion-badge color="tertiary" style="font-size:11px; padding:4px 7px;">
-              Afiliado
-            </ion-badge>
+            <ion-badge color="tertiary" class="mini-badge">Afiliado</ion-badge>
             }
             @if (coupon.discount_pct) {
-            <ion-badge color="success" style="font-size:15px; padding:5px 9px;">
-              {{ coupon.discount_pct }}%
-            </ion-badge>
+            <span class="app-price app-price--green">{{ coupon.discount_pct }}%</span>
             }
           </div>
         </div>
-        <p style="font-size:13px; color:var(--ion-color-medium); margin:4px 0 0;">
-          {{ coupon.store }}
-        </p>
+        <p class="text-soft coupon-store">{{ coupon.store }}</p>
       </ion-card-header>
 
       <ion-card-content>
 
         <!-- Código -->
-        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-          <code style="background:var(--ion-color-light); padding:6px 12px;
-                           border-radius:8px; font-size:15px; font-weight:600;
-                           letter-spacing:1px; flex:1; text-align:center;">
-                {{ coupon.code }}
-              </code>
+        <div class="row coupon-code-row">
+          <code class="coupon-code">{{ coupon.code }}</code>
           <ion-button fill="clear" size="small" (click)="copyCode(coupon.code)">
             <ion-icon name="copy-outline" />
           </ion-button>
@@ -76,35 +62,33 @@
 
         <!-- Link de afiliado -->
         @if (coupon.is_affiliate && coupon.affiliate_url) {
-        <ion-button expand="block" fill="outline" size="small" color="tertiary"
-          style="margin-bottom:10px;" (click)="openAffiliateLink(coupon.affiliate_url!)">
+        <ion-button expand="block" fill="outline" size="small"
+          class="affiliate-btn" (click)="openAffiliateLink(coupon.affiliate_url!)">
           <ion-icon name="open-outline" slot="start" />
           Comprar con este link
         </ion-button>
         }
 
         <!-- Footer -->
-        <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="row-between">
 
           <!-- Vencimiento -->
-          <div style="display:flex; align-items:center; gap:4px;">
-            <ion-icon name="time-outline" style="font-size:14px;"
+          <div class="row expiry-row">
+            <ion-icon name="time-outline" class="expiry-icon"
               [color]="isExpiringSoon(coupon.valid_until) ? 'warning' : 'medium'" />
             @if (isExpiringSoon(coupon.valid_until)) {
-            <span style="font-size:12px; color:var(--ion-color-warning);">
+            <span class="text-xs expiry-soon">
               Vence en {{ daysUntilExpiry(coupon.valid_until) }} día(s)
             </span>
             } @else {
-            <span style="font-size:12px; color:var(--ion-color-medium);">
-              Vence {{ coupon.valid_until }}
-            </span>
+            <span class="text-xs">Vence {{ coupon.valid_until }}</span>
             }
           </div>
 
           <!-- Upvote -->
           <ion-button fill="clear" size="small" (click)="upvote(coupon.id)" [disabled]="svc.hasUpvoted(coupon.id)">
             <ion-icon name="thumbs-up-outline" slot="start" [color]="svc.hasUpvoted(coupon.id) ? 'primary' : ''" />
-            <span style="font-size:13px;">{{ coupon.upvotes }}</span>
+            <span class="upvote-count">{{ coupon.upvotes }}</span>
           </ion-button>
 
         </div>
@@ -113,6 +97,8 @@
     }
   </div>
   }
+
+  </div>
 
   <!-- FAB para agregar cupón -->
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
@@ -126,7 +112,7 @@
 <!-- Modal: agregar cupón -->
 <ion-modal [isOpen]="isModalOpen()" (didDismiss)="isModalOpen.set(false)">
   <ng-template>
-    <ion-header>
+    <ion-header class="ion-no-border">
       <ion-toolbar>
         <ion-title>Nuevo cupón</ion-title>
         <ion-button slot="end" fill="clear" (click)="isModalOpen.set(false)">
@@ -135,26 +121,27 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
+      <div class="page-wrap">
       <form [formGroup]="form" (ngSubmit)="submitCoupon()">
 
-        <ion-item>
-          <ion-label position="floating">Título</ion-label>
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Título</ion-label>
           <ion-input formControlName="title" placeholder="Ej: 20% en toda la web" />
         </ion-item>
 
-        <ion-item style="margin-top:8px;">
-          <ion-label position="floating">Código</ion-label>
-          <ion-input formControlName="code" placeholder="Ej: DESCUENTO20" style="text-transform:uppercase;" />
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Código</ion-label>
+          <ion-input formControlName="code" placeholder="Ej: DESCUENTO20" class="input-uppercase" />
         </ion-item>
 
-        <ion-item style="margin-top:8px;">
-          <ion-label position="floating">Tienda</ion-label>
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Tienda</ion-label>
           <ion-input formControlName="store" placeholder="Ej: Farmacity" />
         </ion-item>
 
-        <ion-item style="margin-top:8px;">
-          <ion-label>Categoría</ion-label>
-          <ion-select formControlName="category">
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Categoría</ion-label>
+          <ion-select formControlName="category" interface="popover">
             @for (cat of categories; track cat.value) {
             @if (cat.value !== 'todos') {
             <ion-select-option [value]="cat.value">{{ cat.label }}</ion-select-option>
@@ -163,26 +150,26 @@
           </ion-select>
         </ion-item>
 
-        <ion-item style="margin-top:8px;">
-          <ion-label position="floating">Descuento % (opcional)</ion-label>
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Descuento % (opcional)</ion-label>
           <ion-input type="number" formControlName="discount_pct" />
         </ion-item>
 
-        <ion-item style="margin-top:8px;">
-          <ion-label position="floating">Vence el</ion-label>
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Vence el</ion-label>
           <ion-input type="date" formControlName="valid_until" />
         </ion-item>
 
-        <ion-item style="margin-top:8px;">
-          <ion-label position="floating">Link de afiliado (opcional)</ion-label>
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Link de afiliado (opcional)</ion-label>
           <ion-input type="url" formControlName="affiliate_url" placeholder="https://..." />
         </ion-item>
-        <p style="font-size:12px; color:var(--ion-color-medium); margin:6px 4px 0;">
-          <ion-icon name="cash-outline" style="vertical-align:middle;" />
+        <p class="text-soft affiliate-hint">
+          <ion-icon name="cash-outline" class="icon-inline" />
           Si es tu cupón de afiliado, te llevás la comisión por cada compra hecha desde tu link.
         </p>
 
-        <ion-button expand="block" type="submit" style="margin-top:24px;" [disabled]="form.invalid || submitting()">
+        <ion-button expand="block" type="submit" class="form-submit" [disabled]="form.invalid || submitting()">
           @if (submitting()) {
           <ion-spinner name="crescent" />
           } @else {
@@ -191,6 +178,7 @@
         </ion-button>
 
       </form>
+      </div>
     </ion-content>
   </ng-template>
 </ion-modal>

@@ -1,2 +1,120 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+// AhorroAR design tokens — "soft premium" e-commerce
+// Marca: verde salvia único. Serif (Playfair Display) para títulos/precios,
+// Inter para el resto. Tema claro forzado (sin modo oscuro por ahora).
+
+:root {
+  /* Marca */
+  --ion-color-primary: #9CAF88;          /* verde salvia */
+  --ion-color-primary-rgb: 156, 175, 136;
+  --ion-color-primary-contrast: #FFFFFF;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #89A075;
+  --ion-color-primary-tint: #A6B792;
+
+  /* Neutros */
+  --app-bg: #FFFFFF;
+  --app-bg-soft: #FAFAF8;                /* fondo de secciones */
+  --app-surface-selected: #EDF0E7;       /* item seleccionado (sage muy claro) */
+  --app-ink: #1A1A1A;                    /* texto principal */
+  --app-ink-soft: #8A8A8A;               /* texto secundario / labels */
+  --app-border: #E8E8E6;                 /* bordes de inputs y cards */
+  --app-card-dark: #161616;              /* tarjeta bancaria activa */
+
+  /* Semánticos */
+  --app-price: #7E9465;                  /* precios/totales en verde oscuro */
+  --app-danger: #C65D4A;
+
+  /* Geometría */
+  --app-radius-sm: 10px;
+  --app-radius-md: 16px;
+  --app-radius-lg: 22px;
+  --app-radius-pill: 100px;
+
+  /* Sombras */
+  --app-shadow-soft: 0 2px 12px rgba(0, 0, 0, 0.05);
+  --app-shadow-card: 0 6px 24px rgba(0, 0, 0, 0.08);
+
+  /* Tipografía */
+  --app-font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --app-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --ion-font-family: var(--app-font-sans);
+
+  /* Ionic overrides globales */
+  --ion-background-color: var(--app-bg);
+  --ion-background-color-rgb: 255, 255, 255;
+  --ion-text-color: var(--app-ink);
+  --ion-text-color-rgb: 26, 26, 26;
+  --ion-item-background: transparent;
+  --ion-toolbar-background: var(--app-bg);
+  --ion-tab-bar-background: var(--app-bg);
+  --ion-card-background: var(--app-bg);
+  --ion-border-color: var(--app-border);
+
+  /* ── Paleta secundaria armonizada con el sistema ──
+     Las páginas referencian var(--ion-color-medium|light|dark|success|warning|danger)
+     de forma extendida: se re-mapean a los neutros/semánticos del sistema para
+     que ningún color Material viejo quede vivo. */
+
+  --ion-color-secondary: #A6B792;
+  --ion-color-secondary-rgb: 166, 183, 146;
+  --ion-color-secondary-contrast: #FFFFFF;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #89A075;
+  --ion-color-secondary-tint: #B3C1A2;
+
+  --ion-color-tertiary: #A99E8B;         /* taupe suave (badges "afiliado") */
+  --ion-color-tertiary-rgb: 169, 158, 139;
+  --ion-color-tertiary-contrast: #FFFFFF;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #8F8471;
+  --ion-color-tertiary-tint: #B7AD9C;
+
+  --ion-color-success: #7E9465;          /* = --app-price */
+  --ion-color-success-rgb: 126, 148, 101;
+  --ion-color-success-contrast: #FFFFFF;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #66784F;
+  --ion-color-success-tint: #EDF0E7;     /* sage muy claro: usado como fondo */
+
+  --ion-color-warning: #C9A24B;          /* ámbar apagado */
+  --ion-color-warning-rgb: 201, 162, 75;
+  --ion-color-warning-contrast: #FFFFFF;
+  --ion-color-warning-contrast-rgb: 255, 255, 255;
+  --ion-color-warning-shade: #8F7332;    /* legible sobre fondos claros */
+  --ion-color-warning-tint: #F7F1E3;     /* crema: usado como fondo */
+
+  --ion-color-danger: #C65D4A;
+  --ion-color-danger-rgb: 198, 93, 74;
+  --ion-color-danger-contrast: #FFFFFF;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #A84A39;
+  --ion-color-danger-tint: #F8ECE9;
+
+  --ion-color-medium: #8A8A8A;           /* = --app-ink-soft */
+  --ion-color-medium-rgb: 138, 138, 138;
+  --ion-color-medium-contrast: #FFFFFF;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #6F6F6F;
+  --ion-color-medium-tint: #A3A3A3;
+
+  --ion-color-light: #FAFAF8;            /* = --app-bg-soft */
+  --ion-color-light-rgb: 250, 250, 248;
+  --ion-color-light-contrast: #1A1A1A;
+  --ion-color-light-contrast-rgb: 26, 26, 26;
+  --ion-color-light-shade: #E8E8E6;      /* = --app-border */
+  --ion-color-light-tint: #FFFFFF;
+
+  --ion-color-dark: #1A1A1A;             /* = --app-ink */
+  --ion-color-dark-rgb: 26, 26, 26;
+  --ion-color-dark-contrast: #FFFFFF;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #161616;
+  --ion-color-dark-tint: #333333;
+}
+
+/* Tema claro forzado: la app no implementa modo oscuro todavía. */
+:root,
+html,
+body {
+  color-scheme: light only;
+}

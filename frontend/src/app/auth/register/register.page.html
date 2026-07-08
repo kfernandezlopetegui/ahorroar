@@ -1,22 +1,15 @@
 <ion-content class="ion-padding">
-  <div style="max-width: 400px; margin: 60px auto 0;">
+  <div class="auth-wrap">
 
-    <h1 style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">Crear cuenta</h1>
-    <p style="color: var(--ion-color-medium); margin-bottom: 32px; font-size: 15px;">
-      Empezá a ahorrar con AhorroAR
-    </p>
+    <h1 class="auth-title">Crear cuenta</h1>
+    <p class="auth-sub">Empezá a ahorrar con AhorroAR</p>
 
     <!-- Estado de éxito -->
     @if (success()) {
-      <div style="
-        background: var(--ion-color-success-tint);
-        border-radius: 12px;
-        padding: 20px;
-        text-align: center;
-        margin-bottom: 24px;">
-        <p style="font-size: 24px; margin: 0 0 8px;">✅</p>
-        <p style="font-weight: 600; margin: 0 0 4px;">¡Cuenta creada!</p>
-        <p style="font-size: 13px; color: var(--ion-color-medium); margin: 0;">
+      <div class="soft-panel--selected soft-panel auth-success">
+        <p class="auth-success-emoji">✅</p>
+        <p class="auth-success-title">¡Cuenta creada!</p>
+        <p class="text-soft">
           Revisá tu email para confirmar la cuenta, luego podés iniciar sesión.
         </p>
       </div>
@@ -29,8 +22,8 @@
     @if (!success()) {
       <form [formGroup]="form" (ngSubmit)="submit()">
 
-        <ion-item>
-          <ion-label position="floating">Email</ion-label>
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Email</ion-label>
           <ion-input
             type="email"
             formControlName="email"
@@ -38,13 +31,11 @@
         </ion-item>
 
         @if (form.get('email')?.invalid && form.get('email')?.dirty) {
-          <p style="font-size: 12px; color: var(--ion-color-danger); margin: 4px 16px 0;">
-            Ingresá un email válido.
-          </p>
+          <p class="field-error">Ingresá un email válido.</p>
         }
 
-        <ion-item style="margin-top: 12px;">
-          <ion-label position="floating">Contraseña</ion-label>
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Contraseña</ion-label>
           <ion-input
             type="password"
             formControlName="password"
@@ -52,13 +43,11 @@
         </ion-item>
 
         @if (form.get('password')?.invalid && form.get('password')?.dirty) {
-          <p style="font-size: 12px; color: var(--ion-color-danger); margin: 4px 16px 0;">
-            Mínimo 6 caracteres.
-          </p>
+          <p class="field-error">Mínimo 6 caracteres.</p>
         }
 
-        <ion-item style="margin-top: 12px;">
-          <ion-label position="floating">Repetir contraseña</ion-label>
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Repetir contraseña</ion-label>
           <ion-input
             type="password"
             formControlName="confirmPassword"
@@ -66,21 +55,17 @@
         </ion-item>
 
         @if (passwordMismatch) {
-          <p style="font-size: 12px; color: var(--ion-color-danger); margin: 4px 16px 0;">
-            Las contraseñas no coinciden.
-          </p>
+          <p class="field-error">Las contraseñas no coinciden.</p>
         }
 
         @if (errorMsg()) {
-          <ion-text color="danger">
-            <p style="font-size: 13px; margin: 12px 4px 0;">{{ errorMsg() }}</p>
-          </ion-text>
+          <p class="field-error">{{ errorMsg() }}</p>
         }
 
         <ion-button
           expand="block"
           type="submit"
-          style="margin-top: 28px;"
+          class="auth-submit"
           [disabled]="loading() || form.invalid">
           @if (loading()) {
             <ion-spinner name="crescent" />
@@ -91,9 +76,9 @@
 
       </form>
 
-      <p style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--ion-color-medium);">
+      <p class="auth-switch">
         ¿Ya tenés cuenta?
-        <a routerLink="/auth/login" style="color: var(--ion-color-primary);">Iniciá sesión</a>
+        <a routerLink="/auth/login">Iniciá sesión</a>
       </p>
     }
 
