@@ -1,0 +1,180 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/profile" icon="chevron-back-outline" />
+    </ion-buttons>
+    <ion-title>Mi canasta</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Buscar producto para agregar..."
+      [debounce]="400"
+      [value]="searchQuery()"
+      (ionInput)="onSearch($event)" />
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="page-wrap">
+
+    <!-- Resultados de búsqueda -->
+    @if (searching()) {
+      <div class="spinner-center">
+        <ion-spinner name="crescent" />
+      </div>
+    }
+    @if (searchResults().length) {
+      <ion-list class="branch-dropdown search-dropdown">
+        @for (p of searchResults(); track p.id) {
+          <ion-item button lines="none" (click)="addProduct(p)">
+            <ion-icon [name]="svc.isInBasket(p.id) ? 'checkmark-circle-outline' : 'add-outline'"
+              slot="start" [color]="svc.isInBasket(p.id) ? 'success' : 'primary'" />
+            <ion-label>
+              <p class="product-name">{{ p.nombre }}</p>
+              <p class="text-xs">{{ p.marca }}@if (p.presentacion) { · {{ p.presentacion }} }</p>
+            </ion-label>
+          </ion-item>
+        }
+      </ion-list>
+    }
+
+    @if (loading()) {
+      <div class="spinner-center">
+        <ion-spinner name="crescent" />
+      </div>
+    }
+
+    <!-- Canasta vacía -->
+    @if (!loading() && !items().length) {
+      <div class="soft-panel empty-basket">
+        <ion-icon name="basket-outline" class="empty-basket-icon" />
+        <p class="text-soft">
+          Tu canasta está vacía. Buscá arriba los productos que comprás
+          siempre y la app te muestra cuánto aumentó tu compra en el tiempo.
+        </p>
+      </div>
+    }
+
+    <!-- Evaluación -->
+    @if (items().length) {
+      <ion-segment [value]="meses().toString()" (ionChange)="onMesesChange($event)" class="meses-segment">
+        <ion-segment-button value="3"><ion-label>3 meses</ion-label></ion-segment-button>
+        <ion-segment-button value="6"><ion-label>6 meses</ion-label></ion-segment-button>
+        <ion-segment-button value="12"><ion-label>12 meses</ion-label></ion-segment-button>
+      </ion-segment>
+
+      @if (loadingEval()) {
+        <div class="spinner-center">
+          <ion-spinner name="crescent" />
+        </div>
+      }
+
+      @if (!loadingEval() && evaluation()) {
+        @if (evaluation()!.resumen; as resumen) {
+          <ion-card class="chart-card basket-summary">
+            <ion-card-content>
+              <h3 class="section-title">Tu canasta en {{ meses() }} meses</h3>
+              <div class="tile-grid stat-tiles">
+                <div class="info-tile stat-tile">
+                  <p class="tile-label">{{ periodoLabel(resumen.periodoAnterior) }}</p>
+                  <p class="tile-value">${{ resumen.totalAnterior | number:'1.0-0' }}</p>
+                </div>
+                <div class="info-tile stat-tile">
+                  <p class="tile-label">{{ periodoLabel(resumen.periodoActual) }}</p>
+                  <p class="tile-value">${{ resumen.totalActual | number:'1.0-0' }}</p>
+                </div>
+              </div>
+              <p class="stat-value basket-variation"
+                 [class.stat-value--up]="resumen.variacionPct >= 0"
+                 [class.stat-value--down]="resumen.variacionPct < 0">
+                <ion-icon [name]="resumen.variacionPct >= 0 ? 'trending-up-outline' : 'trending-down-outline'"
+                  class="icon-inline" />
+                {{ resumen.variacionPct >= 0 ? '+' : '' }}{{ resumen.variacionPct | number:'1.1-1' }}%
+                ({{ resumen.variacionAbs >= 0 ? '+' : '' }}${{ resumen.variacionAbs | number:'1.0-0' }})
+              </p>
+              @if (resumen.productosConDatos < resumen.productosTotal) {
+                <p class="text-xs">
+                  Calculado con {{ resumen.productosConDatos }} de {{ resumen.productosTotal }}
+                  productos (el resto todavía no tiene historial de precios).
+                </p>
+              }
+            </ion-card-content>
+          </ion-card>
+        }
+
+        @if (evaluation()!.mensaje) {
+          <div class="soft-panel message-panel">
+            <p class="text-soft">
+              <ion-icon name="stats-chart-outline" class="icon-inline" />
+              {{ evaluation()!.mensaje }}
+            </p>
+          </div>
+        }
+      }
+
+      <!-- Productos -->
+      <h2 class="section-title basket-products-title">Productos ({{ items().length }})</h2>
+
+      @for (item of items(); track item.id) {
+        <ion-card class="basket-item-card">
+          <ion-card-content>
+            <div class="row-between-start">
+              <div class="grow">
+                <p class="product-name">{{ item.producto_nombre }}</p>
+                <p class="text-xs">EAN {{ item.ean }}</p>
+              </div>
+              <ion-button fill="clear" size="small" color="medium" (click)="confirmRemove(item)">
+                <ion-icon name="trash-outline" slot="icon-only" />
+              </ion-button>
+            </div>
+
+            <div class="row-between basket-item-foot">
+              <div class="row qty-controls">
+                <ion-button fill="outline" size="small" class="btn-icon-square"
+                  [disabled]="item.cantidad <= 1" (click)="changeCantidad(item, -1)">
+                  <ion-icon name="remove-outline" slot="icon-only" />
+                </ion-button>
+                <span class="qty-value">{{ item.cantidad }}</span>
+                <ion-button fill="outline" size="small" class="btn-icon-square"
+                  [disabled]="item.cantidad >= 99" (click)="changeCantidad(item, 1)">
+                  <ion-icon name="add-outline" slot="icon-only" />
+                </ion-button>
+              </div>
+
+              @if (evalFor(item.id); as ev) {
+                @if (ev.conDatos) {
+                  <div class="basket-item-prices">
+                    <span class="text-xs">
+                      {{ periodoLabel(ev.periodoAnterior) }}: ${{ ev.precioAnterior | number:'1.0-0' }}
+                      a hoy: ${{ ev.precioActual | number:'1.0-0' }}
+                    </span>
+                    <span class="variation"
+                      [class.variation--up]="(ev.variacionPct ?? 0) >= 0"
+                      [class.variation--down]="(ev.variacionPct ?? 0) < 0">
+                      {{ (ev.variacionPct ?? 0) >= 0 ? '+' : '' }}{{ ev.variacionPct | number:'1.1-1' }}%
+                    </span>
+                  </div>
+                } @else {
+                  <span class="text-xs">
+                    @if (ev.precioActual !== null) {
+                      ${{ ev.precioActual | number:'1.0-0' }} · sin historial aún
+                    } @else {
+                      Sin historial de precios aún
+                    }
+                  </span>
+                }
+              }
+            </div>
+          </ion-card-content>
+        </ion-card>
+      }
+
+      <!-- Link a inflación personal -->
+      <ion-button expand="block" fill="outline" routerLink="/tabs/inflacion" class="basket-inflation-btn">
+        <ion-icon name="stats-chart-outline" slot="start" />
+        Ver mi inflación personal vs IPC
+      </ion-button>
+    }
+
+  </div>
+</ion-content>

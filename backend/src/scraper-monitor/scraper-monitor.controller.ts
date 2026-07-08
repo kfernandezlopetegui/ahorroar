@@ -1,9 +1,11 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { JwtGuard } from '../auth/jwt.guard';
+import { AdminGuard } from '../auth/admin.guard';
 import { ScraperMonitorService } from './scraper-monitor.service';
 
+// Panel interno: solo administradores (ver ADMIN_EMAILS en el backend)
 @Controller('scraper-monitor')
-@UseGuards(JwtGuard)
+@UseGuards(JwtGuard, AdminGuard)
 export class ScraperMonitorController {
   constructor(private svc: ScraperMonitorService) {}
 

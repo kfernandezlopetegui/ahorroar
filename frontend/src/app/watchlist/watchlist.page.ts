@@ -11,6 +11,7 @@ import { addIcons } from 'ionicons';
 import {
   trashOutline, eyeOutline, trendingDownOutline,
   notificationsOutline, pricetagOutline, createOutline,
+  checkmarkCircleOutline,
 } from 'ionicons/icons';
 import { WatchlistService, WatchlistItem } from '../core/services/watchlist';
 
@@ -35,7 +36,8 @@ export class WatchlistPage implements OnInit {
     private alertCtrl: AlertController,
   ) {
     addIcons({ trashOutline, eyeOutline, trendingDownOutline,
-               notificationsOutline, pricetagOutline, createOutline });
+               notificationsOutline, pricetagOutline, createOutline,
+               checkmarkCircleOutline });
   }
 
   ngOnInit() { this.svc.load(); }
@@ -47,13 +49,13 @@ export class WatchlistPage implements OnInit {
       inputs: [
         {
           type: 'radio',
-          label: '🏷️ Cualquier oferta (2x1, % desc, etc.)',
+          label: 'Cualquier oferta (2x1, % desc, etc.)',
           value: 'promo',
           checked: item.alert_on_promo,
         },
         {
           type: 'radio',
-          label: '🎯 Cuando baje de un precio',
+          label: 'Cuando baje de un precio',
           value: 'precio',
           checked: !item.alert_on_promo,
         },
@@ -65,7 +67,7 @@ export class WatchlistPage implements OnInit {
           handler: async (mode: 'promo' | 'precio') => {
             if (mode === 'promo') {
               await this.svc.updateAlertMode(item, 'promo');
-              this.showToast('✅ Alerta activada para cualquier oferta');
+              this.showToast('Alerta activada para cualquier oferta');
             } else {
               await this.askPrecioObjetivo(item);
             }
@@ -94,7 +96,7 @@ export class WatchlistPage implements OnInit {
             const precio = parseFloat(val.precio);
             if (!precio || precio <= 0) return;
             await this.svc.updateAlertMode(item, 'precio', precio);
-            this.showToast(`✅ Te avisamos cuando baje de $${precio.toLocaleString('es-AR')}`);
+            this.showToast(`Te avisamos cuando baje de $${precio.toLocaleString('es-AR')}`);
           },
         },
       ],
@@ -130,7 +132,10 @@ export class WatchlistPage implements OnInit {
   }
 
   private async showToast(message: string) {
-    const t = await this.toastCtrl.create({ message, duration: 2500, color: 'success', position: 'top' });
+    const t = await this.toastCtrl.create({
+      message, icon: 'checkmark-circle-outline',
+      duration: 2500, color: 'success', position: 'top',
+    });
     await t.present();
   }
 }

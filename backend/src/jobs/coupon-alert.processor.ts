@@ -33,7 +33,7 @@ export class CouponAlertProcessor extends WorkerHost {
       try {
         await this.notifs.sendToUser(
           coupon.user_id,
-          '⏰ Cupón por vencer mañana',
+          'Cupón por vencer mañana',
           `Tu cupón "${coupon.code}" de ${coupon.store} vence mañana. ¡Usalo!`,
           { coupon_id: coupon.id, tipo: 'coupon_alert' },
         );

@@ -157,7 +157,7 @@ export class EanSourcesService {
           this.http.get(
             `https://world.openfoodfacts.org/api/v2/product/${ean}.json`,
             {
-              headers: { 'User-Agent': 'AhorroAR/1.0 (price comparison app)' },
+              headers: { 'User-Agent': 'Preciosos/1.0 (price comparison app)' },
               params: {
                 fields: 'product_name,product_name_es,brands,quantity,image_front_url',
               },

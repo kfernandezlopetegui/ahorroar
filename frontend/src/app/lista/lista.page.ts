@@ -65,7 +65,7 @@ export class ListaPage {
       this.userLat.set(pos.coords.latitude);
       this.userLng.set(pos.coords.longitude);
       this.usandoUbicacion.set(true);
-      const t = await this.toastCtrl.create({ message: '📍 Ubicación activada', duration: 1500, color: 'primary' });
+      const t = await this.toastCtrl.create({ message: 'Ubicación activada', icon: 'location-outline', duration: 1500, color: 'primary' });
       await t.present();
     } catch {
       const t = await this.toastCtrl.create({ message: 'No se pudo obtener la ubicación', duration: 2000, color: 'warning' });

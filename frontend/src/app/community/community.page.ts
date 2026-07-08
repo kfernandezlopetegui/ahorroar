@@ -14,7 +14,9 @@ import { addIcons } from 'ionicons';
 import {
   addOutline, thumbsUpOutline, trophyOutline,
   alertCircleOutline, checkmarkCircle, storefront,
-  closeCircle, flagOutline,
+  closeCircle, flagOutline, trophy, checkmarkOutline,
+  checkmarkCircleOutline, peopleOutline, newspaperOutline,
+  ribbonOutline,
 } from 'ionicons/icons';
 import {
   Subject, debounceTime, distinctUntilChanged,
@@ -88,7 +90,12 @@ export class CommunityPage implements OnInit, OnDestroy {
     private supabase: SupabaseService,
     private toastCtrl: ToastController,
   ) {
-    addIcons({ addOutline, thumbsUpOutline, trophyOutline, alertCircleOutline, checkmarkCircle, storefront, closeCircle, flagOutline });
+    addIcons({
+      addOutline, thumbsUpOutline, trophyOutline, alertCircleOutline,
+      checkmarkCircle, storefront, closeCircle, flagOutline,
+      trophy, checkmarkOutline, checkmarkCircleOutline,
+      peopleOutline, newspaperOutline, ribbonOutline,
+    });
   }
 
   ngOnInit() {
@@ -233,7 +240,8 @@ export class CommunityPage implements OnInit, OnDestroy {
       this.isModalOpen.set(false);
       this.form.reset();
       const t = await this.toastCtrl.create({
-        message: '✅ +10 puntos! Reporte enviado', duration: 2500, color: 'success', position: 'top',
+        message: '+10 puntos! Reporte enviado', icon: 'checkmark-circle-outline',
+        duration: 2500, color: 'success', position: 'top',
       });
       await t.present();
     } catch (err: any) {

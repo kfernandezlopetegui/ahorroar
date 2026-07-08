@@ -49,7 +49,7 @@
 
     <!-- Bancos -->
     @if (banks().length) {
-    <p class="micro-label group-label">🏦 Bancos</p>
+    <p class="micro-label group-label"><ion-icon name="business-outline" class="icon-inline" /> Bancos</p>
     @for (s of banks(); track s.scraper) {
     <ng-container *ngTemplateOutlet="scraperCard; context: { $implicit: s }" />
     }
@@ -57,7 +57,7 @@
 
     <!-- Supermercados -->
     @if (supers().length) {
-    <p class="micro-label group-label">🛒 Supermercados y farmacias</p>
+    <p class="micro-label group-label"><ion-icon name="cart-outline" class="icon-inline" /> Supermercados y farmacias</p>
     @for (s of supers(); track s.scraper) {
     <ng-container *ngTemplateOutlet="scraperCard; context: { $implicit: s }" />
     }

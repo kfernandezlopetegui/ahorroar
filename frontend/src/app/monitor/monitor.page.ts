@@ -11,6 +11,7 @@ import { addIcons } from 'ionicons';
 import {
   checkmarkCircleOutline, closeCircleOutline,
   timeOutline, hardwareChipOutline, chevronBackOutline,
+  businessOutline, cartOutline,
 } from 'ionicons/icons';
 import { environment } from '../../environments/environment';
 import { SupabaseService } from '../core/services/supabase';
@@ -56,7 +57,7 @@ export class MonitorPage implements OnInit {
     private readonly http: HttpClient,
     private readonly supabase: SupabaseService,
   ) {
-    addIcons({ checkmarkCircleOutline, closeCircleOutline, timeOutline, hardwareChipOutline, chevronBackOutline });
+    addIcons({ checkmarkCircleOutline, closeCircleOutline, timeOutline, hardwareChipOutline, chevronBackOutline, businessOutline, cartOutline });
   }
 
   ngOnInit() {

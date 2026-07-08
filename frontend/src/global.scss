@@ -1,5 +1,5 @@
 /*
- * AhorroAR — Global styles
+ * Preciosos — Global styles
  * ----------------------------------------------------------------------------
  * Sistema de diseño "soft premium": tokens en src/theme/variables.scss,
  * tipografía serif (Playfair Display) + sans (Inter) cargadas como assets
@@ -887,7 +887,7 @@ ion-infinite-scroll-content {
   border-radius: var(--app-radius-md);
 }
 
-.auth-success-emoji { font-size: 26px; margin: 0 0 8px; }
+.auth-success-icon { font-size: 34px; margin: 0 0 8px; }
 .auth-success-title { font-weight: 600; margin: 0 0 4px; }
 
 .field-error {
@@ -1245,9 +1245,17 @@ ion-infinite-scroll-content {
 }
 
 .rank-medal {
-  font-size: 24px;
+  font-size: 15px;
+  font-weight: 600;
   min-width: 36px;
   text-align: center;
+  color: var(--app-ink-soft);
+
+  ion-icon { font-size: 22px; vertical-align: middle; }
+
+  &.rank-medal--gold   { color: #C9A227; }
+  &.rank-medal--silver { color: #9BA3AD; }
+  &.rank-medal--bronze { color: #B07C4F; }
 }
 
 .reward-hint { margin-bottom: 16px; }
@@ -1425,6 +1433,50 @@ ion-infinite-scroll-content {
     color: var(--app-ink-soft);
   }
 }
+
+/* ── Mi canasta ──────────────────────────────────────────────────────────── */
+
+.empty-basket {
+  text-align: center;
+  padding: 28px 20px;
+  margin-top: 8px;
+}
+
+.empty-basket-icon {
+  font-size: 40px;
+  color: var(--app-ink-soft);
+  margin-bottom: 8px;
+}
+
+.meses-segment { margin-bottom: 14px; }
+
+.basket-summary { margin: 0 0 14px; }
+
+.basket-variation {
+  text-align: center;
+  margin: 12px 0 4px;
+}
+
+.basket-products-title { margin-top: 18px; }
+
+.basket-item-card { margin: 8px 0; }
+
+.basket-item-foot {
+  margin-top: 10px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.basket-item-prices {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.basket-inflation-btn { margin-top: 18px; }
+
+.search-dropdown { margin-top: 4px; }
 
 /* ── Inflación ───────────────────────────────────────────────────────────── */
 

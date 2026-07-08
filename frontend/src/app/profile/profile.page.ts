@@ -10,7 +10,7 @@ import {
 import { addIcons } from 'ionicons';
 import {
   addOutline, trashOutline, cardOutline, logOutOutline,
-  statsChartOutline, hardwareChipOutline, checkmark,
+  statsChartOutline, hardwareChipOutline, checkmark, basketOutline,
 } from 'ionicons/icons';
 import { CardsService, BANKS } from '../core/services/cards';
 import { AuthService } from '../core/services/auth';
@@ -48,12 +48,13 @@ export class ProfilePage implements OnInit {
   ) {
     addIcons({
       addOutline, trashOutline, cardOutline, logOutOutline,
-      statsChartOutline, hardwareChipOutline, checkmark,
+      statsChartOutline, hardwareChipOutline, checkmark, basketOutline,
     });
   }
 
   ngOnInit() {
     this.cardsSvc.loadCards();
+    this.auth.checkAdmin();
   }
 
   onBankChange(event: any) {

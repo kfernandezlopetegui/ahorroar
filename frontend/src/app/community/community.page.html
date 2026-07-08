@@ -29,7 +29,8 @@
     <div class="chip-row">
       @for (b of userStats()!.badges; track b.badge) {
         <ion-chip [color]="badgeInfo[b.badge]?.color ?? 'medium'" class="badge-chip">
-          {{ badgeInfo[b.badge]?.icon }} {{ badgeInfo[b.badge]?.label }}
+          <ion-icon [name]="badgeInfo[b.badge]?.icon ?? 'ribbon-outline'" />
+          <ion-label>{{ badgeInfo[b.badge]?.label }}</ion-label>
         </ion-chip>
       }
     </div>
@@ -45,7 +46,7 @@
   @if (activeSegment() === 'reportes') {
     <div class="feed card-grid">
       @if (!loading() && !reports().length) {
-        <p class="empty-note">Sé el primero en reportar un precio 🏷️</p>
+        <p class="empty-note">Sé el primero en reportar un precio.</p>
       }
       @for (r of reports(); track r.id) {
         <ion-card class="report-card">
@@ -62,7 +63,9 @@
                 <div class="row report-meta">
                   <span class="text-xs">{{ timeAgo(r.created_at) }}</span>
                   @if (r.verified) {
-                    <ion-badge color="success" class="mini-badge">✓ Verificado</ion-badge>
+                    <ion-badge color="success" class="mini-badge">
+                      <ion-icon name="checkmark-outline" class="icon-inline" /> Verificado
+                    </ion-badge>
                   }
                 </div>
               </div>
@@ -97,8 +100,15 @@
         <ion-card class="rank-card" [class.rank-card--top]="i < 3">
           <ion-card-content>
             <div class="row">
-              <span class="rank-medal">
-                {{ i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '#' + (i + 1) }}
+              <span class="rank-medal"
+                [class.rank-medal--gold]="i === 0"
+                [class.rank-medal--silver]="i === 1"
+                [class.rank-medal--bronze]="i === 2">
+                @if (i < 3) {
+                  <ion-icon name="trophy" />
+                } @else {
+                  #{{ i + 1 }}
+                }
               </span>
               <div class="grow">
                 <p class="product-name">Usuario {{ user.user_id.slice(0,8) }}...</p>

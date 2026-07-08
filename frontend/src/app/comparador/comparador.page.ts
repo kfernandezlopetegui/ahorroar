@@ -13,6 +13,7 @@ import {
   locationOutline, scanOutline, searchOutline,
   barcodeOutline, cameraOutline, trendingDownOutline,
   timeOutline, cartOutline, eyeOutline, chevronBackOutline,
+  checkmarkCircleOutline,
 } from 'ionicons/icons';
 import { Geolocation } from '@capacitor/geolocation';
 import { Platform } from '@ionic/angular/standalone';
@@ -79,6 +80,7 @@ export class ComparadorPage implements OnDestroy {
       locationOutline, scanOutline, searchOutline,
       barcodeOutline, cameraOutline, trendingDownOutline,
       timeOutline, cartOutline, eyeOutline, chevronBackOutline,
+      checkmarkCircleOutline,
     });
     this.watchlist.load();
   }
@@ -208,7 +210,8 @@ export class ComparadorPage implements OnDestroy {
       }
 
       const toast = await this.toastCtrl.create({
-        message:  '📍 Ubicación activada',
+        message:  'Ubicación activada',
+        icon:     'location-outline',
         duration: 1500,
         color:    'primary',
       });
@@ -244,13 +247,13 @@ export class ComparadorPage implements OnDestroy {
       inputs: [
         {
           type:    'radio',
-          label:   '🏷️ Cualquier oferta (2x1, % desc, etc.)',
+          label:   'Cualquier oferta (2x1, % desc, etc.)',
           value:   'promo',
           checked: watching ? watching.alert_on_promo : true,
         },
         {
           type:    'radio',
-          label:   '🎯 Cuando baje de un precio',
+          label:   'Cuando baje de un precio',
           value:   'precio',
           checked: watching ? !watching.alert_on_promo : false,
         },
@@ -263,7 +266,8 @@ export class ComparadorPage implements OnDestroy {
             if (mode === 'promo') {
               await this.watchlist.followPromo(producto.id, producto.nombre);
               const t = await this.toastCtrl.create({
-                message:  '✅ Te avisamos cuando aparezca cualquier oferta',
+                message:  'Te avisamos cuando aparezca cualquier oferta',
+                icon:     'checkmark-circle-outline',
                 duration: 2500,
                 color:    'success',
               });
@@ -298,7 +302,8 @@ export class ComparadorPage implements OnDestroy {
             if (!precio || precio <= 0) return;
             await this.watchlist.followPrecio(producto.id, producto.nombre, precio);
             const t = await this.toastCtrl.create({
-              message:  `✅ Te avisamos cuando baje de $${precio.toLocaleString('es-AR')}`,
+              message:  `Te avisamos cuando baje de $${precio.toLocaleString('es-AR')}`,
+              icon:     'checkmark-circle-outline',
               duration: 2500,
               color:    'success',
             });

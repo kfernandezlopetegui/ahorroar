@@ -11,7 +11,7 @@ import { DecimalPipe, SlicePipe } from '@angular/common';
 import { addIcons } from 'ionicons';
 import {
   personOutline, cartOutline, calculatorOutline,
-  informationCircleOutline,
+  informationCircleOutline, starOutline, checkmarkOutline,
 } from 'ionicons/icons';
 import { PromotionsService, CATEGORIES, Promotion } from '../core/services/promotions';
 import { AuthService } from '../core/services/auth';
@@ -61,7 +61,7 @@ export class HomePage implements OnInit {
     public  cardsSvc: CardsService,
     public  lista:    ListaService,
   ) {
-    addIcons({ personOutline, cartOutline, calculatorOutline, informationCircleOutline });
+    addIcons({ personOutline, cartOutline, calculatorOutline, informationCircleOutline, starOutline, checkmarkOutline });
   }
 
   async ngOnInit() {

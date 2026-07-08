@@ -20,6 +20,8 @@ import { SupermarketOffersController } from './supermarket-offers/supermarket-of
 import { SupermarketOffersModule } from './supermarket-offers/supermarket-offers.module';
 import { InflationModule } from './inflation/inflation.module';
 import { ScraperMonitorModule } from './scraper-monitor/scraper-monitor.module';
+import { BasketModule } from './basket/basket.module';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
   imports: [
@@ -35,8 +37,9 @@ import { ScraperMonitorModule } from './scraper-monitor/scraper-monitor.module';
     SupermarketOffersModule,
     InflationModule,
     ScraperMonitorModule,
+    BasketModule,
   ],
-  controllers: [AppController, NotificationsController, SupermarketOffersController],
+  controllers: [AppController, AuthController, NotificationsController, SupermarketOffersController],
   providers: [AppService, NotificationsService, WatchlistService, CommunityService, BankComboService, SupermarketOffersService],
 })
 export class AppModule {}

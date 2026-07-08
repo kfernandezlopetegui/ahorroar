@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth-guard';
+import { adminGuard } from './core/guards/admin-guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'tabs/home', pathMatch: 'full' },
@@ -25,7 +26,8 @@ export const routes: Routes = [
       { path: 'coupons',    loadComponent: () => import('./coupons/coupons.page').then(m => m.CouponsPage) },
       { path: 'profile',    loadComponent: () => import('./profile/profile.page').then(m => m.ProfilePage) },
       { path: 'inflacion',  loadComponent: () => import('./inflacion/inflacion.page').then(m => m.InflacionPage) },
-      { path: 'monitor',    loadComponent: () => import('./monitor/monitor.page').then(m => m.MonitorPage) },
+      { path: 'canasta',    loadComponent: () => import('./canasta/canasta.page').then(m => m.CanastaPage) },
+      { path: 'monitor',    canActivate: [adminGuard], loadComponent: () => import('./monitor/monitor.page').then(m => m.MonitorPage) },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
   },
