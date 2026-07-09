@@ -23,11 +23,12 @@ export interface UserStats {
   badges: { badge: string; earned_at: string }[];
 }
 
+// icon = nombre de ionicon (se renderiza con <ion-icon [name]>)
 export const BADGE_INFO: Record<string, { label: string; icon: string; color: string }> = {
-  colaborador: { label: 'Colaborador',        icon: '🤝', color: 'primary'   },
-  informante:  { label: 'Informante',         icon: '📰', color: 'secondary' },
-  experto:     { label: 'Experto',            icon: '🏆', color: 'warning'   },
-  maestro:     { label: 'Maestro del Ahorro', icon: '👑', color: 'danger'    },
+  colaborador: { label: 'Colaborador',        icon: 'people-outline',    color: 'primary'   },
+  informante:  { label: 'Informante',         icon: 'newspaper-outline', color: 'secondary' },
+  experto:     { label: 'Experto',            icon: 'trophy-outline',    color: 'warning'   },
+  maestro:     { label: 'Maestro del Ahorro', icon: 'ribbon-outline',    color: 'danger'    },
 };
 
 const BASE = `${environment.apiUrl}/community`;

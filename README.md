@@ -1,10 +1,11 @@
-# 💸 AhorroAR — Smart Savings App for Argentina
+# Preciosos — Smart Savings App for Argentina
 
 A mobile app that helps Argentinians maximize their bank promotions, 
 compare supermarket prices in real time, and make smarter purchasing 
 decisions in a high-inflation context.
 
-> 🚧 Actively in development — Phases 1-4 implemented.
+> Actively in development — Phases 1-4 implemented. 
+> Formerly known as *AhorroAR*.
 
 ---
 
@@ -15,7 +16,7 @@ at different stores, with different caps. Tracking all of them manually
 is impossible. Meanwhile, the same product can vary 40%+ in price 
 across supermarket chains.
 
-AhorroAR centralizes all of that into one app.
+Preciosos centralizes all of that into one app.
 
 ---
 
@@ -59,6 +60,9 @@ AhorroAR centralizes all of that into one app.
 ### ✅ Phase 4 — Personal Inflation & Monetization (Completed)
 - 📉 **Personal inflation** — your basket's price curve vs official 
   CPI (INDEC API via datos.gob.ar time series)
+- 🧺 **Personal basket** — pick the exact products of your basket 
+  (with quantities) and see how much it went up over 3/6/12 months, 
+  product by product and as a total
 - 🏪 **Expanded scrapers** — Carrefour, DIA, Jumbo, Disco, Vea, 
   Coto, La Anónima, ChangoMás and Farmacity
 - 💰 **Affiliate coupons** — upload your own affiliate coupon with 
@@ -66,7 +70,9 @@ AhorroAR centralizes all of that into one app.
 - 🏆 **Reputation system** — contributor ranking, badges and 
   community moderation (flagged reports get auto-hidden)
 - 🩺 **Scraper monitor** — persistent run log + in-app dashboard 
-  showing which scrapers are broken
+  showing which scrapers are broken (**admin-only**: set the 
+  `ADMIN_EMAILS` env var in the backend, e.g. 
+  `ADMIN_EMAILS=vos@mail.com,otro@mail.com`)
 - 📱 PWA (Angular service worker) → store publishing via Capacitor 
   pending
 
@@ -129,8 +135,9 @@ npm run start:dev
 > Contact me for access to the development environment.
 
 **Database migrations:** run the SQL files in [`db/migrations/`](./db/migrations) 
-in the Supabase SQL Editor (latest: `2026-07-07_fase4.sql` — scraper monitor, 
-affiliate coupons, report moderation).
+in the Supabase SQL Editor (latest: `2026-07-08_canasta_transporte.sql` — 
+personal basket + transport offers seed; previous: `2026-07-07_fase4.sql` — 
+scraper monitor, affiliate coupons, report moderation).
 
 ---
 

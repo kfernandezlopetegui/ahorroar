@@ -100,6 +100,14 @@
   <div class="tools-section">
     <h2 class="section-title">Herramientas</h2>
 
+    <ion-item button detail lines="none" class="tool-item" (click)="goTo('/tabs/canasta')">
+      <ion-icon name="basket-outline" slot="start" />
+      <ion-label>
+        <h3>Mi canasta</h3>
+        <p>Elegí tus productos y mirá cuánto aumentaron</p>
+      </ion-label>
+    </ion-item>
+
     <ion-item button detail lines="none" class="tool-item" (click)="goTo('/tabs/inflacion')">
       <ion-icon name="stats-chart-outline" slot="start" />
       <ion-label>
@@ -108,13 +116,15 @@
       </ion-label>
     </ion-item>
 
-    <ion-item button detail lines="none" class="tool-item" (click)="goTo('/tabs/monitor')">
-      <ion-icon name="hardware-chip-outline" slot="start" />
-      <ion-label>
-        <h3>Monitor de scrapers</h3>
-        <p>Estado de las fuentes de datos</p>
-      </ion-label>
-    </ion-item>
+    @if (auth.isAdmin()) {
+      <ion-item button detail lines="none" class="tool-item" (click)="goTo('/tabs/monitor')">
+        <ion-icon name="hardware-chip-outline" slot="start" />
+        <ion-label>
+          <h3>Monitor de scrapers</h3>
+          <p>Estado de las fuentes de datos (solo admin)</p>
+        </ion-label>
+      </ion-item>
+    }
   </div>
 
   </div>

@@ -29,7 +29,7 @@ export function detectCategory(text: string): Category {
   const t = text.toLowerCase();
   if (/carrefour|disco|jumbo|coto|vea|super|mercado|dÃa|dia\b/.test(t)) return 'supermercado';
   if (/farmacity|farmacia|boti|salud|drogueria/.test(t)) return 'farmacia';
-  if (/uber|cabify|metrobus|sube|subte|transporte/.test(t)) return 'transporte';
+  if (/uber|cabify|didi|metrobus|sube\b|subte|tren\b|colectivo|taxi|peaje|estacionamiento|movilidad|transporte/.test(t)) return 'transporte';
   if (/zara|h&m|ropa|indumentaria|moda|falabella|nike|adidas/.test(t)) return 'indumentaria';
   if (/fravega|musimundo|garbarino|electronica|celular|apple|samsung/.test(t)) return 'electronica';
   if (/restaurant|cafe|mcdonalds|burger|pizza|rappi|pedidosya|gastronomia/.test(t)) return 'gastronomia';

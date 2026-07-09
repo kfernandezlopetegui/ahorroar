@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>AhorroAR</ion-title>
+    <ion-title>Preciosos</ion-title>
     <ion-button slot="end" fill="clear" routerLink="/tabs/lista" class="toolbar-icon-btn">
       <ion-icon name="cart-outline" />
       @if (cartCount() > 0) {
@@ -36,7 +36,7 @@
     </div>
 
     @if (userBanks().length) {
-      <p class="my-banks-hint">⭐ Tus bancos aparecen primero</p>
+      <p class="my-banks-hint"><ion-icon name="star-outline" class="icon-inline" /> Tus bancos aparecen primero</p>
     }
 
     @if (loading()) {
@@ -184,7 +184,7 @@
                 </div>
               }
               <div class="row-start">
-                <span class="step-dot step-dot--ok">✓</span>
+                <span class="step-dot step-dot--ok"><ion-icon name="checkmark-outline" /></span>
                 <p class="howto-text">
                   Válido hasta el <strong>{{ selectedPromo()!.valid_until }}</strong>
                 </p>

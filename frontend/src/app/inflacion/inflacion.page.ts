@@ -1,12 +1,16 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   IonContent, IonHeader, IonToolbar, IonTitle,
   IonCard, IonCardContent, IonSpinner, IonSegment, IonSegmentButton, IonLabel, IonIcon,
-  IonButtons, IonBackButton,
+  IonButtons, IonBackButton, IonButton,
 } from '@ionic/angular/standalone';
 import { DecimalPipe } from '@angular/common';
 import { addIcons } from 'ionicons';
-import { trendingUpOutline, trendingDownOutline, statsChartOutline, chevronBackOutline } from 'ionicons/icons';
+import {
+  trendingUpOutline, trendingDownOutline, statsChartOutline,
+  chevronBackOutline, basketOutline,
+} from 'ionicons/icons';
 import { InflationService, MonthPoint } from '../core/services/inflation';
 
 interface ChartLine {
@@ -24,10 +28,10 @@ const PAD = { top: 12, right: 12, bottom: 24, left: 36 };
   selector: 'app-inflacion',
   standalone: true,
   imports: [
-    DecimalPipe,
+    DecimalPipe, RouterLink,
     IonContent, IonHeader, IonToolbar, IonTitle,
     IonCard, IonCardContent, IonSpinner, IonSegment, IonSegmentButton, IonLabel, IonIcon,
-    IonButtons, IonBackButton,
+    IonButtons, IonBackButton, IonButton,
   ],
   templateUrl: './inflacion.page.html',
 })
@@ -85,7 +89,7 @@ export class InflacionPage implements OnInit {
   });
 
   constructor(public svc: InflationService) {
-    addIcons({ trendingUpOutline, trendingDownOutline, statsChartOutline, chevronBackOutline });
+    addIcons({ trendingUpOutline, trendingDownOutline, statsChartOutline, chevronBackOutline, basketOutline });
   }
 
   ngOnInit() {

@@ -5,8 +5,9 @@ import { SupabaseService } from '../supabase/supabase.service';
 
 /**
  * Inflación personal: compara la evolución de la canasta del usuario
- * (los productos que sigue en su watchlist, con precios del price_history)
- * contra el IPC oficial del INDEC (API de series de tiempo de datos.gob.ar).
+ * (los productos que eligió en "Mi canasta"; si está vacía se usa su
+ * watchlist, con precios del price_history) contra el IPC oficial del
+ * INDEC (API de series de tiempo de datos.gob.ar).
  */
 
 // IPC Nacional, nivel general (índice, dic-2016 = 100)
@@ -74,20 +75,31 @@ export class InflationService {
       ipc,
       productosSeguidos: canasta.eansIncluidos,
       mensaje: canasta.puntos.length < 2
-        ? 'Todavía no hay historial suficiente: seguí productos en tu watchlist y usá el comparador para acumular precios.'
+        ? 'Todavía no hay historial suficiente: armá tu canasta con productos y usá el comparador para acumular precios.'
         : null,
     };
   }
 
   private async getCanasta(userId: string, meses: number) {
-    const { data: watch, error: werr } = await this.supabase.client
-      .from('watchlist')
+    // Primero la canasta elegida por el usuario; si está vacía, su watchlist
+    const { data: basket, error: berr } = await this.supabase.client
+      .from('basket_items')
       .select('ean')
-      .eq('user_id', userId)
-      .eq('activa', true);
-    if (werr) throw werr;
+      .eq('user_id', userId);
+    if (berr) throw berr;
 
-    const eans = (watch ?? []).map((w) => w.ean);
+    let eans = (basket ?? []).map((b) => b.ean);
+
+    if (!eans.length) {
+      const { data: watch, error: werr } = await this.supabase.client
+        .from('watchlist')
+        .select('ean')
+        .eq('user_id', userId)
+        .eq('activa', true);
+      if (werr) throw werr;
+      eans = (watch ?? []).map((w) => w.ean);
+    }
+
     if (!eans.length) return { puntos: [] as MonthPoint[], eansIncluidos: 0 };
 
     const desde = new Date();

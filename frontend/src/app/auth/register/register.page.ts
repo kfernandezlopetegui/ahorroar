@@ -3,7 +3,9 @@ import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl, Validati
 import { RouterLink } from '@angular/router';
 import {
   IonContent, IonButton, IonInput, IonItem,
-  IonLabel, IonSpinner, } from '@ionic/angular/standalone';
+  IonLabel, IonSpinner, IonIcon, } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { checkmarkCircle } from 'ionicons/icons';
 import { AuthService } from '../../core/services/auth';
 
 function passwordsMatch(control: AbstractControl): ValidationErrors | null {
@@ -18,7 +20,7 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   imports: [
     ReactiveFormsModule, RouterLink,
     IonContent, IonButton, IonInput, IonItem,
-    IonLabel, IonSpinner, ],
+    IonLabel, IonSpinner, IonIcon, ],
   templateUrl: './register.page.html',
 })
 export class RegisterPage {
@@ -35,7 +37,9 @@ export class RegisterPage {
     { validators: passwordsMatch },
   );
 
-  constructor(private fb: FormBuilder, private auth: AuthService) {}
+  constructor(private fb: FormBuilder, private auth: AuthService) {
+    addIcons({ checkmarkCircle });
+  }
 
   get passwordMismatch() {
     return this.form.errors?.['passwordsMismatch'] && this.form.get('confirmPassword')?.dirty;

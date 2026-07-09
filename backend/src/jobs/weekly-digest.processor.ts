@@ -58,7 +58,7 @@ export class WeeklyDigestProcessor extends WorkerHost {
     const top = drops[0];
     await this.notifs.sendMulticast(
       tokens.map(t => t.token),
-      '📊 Resumen semanal de AhorroAR',
+      'Resumen semanal de Preciosos',
       `${top.nombre} bajó ${top.drop_pct}% esta semana. ${drops.length} bajadas destacadas.`,
     );
   }

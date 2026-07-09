@@ -1,6 +1,6 @@
 {
-  "name": "app",
-  "short_name": "app",
+  "name": "Preciosos",
+  "short_name": "Preciosos",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
@@ -53,5 +53,7 @@
       "type": "image/png",
       "purpose": "maskable any"
     }
-  ]
+  ],
+  "theme_color": "#C65D4A",
+  "background_color": "#FAF3EC"
 }

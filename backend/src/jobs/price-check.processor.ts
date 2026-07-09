@@ -54,7 +54,7 @@ export class PriceCheckProcessor extends WorkerHost {
 
           await this.notifs.sendToUser(
             item.user_id,
-            `🏷️ ¡Oferta! ${item.producto_nombre}`,
+            `¡Oferta! ${item.producto_nombre}`,
             promoDescs,
             { ean: item.ean, tipo: 'promo_alert' },
           );
@@ -84,7 +84,7 @@ export class PriceCheckProcessor extends WorkerHost {
 
             await this.notifs.sendToUser(
               item.user_id,
-              '🎯 Precio objetivo alcanzado',
+              'Precio objetivo alcanzado',
               `${item.producto_nombre} está a $${minPrecio.toLocaleString('es-AR')} ` +
                 `(objetivo: $${item.precio_objetivo.toLocaleString('es-AR')})`,
               { ean: item.ean, tipo: 'price_alert' },
