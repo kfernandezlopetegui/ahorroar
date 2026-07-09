@@ -15,13 +15,11 @@ COPY src ./src
 RUN npm run build
 
 ENV NODE_ENV=production
-# Bancos y supers corren una vez al arrancar el contenedor; después siguen
-# con el cron (bancos diario 7am, supers martes y viernes 6am). Así un
-# deploy nuevo puebla datos —incluidos los cortes de carne— sin esperar al
-# próximo cron.
-ENV RUN_ON_START=true
-ENV RUN_SUPERS_ON_START=true
+# El worker consume la cola `scrapers` (BullMQ/Upstash). La orquestación
+# (qué scraper corre y cuándo) la maneja el scheduler del backend NestJS;
+# este servicio sólo procesa jobs y expone /health.
+ENV WORKER_CONCURRENCY=3
 
 EXPOSE 3001
 
-CMD ["node", "dist/index.js"]
+CMD ["node", "dist/worker.js"]

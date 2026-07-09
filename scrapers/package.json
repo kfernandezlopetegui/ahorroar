@@ -2,10 +2,13 @@
   "name": "ahorroar-scrapers",
   "version": "1.0.0",
   "description": "Bank promotion scrapers for AhorroAR",
-  "main": "dist/index.js",
+  "main": "dist/worker.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node dist/worker.js",
+    "worker": "node dist/worker.js",
+    "worker:dev": "ts-node src/worker.ts",
+    "start:legacy": "node dist/index.js",
     "dev": "ts-node src/index.ts",
     "test": "node --require ts-node/register --test src/meat/meat-cut-matcher.test.ts",
     "scrape:galicia": "ts-node src/scrapers/galicia.ts",
@@ -27,8 +30,10 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
     "axios": "^1.6.0",
+    "bullmq": "^5.79.3",
     "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.3.1",
+    "ioredis": "^5.11.1",
     "node-cron": "^3.0.3",
     "playwright": "^1.40.0"
   },

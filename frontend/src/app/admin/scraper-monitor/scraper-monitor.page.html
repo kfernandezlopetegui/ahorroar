@@ -1,0 +1,164 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/profile" icon="chevron-back-outline" />
+    </ion-buttons>
+    <ion-title>Monitor de scrapers</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="load()" [disabled]="loading()">
+        <ion-icon slot="icon-only" name="refresh-outline" />
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)">
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <div class="page-wrap monitor-wrap">
+
+    @if (loading() && !status()) {
+    <div class="spinner-center"><ion-spinner name="crescent" /></div>
+    }
+
+    @if (error()) {
+    <p class="error-note">{{ error() }}</p>
+    }
+
+    @if (status(); as st) {
+    <div class="monitor-content">
+
+      <!-- Resumen -->
+      <ion-card class="health-card" [class.health-card--broken]="!st.healthy">
+        <ion-card-content class="row">
+          <ion-icon [name]="st.healthy ? 'checkmark-circle-outline' : 'close-circle-outline'"
+            [color]="st.healthy ? 'primary' : 'danger'" class="health-icon" />
+          <div class="grow">
+            <p class="health-title">
+              {{ st.healthy ? 'Todos los scrapers OK' : st.totals.error + ' con problemas' }}
+            </p>
+            <p class="text-soft">
+              {{ st.totals.ok }} ok · {{ st.totals.error }} error · {{ st.totals.running }} corriendo
+              · {{ st.totals.itemsScraped }} ítems
+            </p>
+            @if (st.lastRunAt) {
+            <p class="text-xs">Última corrida {{ timeAgo(st.lastRunAt) }}</p>
+            }
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Bancos -->
+      @if (banks().length) {
+      <p class="micro-label group-label"><ion-icon name="business-outline" class="icon-inline" /> Bancos</p>
+      @for (s of banks(); track s.name) {
+      <ng-container *ngTemplateOutlet="scraperCard; context: { $implicit: s }" />
+      }
+      }
+
+      <!-- Supermercados -->
+      @if (supers().length) {
+      <p class="micro-label group-label"><ion-icon name="cart-outline" class="icon-inline" /> Supermercados y farmacias</p>
+      @for (s of supers(); track s.name) {
+      <ng-container *ngTemplateOutlet="scraperCard; context: { $implicit: s }" />
+      }
+      }
+
+    </div>
+    }
+  </div>
+
+  <!-- Card de un scraper -->
+  <ng-template #scraperCard let-s>
+    <ion-card class="scraper-card" button (click)="openDetail(s)">
+      <ion-card-content class="scraper-row">
+        <div class="grow">
+          <div class="scraper-head">
+            <span class="product-name">{{ s.label }}</span>
+            <span [ngClass]="chipClass(s.status)">
+              @if (s.status === 'running') { <span class="chip-dot"></span> }
+              {{ chipLabel(s.status) }}
+            </span>
+          </div>
+          <p class="text-soft">
+            <ion-icon name="time-outline" class="icon-inline" />
+            {{ timeAgo(s.lastRun?.started_at) }}
+            @if (s.lastRun?.items_scraped != null) { · {{ s.lastRun.items_scraped }} ítems }
+            @if (s.lastRun?.duration_ms != null) { · {{ s.lastRun.duration_ms }}ms }
+          </p>
+          @if (s.status === 'error' && s.lastRun?.error_message) {
+          <p class="text-xs text-danger">{{ s.lastRun.error_message }}</p>
+          }
+        </div>
+        <ion-button fill="clear" size="small" class="run-btn"
+          [disabled]="isRunning(s.name) || s.status === 'running'"
+          (click)="runNow(s, $event)">
+          @if (isRunning(s.name)) {
+          <ion-spinner name="crescent" slot="icon-only" />
+          } @else {
+          <ion-icon slot="icon-only" name="play-outline" />
+          }
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+
+  <!-- Modal de historial -->
+  <ion-modal [isOpen]="!!selected()" (didDismiss)="closeDetail()">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title>{{ selected()?.label }}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeDetail()">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <div class="page-wrap">
+          <div class="history-actions">
+            <ion-button expand="block" fill="outline" size="small"
+              [disabled]="isRunning(selected()!.name)"
+              (click)="runNow(selected()!)">
+              <ion-icon slot="start" name="play-outline" /> Ejecutar ahora
+            </ion-button>
+          </div>
+
+          @if (runsLoading()) {
+          <div class="spinner-center"><ion-spinner name="crescent" /></div>
+          } @else if (!runs().length) {
+          <p class="empty-note">Sin corridas registradas todavía.</p>
+          } @else {
+          <ion-list lines="full">
+            @for (r of runs(); track r.id) {
+            <ion-item [button]="!!r.error_message" detail="false" (click)="toggleRun(r)">
+              <div class="run-row">
+                <div class="run-main">
+                  <span [ngClass]="chipClass(r.status)">{{ chipLabel(r.status) }}</span>
+                  <span class="text-soft run-when">{{ timeAgo(r.started_at) }}</span>
+                </div>
+                <div class="run-meta text-xs">
+                  {{ r.items_scraped }} ítems · {{ r.items_upserted }} guardados
+                  @if (r.duration_ms != null) { · {{ r.duration_ms }}ms }
+                  @if (r.error_message) {
+                  <ion-icon [name]="expandedRun() === r.id ? 'chevron-down-outline' : 'chevron-forward-outline'"
+                    class="icon-inline" />
+                  }
+                </div>
+                @if (r.error_message && expandedRun() === r.id) {
+                <p class="run-error text-xs text-danger">
+                  <ion-icon name="alert-circle-outline" class="icon-inline" /> {{ r.error_message }}
+                </p>
+                }
+              </div>
+            </ion-item>
+            }
+          </ion-list>
+          }
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

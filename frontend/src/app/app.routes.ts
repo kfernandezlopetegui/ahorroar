@@ -27,9 +27,13 @@ export const routes: Routes = [
       { path: 'profile',    loadComponent: () => import('./profile/profile.page').then(m => m.ProfilePage) },
       { path: 'inflacion',  loadComponent: () => import('./inflacion/inflacion.page').then(m => m.InflacionPage) },
       { path: 'canasta',    loadComponent: () => import('./canasta/canasta.page').then(m => m.CanastaPage) },
-      { path: 'monitor',    canActivate: [adminGuard], loadComponent: () => import('./monitor/monitor.page').then(m => m.MonitorPage) },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
+  },
+  {
+    path: 'admin/scraper-monitor',
+    canActivate: [authGuard, adminGuard],
+    loadComponent: () => import('./admin/scraper-monitor/scraper-monitor.page').then(m => m.ScraperMonitorPage),
   },
   { path: '**', redirectTo: 'tabs/home' },
 ];
