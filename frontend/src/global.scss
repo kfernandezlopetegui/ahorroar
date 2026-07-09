@@ -1613,3 +1613,152 @@ app-logo.auth-logo {
 .scraper-status-icon { font-size: 24px; }
 
 .stale-note { color: var(--ion-color-warning-shade); }
+
+/* ── Carnes (comparador por corte a $/kg) ────────────────────────────────── */
+
+.meat-section { padding: 12px 16px; }
+
+.meat-disclaimer {
+  display: block;
+  margin: 0 0 12px;
+}
+
+/* Grilla de cortes: 2 columnas en móvil, fluida en pantallas grandes */
+.meat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
+  gap: 10px;
+}
+
+.meat-card {
+  display: block;
+  text-align: left;
+  background: var(--app-bg);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+  box-shadow: var(--app-shadow-soft);
+  padding: 14px;
+  cursor: pointer;
+  font-family: var(--app-font-sans);
+
+  &:active { background: var(--app-surface-selected); }
+}
+
+/* Nombre del corte: Inter 600 */
+.meat-cut-name {
+  font-family: var(--app-font-sans);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--app-ink);
+  margin: 0 0 8px;
+}
+
+/* Mejor $/kg: Fraunces (precio destacado del sistema) */
+.meat-cut-price {
+  font-family: var(--app-font-serif);
+  font-weight: 600;
+  font-size: clamp(20px, 5.5vw, 24px);
+  color: var(--app-price);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.meat-cut-kg { margin: 0 0 8px; }
+
+.meat-cut-empty { margin: 4px 0 0; }
+
+/* Cadena más barata */
+.meat-chain-chip {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--app-ink-soft);
+  background: var(--app-bg-soft);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-pill);
+  padding: 3px 10px;
+}
+
+/* Detalle del corte */
+.detail-wrap--meat { padding: 0; }
+
+.meat-detail-title {
+  font-family: var(--app-font-sans);
+  font-weight: 600;
+  font-size: clamp(17px, 4.5vw, 19px);
+  color: var(--app-ink);
+  margin: 0;
+}
+
+.meat-detail-cat { margin: 2px 0 0; }
+
+.meat-best-panel {
+  background: var(--app-bg-soft);
+  border-radius: var(--app-radius-md);
+  padding: 16px;
+  margin: 4px 0 16px;
+
+  .micro-label { display: block; margin-bottom: 4px; }
+}
+
+.meat-best-price { margin: 0; }
+
+.meat-best-unit {
+  font-family: var(--app-font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--app-ink-soft);
+}
+
+/* Tabla comparativa por cadena */
+.meat-table { margin-bottom: 10px; }
+
+.meat-table-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px 6px;
+}
+
+.meat-table-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.meat-col-price {
+  flex-shrink: 0;
+  width: 84px;
+  text-align: right;
+
+  .app-price { margin: 0; }
+}
+
+.meat-col-diff {
+  flex-shrink: 0;
+  width: 88px;
+  text-align: right;
+}
+
+.meat-row-chain {
+  font-family: var(--app-font-sans);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--app-ink);
+  margin: 0;
+}
+
+.meat-row-product { margin: 2px 0 0; }
+
+.meat-row-when { margin: 2px 0 0; }
+
+.meat-diff {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.meat-diff--best { color: var(--app-price); }
+
+.meat-diff--worse { color: var(--app-danger); }
