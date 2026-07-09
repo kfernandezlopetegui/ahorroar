@@ -5,6 +5,7 @@ import {
   IonContent, IonButton, IonInput, IonItem,
   IonLabel, IonSpinner, } from '@ionic/angular/standalone';
 import { AuthService } from '../../core/services/auth';
+import { LogoComponent } from '../../shared/components/logo/logo.component';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ import { AuthService } from '../../core/services/auth';
   imports: [
     ReactiveFormsModule, RouterLink,
     IonContent, IonButton, IonInput, IonItem,
-    IonLabel, IonSpinner, ],
+    IonLabel, IonSpinner, LogoComponent, ],
   templateUrl: './login.page.html',
 })
 export class LoginPage {

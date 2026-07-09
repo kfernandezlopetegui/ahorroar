@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { SupabaseService } from '../supabase/supabase.service';
@@ -10,6 +10,8 @@ const BASE_URL = 'https://d3e6htiiul5ek9.cloudfront.net/prod';
 
 @Injectable()
 export class PreciosClarosService {
+  private readonly logger = new Logger(PreciosClarosService.name);
+
   constructor(
     private readonly http: HttpService,
     private readonly supabase: SupabaseService,
@@ -38,7 +40,46 @@ export class PreciosClarosService {
         params: { string: query, lat, lng, limit: 20, offset: 0 },
       }),
     );
-    return data;
+
+    // Diagnóstico de imágenes: qué campos trae realmente el primer producto
+    const crudos: any[] = data?.productos ?? [];
+    if (crudos.length) {
+      this.logger.debug(
+        `[buscarProductos] "${query}" → ${crudos.length} productos. ` +
+          `Primer producto crudo: ${JSON.stringify(crudos[0])}`,
+      );
+    }
+
+    return {
+      ...data,
+      productos: crudos.map((p) => ({ ...p, imagen: this.resolverImagen(p) })),
+    };
+  }
+
+  /**
+   * El listado de /productos no trae un campo de imagen estable; si algún
+   * campo conocido viene con URL, se normaliza (https, absoluta). Si no hay
+   * ninguno queda null y el frontend usa el proxy GET /products/:ean/image,
+   * que resuelve el patrón público imagenes.preciosclaros.gob.ar/productos/{EAN}.jpg
+   * y las imágenes scrapeadas.
+   */
+  private resolverImagen(p: any): string | null {
+    const candidata =
+      p?.imagen ??
+      p?.imagenes?.[0] ??
+      p?.foto ??
+      p?.imagenUrl ??
+      p?.urlImagen ??
+      null;
+    if (typeof candidata !== 'string' || !candidata) return null;
+
+    const url = candidata.startsWith('//') ? `https:${candidata}` : candidata;
+    if (/^https?:\/\//.test(url)) {
+      // http:// rompería por mixed content con la app servida en https
+      return url.replace(/^http:\/\//, 'https://');
+    }
+    // URL relativa: colgarla del host público de imágenes
+    return `https://imagenes.preciosclaros.gob.ar/${url.replace(/^\/+/, '')}`;
   }
 
   async buscarSucursales(lat = -34.6037, lng = -58.3816) {

@@ -17,6 +17,7 @@ import {
 } from 'ionicons/icons';
 import { Geolocation } from '@capacitor/geolocation';
 import { Platform } from '@ionic/angular/standalone';
+import { environment } from '../../environments/environment';
 import { PreciosClarosService, PCProducto } from '../core/services/precios-claros';
 import { ScannerComponent } from '../shared/scanner/scanner.component';
 import { PriceChartComponent } from '../shared/price-chart/price-chart.component';
@@ -24,6 +25,8 @@ import { ListaService } from '../core/services/lista';
 import { WatchlistService } from '../core/services/watchlist';
 
 type SearchMode = 'nombre' | 'ean';
+
+const PLACEHOLDER_IMG = 'assets/img/product-placeholder.svg';
 
 @Component({
   selector: 'app-comparador',
@@ -89,6 +92,21 @@ export class ComparadorPage implements OnDestroy {
     this.pc.historial.set([]);
     this.pc.supermarketOffers.set([]);
     this.pc.onlinePrices.set([]);
+  }
+
+  /**
+   * Imagen del producto: si vino de un scraper o fuente online usa esa URL;
+   * si no, el proxy del backend, que resuelve Precios Claros
+   * (imagenes.preciosclaros.gob.ar/productos/{EAN}.jpg) y evita el bloqueo
+   * de hotlinking. Si tampoco hay, (error) muestra el placeholder local.
+   */
+  imgSrc(producto: PCProducto): string {
+    return producto.imagen || `${environment.apiUrl}/products/${producto.id}/image`;
+  }
+
+  onImgError(event: Event) {
+    const img = event.target as HTMLImageElement;
+    if (!img.src.endsWith(PLACEHOLDER_IMG)) img.src = PLACEHOLDER_IMG;
   }
 
   onSegmentChange(event: any) {

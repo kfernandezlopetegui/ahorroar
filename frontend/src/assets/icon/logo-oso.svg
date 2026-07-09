@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Isotipo Preciosos: silueta geométrica de cabeza de oso en verde de marca.
+       Misma construcción que LogoComponent (cabeza + orejas 35% + hocico). -->
+  <path fill="#9CAF88" d="M14 26a12 12 0 1 0 24 0 12 12 0 1 0 -24 0Z
+    M62 26a12 12 0 1 0 24 0 12 12 0 1 0 -24 0Z
+    M16 50a34 34 0 1 0 68 0 34 34 0 1 0 -68 0Z
+    M32 77a18 10 0 1 0 36 0 18 10 0 1 0 -36 0Z" />
+</svg>

@@ -7,6 +7,7 @@ import {
 import { addIcons } from 'ionicons';
 import { checkmarkCircle } from 'ionicons/icons';
 import { AuthService } from '../../core/services/auth';
+import { LogoComponent } from '../../shared/components/logo/logo.component';
 
 function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   const password = control.get('password')?.value;
@@ -20,7 +21,7 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   imports: [
     ReactiveFormsModule, RouterLink,
     IonContent, IonButton, IonInput, IonItem,
-    IonLabel, IonSpinner, IonIcon, ],
+    IonLabel, IonSpinner, IonIcon, LogoComponent, ],
   templateUrl: './register.page.html',
 })
 export class RegisterPage {
