@@ -19,7 +19,7 @@ import { SupermarketOffersService } from './supermarket-offers/supermarket-offer
 import { SupermarketOffersController } from './supermarket-offers/supermarket-offers.controller';
 import { SupermarketOffersModule } from './supermarket-offers/supermarket-offers.module';
 import { InflationModule } from './inflation/inflation.module';
-import { ScraperMonitorModule } from './scraper-monitor/scraper-monitor.module';
+import { AdminScrapersModule } from './admin-scrapers/admin-scrapers.module';
 import { BasketModule } from './basket/basket.module';
 import { MeatCutsModule } from './meat-cuts/meat-cuts.module';
 import { AuthController } from './auth/auth.controller';
@@ -37,7 +37,7 @@ import { AuthController } from './auth/auth.controller';
     PromotionsModule,
     SupermarketOffersModule,
     InflationModule,
-    ScraperMonitorModule,
+    AdminScrapersModule,
     BasketModule,
     MeatCutsModule,
   ],

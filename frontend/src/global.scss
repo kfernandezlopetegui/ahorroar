@@ -1614,6 +1614,112 @@ app-logo.auth-logo {
 
 .stale-note { color: var(--ion-color-warning-shade); }
 
+/* Card de scraper: fila con acción a la derecha */
+.scraper-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scraper-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.run-btn { --padding-start: 6px; --padding-end: 6px; margin: 0; }
+
+/* Chip de estado */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 4px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.chip--ok {
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+}
+
+.chip--partial {
+  background: var(--ion-color-warning, #E0A458);
+  color: #3a2a12;
+}
+
+.chip--error {
+  background: var(--app-danger);
+  color: #fff;
+}
+
+.chip--never {
+  background: rgba(120, 120, 120, 0.22);
+  color: rgba(90, 90, 90, 0.95);
+}
+
+.chip--running {
+  background: var(--ion-color-primary-tint);
+  color: var(--ion-color-primary-contrast);
+  animation: chip-pulse 1.2s ease-in-out infinite;
+}
+
+.chip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: chip-blink 1s ease-in-out infinite;
+}
+
+@keyframes chip-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@keyframes chip-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+/* Historial (modal) */
+.history-actions { padding: 12px 0 4px; }
+
+.run-row { width: 100%; padding: 8px 0; }
+
+.run-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.run-when { font-size: 12px; }
+
+.run-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.run-error {
+  margin: 6px 0 0;
+  padding: 8px 10px;
+  background: rgba(198, 93, 74, 0.10);
+  border-radius: 8px;
+  word-break: break-word;
+}
+
+body.dark {
+  .chip--never { background: rgba(255, 255, 255, 0.14); color: rgba(255, 255, 255, 0.7); }
+}
+
 /* ── Carnes (comparador por corte a $/kg) ────────────────────────────────── */
 
 .meat-section { padding: 12px 16px; }
