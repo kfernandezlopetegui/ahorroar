@@ -20,6 +20,10 @@
         <ion-icon name="barcode-outline" />
         <ion-label>Código EAN</ion-label>
       </ion-segment-button>
+      <ion-segment-button value="carnes">
+        <ion-icon name="restaurant-outline" />
+        <ion-label>Carnes</ion-label>
+      </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 
@@ -60,6 +64,119 @@
         <ion-icon name="camera-outline" slot="icon-only" />
       </ion-button>
     </div>
+  </div>
+  }
+
+  <!-- ── MODO CARNES: comparación por corte a $/kg ─────── -->
+  @if (searchMode() === 'carnes') {
+  <div class="meat-section">
+
+    <!-- Grilla de cortes -->
+    @if (!corteSeleccionado()) {
+      <p class="text-xs meat-disclaimer">{{ meat.disclaimer() }}</p>
+
+      @if (meat.loadingCuts()) {
+      <div class="spinner-center">
+        <ion-spinner name="crescent" />
+      </div>
+      } @else if (meat.error()) {
+      <p class="error-note">{{ meat.error() }}</p>
+      } @else {
+      <div class="meat-grid">
+        @for (corte of meat.cuts(); track corte.slug) {
+        <button type="button" class="meat-card" (click)="seleccionarCorte(corte)">
+          <p class="meat-cut-name">{{ corte.display_name }}</p>
+          @if (corte.best_price; as best) {
+          <p class="meat-cut-price">${{ best.price_per_kg | number:'1.0-0' }}</p>
+          <p class="text-xs meat-cut-kg">por kg</p>
+          <span class="meat-chain-chip">{{ best.chain }}</span>
+          } @else {
+          <p class="text-xs meat-cut-empty">Sin precios recientes</p>
+          }
+        </button>
+        }
+      </div>
+      }
+    }
+
+    <!-- Detalle: comparativa por cadena -->
+    @if (corteSeleccionado(); as corte) {
+    <div class="detail-wrap detail-wrap--meat">
+
+      <div class="row product-head">
+        <ion-button fill="clear" size="small" (click)="volverACortes()">
+          <ion-icon name="chevron-back-outline" slot="start" />
+          Volver
+        </ion-button>
+        <div class="grow">
+          <p class="meat-detail-title">{{ corte.display_name }}</p>
+          <p class="text-soft meat-detail-cat">{{ corte.category | titlecase }} · precio por kg</p>
+        </div>
+      </div>
+
+      @if (meat.loadingDetail()) {
+      <div class="spinner-center">
+        <ion-spinner name="crescent" />
+      </div>
+      } @else if (meat.error()) {
+      <p class="error-note">{{ meat.error() }}</p>
+      } @else if (meat.detail(); as detalle) {
+
+        @if (detalle.prices.length) {
+          <!-- Mejor precio destacado -->
+          <div class="meat-best-panel">
+            <p class="micro-label">Mejor precio</p>
+            <p class="app-total meat-best-price">
+              ${{ detalle.prices[0].price_per_kg | number:'1.0-0' }}
+              <span class="meat-best-unit">/ kg</span>
+            </p>
+            <p class="text-soft">en {{ detalle.prices[0].chain }}</p>
+          </div>
+
+          <!-- Tabla comparativa por cadena -->
+          <div class="meat-table">
+            <div class="meat-table-head">
+              <span class="micro-label grow">Cadena</span>
+              <span class="micro-label meat-col-price">$ / kg</span>
+              <span class="micro-label meat-col-diff">vs mejor</span>
+            </div>
+            @for (fila of detalle.prices; track fila.chain) {
+            <div class="meat-table-row soft-panel" [class.soft-panel--selected]="fila.diff_pct === 0">
+              <div class="grow">
+                <p class="meat-row-chain">{{ fila.chain }}</p>
+                <p class="text-xs ellipsis meat-row-product">{{ fila.product_name }}</p>
+                <p class="text-xs meat-row-when">{{ haceCuanto(fila.scraped_at) }}</p>
+              </div>
+              <div class="meat-col-price">
+                <p class="app-price" [class.app-price--green]="fila.diff_pct === 0">
+                  ${{ fila.price_per_kg | number:'1.0-0' }}
+                </p>
+              </div>
+              <div class="meat-col-diff">
+                @if (fila.diff_pct === 0) {
+                <span class="meat-diff meat-diff--best">
+                  <ion-icon name="trending-down-outline" class="icon-inline" />
+                  Más barato
+                </span>
+                } @else {
+                <span class="meat-diff meat-diff--worse">+{{ fila.diff_pct | number:'1.0-1' }}%</span>
+                }
+              </div>
+            </div>
+            }
+          </div>
+
+          <p class="text-xs meat-disclaimer">
+            {{ detalle.disclaimer }} · últimas {{ detalle.window_hours }} hs
+          </p>
+        } @else {
+        <p class="empty-note">
+          Sin precios publicados para este corte en las últimas {{ detalle.window_hours }} hs.
+        </p>
+        }
+      }
+    </div>
+    }
   </div>
   }
 

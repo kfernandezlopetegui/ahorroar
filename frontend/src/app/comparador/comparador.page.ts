@@ -13,7 +13,7 @@ import {
   locationOutline, scanOutline, searchOutline,
   barcodeOutline, cameraOutline, trendingDownOutline,
   timeOutline, cartOutline, eyeOutline, chevronBackOutline,
-  checkmarkCircleOutline,
+  checkmarkCircleOutline, restaurantOutline,
 } from 'ionicons/icons';
 import { Geolocation } from '@capacitor/geolocation';
 import { Platform } from '@ionic/angular/standalone';
@@ -23,8 +23,9 @@ import { ScannerComponent } from '../shared/scanner/scanner.component';
 import { PriceChartComponent } from '../shared/price-chart/price-chart.component';
 import { ListaService } from '../core/services/lista';
 import { WatchlistService } from '../core/services/watchlist';
+import { MeatCutsService, MeatCutSummary } from '../core/services/meat-cuts';
 
-type SearchMode = 'nombre' | 'ean';
+type SearchMode = 'nombre' | 'ean' | 'carnes';
 
 const PLACEHOLDER_IMG = 'assets/img/product-placeholder.svg';
 
@@ -45,6 +46,7 @@ export class ComparadorPage implements OnDestroy {
   searchMode           = signal<SearchMode>('nombre');
   eanInput             = signal('');
   productoSeleccionado = signal<PCProducto | null>(null);
+  corteSeleccionado    = signal<MeatCutSummary | null>(null);
   userLat              = signal<number | null>(null);
   userLng              = signal<number | null>(null);
   usandoUbicacion      = signal(false);
@@ -72,6 +74,7 @@ export class ComparadorPage implements OnDestroy {
 
   constructor(
     public  readonly pc:         PreciosClarosService,
+    public  readonly meat:       MeatCutsService,
     public  readonly lista:      ListaService,
     public  readonly watchlist:  WatchlistService,
     private readonly toastCtrl:  ToastController,
@@ -83,7 +86,7 @@ export class ComparadorPage implements OnDestroy {
       locationOutline, scanOutline, searchOutline,
       barcodeOutline, cameraOutline, trendingDownOutline,
       timeOutline, cartOutline, eyeOutline, chevronBackOutline,
-      checkmarkCircleOutline,
+      checkmarkCircleOutline, restaurantOutline,
     });
     this.watchlist.load();
   }
@@ -112,6 +115,30 @@ export class ComparadorPage implements OnDestroy {
   onSegmentChange(event: any) {
     this.searchMode.set(event.detail.value as SearchMode);
     this.resetResultados();
+    if (this.searchMode() === 'carnes' && !this.meat.cuts().length) {
+      this.meat.loadCuts();
+    }
+  }
+
+  // ── Sección Carnes: comparación por corte a $/kg ──────────────────────────
+
+  async seleccionarCorte(corte: MeatCutSummary) {
+    this.corteSeleccionado.set(corte);
+    await this.meat.loadDetail(corte.slug);
+  }
+
+  volverACortes() {
+    this.corteSeleccionado.set(null);
+    this.meat.detail.set(null);
+    this.meat.loadCuts(); // refresca los mínimos al volver a la grilla
+  }
+
+  /** "hace 3 h" / "hace 20 min" para el scraped_at de cada fila */
+  haceCuanto(iso: string): string {
+    const mins = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+    if (mins < 60) return `hace ${mins} min`;
+    const hs = Math.round(mins / 60);
+    return `hace ${hs} h`;
   }
 
   async onSearch(event: any) {
@@ -335,6 +362,8 @@ export class ComparadorPage implements OnDestroy {
 
   private resetResultados() {
     this.productoSeleccionado.set(null);
+    this.corteSeleccionado.set(null);
+    this.meat.detail.set(null);
     this.pc.productos.set([]);
     this.pc.precios.set([]);
     this.pc.historial.set([]);
