@@ -7,6 +7,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
+    "test": "node --require ts-node/register --test src/meat/meat-cut-matcher.test.ts",
     "scrape:galicia": "ts-node src/scrapers/galicia.ts",
     "scrape:naranja": "ts-node src/scrapers/naranja.ts",
     "scrape:bbva": "ts-node src/scrapers/bbva.ts",

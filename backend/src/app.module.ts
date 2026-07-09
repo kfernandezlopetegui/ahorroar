@@ -21,6 +21,7 @@ import { SupermarketOffersModule } from './supermarket-offers/supermarket-offers
 import { InflationModule } from './inflation/inflation.module';
 import { ScraperMonitorModule } from './scraper-monitor/scraper-monitor.module';
 import { BasketModule } from './basket/basket.module';
+import { MeatCutsModule } from './meat-cuts/meat-cuts.module';
 import { AuthController } from './auth/auth.controller';
 
 @Module({
@@ -38,6 +39,7 @@ import { AuthController } from './auth/auth.controller';
     InflationModule,
     ScraperMonitorModule,
     BasketModule,
+    MeatCutsModule,
   ],
   controllers: [AppController, AuthController, NotificationsController, SupermarketOffersController],
   providers: [AppService, NotificationsService, WatchlistService, CommunityService, BankComboService, SupermarketOffersService],

@@ -1,4 +1,5 @@
 import { supabase } from '../../supabase';
+import { annotateMeatCuts } from '../../meat/meat-cut-annotator';
 export { createBrowser, createPage } from '../base';
 
 export interface SuperOffer {
@@ -15,6 +16,10 @@ export interface SuperOffer {
   offer_description?: string;
   valid_from:         string;
   valid_until:        string;
+  /** corte de carne detectado por keywords (comparador por $/kg) */
+  meat_cut_id?:       string | null;
+  /** precio normalizado a $/kg; null = presentación no inferible */
+  price_per_kg?:      number | null;
 }
 
 export type OfferType     = 'percent' | '2x1' | '3x2' | 'fixed_price' | 'cuotas';
@@ -108,6 +113,10 @@ export async function saveSuperOffers(
   // Deduplicar el total ANTES de batchear
   const unique = deduplicateBatch(offers);
   console.log(`[${chain}] ${offers.length} ofertas → ${unique.length} tras deduplicar`);
+
+  // Etiquetar cortes de carne (meat_cut_id + price_per_kg) para el comparador
+  const tagged = await annotateMeatCuts(unique);
+  if (tagged > 0) console.log(`[${chain}] 🥩 ${tagged} productos etiquetados como cortes de carne`);
 
   for (let i = 0; i < unique.length; i += BATCH) {
     const batch = unique.slice(i, i + BATCH).map(o => ({
