@@ -35,6 +35,24 @@ create policy "basket_own_rows" on basket_items
 --    scrapers no las desactiven al correr.
 -- ============================================================
 
+-- Por si este proyecto todavía no tiene la tabla (mismo esquema
+-- que usan los scrapers y el backend). Si ya existe, no hace nada.
+create table if not exists promotions (
+  id           uuid primary key default gen_random_uuid(),
+  bank         text not null,
+  title        text not null,
+  description  text not null default '',
+  discount_pct numeric not null default 0,
+  max_discount numeric,
+  category     text not null default 'otros',
+  store        text,
+  valid_from   date not null default current_date,
+  valid_until  date not null default current_date,
+  days_of_week integer[] not null default array[1,2,3,4,5,6,7],
+  is_active    boolean not null default true,
+  scraped_at   timestamptz not null default now()
+);
+
 insert into promotions
   (bank, title, description, discount_pct, max_discount, category, store,
    valid_from, valid_until, days_of_week, is_active)
