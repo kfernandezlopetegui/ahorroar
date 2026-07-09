@@ -12,6 +12,38 @@
 -- Para el backfill del punto 4 (matching sin tildes en SQL)
 create extension if not exists unaccent;
 
+-- Normalización a $/kg en SQL (misma lógica que parsePricePerKg del pipeline).
+-- Se usa en el backfill para que el comparador tenga datos antes de la
+-- próxima corrida de scrapers. Ver 2026-07-09_meat_cuts_price_per_kg.sql.
+create or replace function meat_price_per_kg(p_name text, p_price numeric)
+returns numeric
+language plpgsql
+stable
+as $$
+declare
+  t text := lower(unaccent(coalesce(p_name, '')));
+  m text[];
+  w numeric;
+begin
+  if p_price is null or p_price <= 0 then return null; end if;
+  if t ~ '\y1\s*/\s*2\s*(kg|kgs|kilo|kilos)\y' then return round(p_price / 0.5, 2); end if;
+  m := regexp_match(t, '(\d+(?:[.,]\d+)?)\s*(kg|kgs|kilo|kilos)\y');
+  if m is not null then
+    w := replace(m[1], ',', '.')::numeric;
+    if w > 0 then return round(p_price / w, 2); end if;
+    return null;
+  end if;
+  m := regexp_match(t, '(\d+(?:[.,]\d+)?)\s*(g|gr|grs|gramos)\y');
+  if m is not null then
+    w := replace(m[1], ',', '.')::numeric / 1000;
+    if w > 0 then return round(p_price / w, 2); end if;
+    return null;
+  end if;
+  if t ~ '\y(kg|kgs|kilo|kilos)\y' then return round(p_price, 2); end if;
+  return null;
+end;
+$$;
+
 -- 1) Catálogo de cortes
 create table if not exists meat_cuts (
   id               uuid primary key default gen_random_uuid(),
@@ -79,7 +111,8 @@ create index if not exists idx_supermarket_offers_meat_cut
 -- aproximación simple por keyword para no arrancar con la tabla vacía.
 -- La próxima corrida de scrapers re-etiqueta todo con la lógica completa.
 update supermarket_offers o
-set meat_cut_id = mc.id
+set meat_cut_id = mc.id,
+    price_per_kg = meat_price_per_kg(o.product_name, o.offer_price)
 from meat_cuts mc
 where o.meat_cut_id is null
   and o.is_active = true
