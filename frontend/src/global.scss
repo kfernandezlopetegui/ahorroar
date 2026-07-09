@@ -2,9 +2,16 @@
  * Preciosos — Global styles
  * ----------------------------------------------------------------------------
  * Sistema de diseño "soft premium": tokens en src/theme/variables.scss,
- * tipografía serif (Playfair Display) + sans (Inter) cargadas como assets
+ * tipografía serif (Fraunces) + sans (Inter) cargadas como assets
  * locales (offline-first, sin CDN), overrides de componentes Ionic y
  * clases utilitarias (.app-card, .app-price, .card-dark, .item-selected…).
+ *
+ * Reglas tipográficas:
+ *  - Fraunces (500/600) SOLO en título de página (ion-title, h1), precios
+ *    destacados (.app-price--hero, .app-total, .wallet-total) y el nombre
+ *    de la app. Nunca serif por debajo de 18px.
+ *  - Todo lo demás (subtítulos, nombres de producto, labels, botones,
+ *    chips, tabs, precios en cards chicas) va en Inter 400/500/600.
  */
 
 /* Core CSS required for Ionic components to work properly */
@@ -38,19 +45,19 @@
 }
 
 @font-face {
-  font-family: 'Playfair Display';
+  font-family: 'Fraunces';
   font-style: normal;
-  font-weight: 400 900;
+  font-weight: 500 600;
   font-display: swap;
-  src: url('./assets/fonts/playfair-display-latin.woff2') format('woff2');
+  src: url('./assets/fonts/fraunces-latin.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: 'Playfair Display';
+  font-family: 'Fraunces';
   font-style: italic;
-  font-weight: 400 900;
+  font-weight: 600;
   font-display: swap;
-  src: url('./assets/fonts/playfair-display-italic-latin.woff2') format('woff2');
+  src: url('./assets/fonts/fraunces-italic-latin.woff2') format('woff2');
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -63,20 +70,27 @@ html {
 
 body {
   color: var(--app-ink);
+  font-size: 15px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3,
-ion-title,
-ion-card-title,
-.price, .total {
+/* Serif SOLO en título de página. Mínimo 18px (acá siempre ≥22px). */
+h1,
+ion-title {
   font-family: var(--app-font-serif);
+  font-weight: 600;
   color: var(--app-ink);
   letter-spacing: -0.01em;
 }
 
-h1 { font-weight: 700; }
-h2, h3 { font-weight: 600; }
+/* Subtítulos y títulos internos: Inter 600 */
+h2, h3,
+.price, .total {
+  font-family: var(--app-font-sans);
+  font-weight: 600;
+  color: var(--app-ink);
+}
 
 p, span, ion-label, ion-note, button, input, textarea {
   font-family: var(--app-font-sans);
@@ -256,7 +270,7 @@ ion-item {
 ion-list { background: transparent; }
 
 ion-list-header ion-label {
-  font-family: var(--app-font-serif);
+  font-family: var(--app-font-sans);
   font-size: 18px;
   font-weight: 600;
   color: var(--app-ink);
@@ -373,6 +387,7 @@ ion-card {
 ion-card-header { padding: 16px 16px 6px; }
 
 ion-card-title {
+  font-family: var(--app-font-sans);
   font-size: 17px;
   font-weight: 600;
   color: var(--app-ink);
@@ -380,7 +395,8 @@ ion-card-title {
 
 ion-card-content {
   padding: 12px 16px 16px;
-  font-size: 14px;
+  font-size: 15px;
+  line-height: 1.5;
   color: var(--app-ink);
 }
 
@@ -449,7 +465,7 @@ ion-alert {
   }
 
   .alert-title {
-    font-family: var(--app-font-serif) !important;
+    font-family: var(--app-font-sans) !important;
     font-weight: 600 !important;
     color: var(--app-ink) !important;
   }
@@ -500,21 +516,31 @@ ion-infinite-scroll-content {
   padding: 16px;
 }
 
-/* Precio de producto: serif */
+/* Precio en cards y listados: Inter 600 (nunca serif en tamaños chicos) */
 .app-price {
-  font-family: var(--app-font-serif);
+  font-family: var(--app-font-sans);
   font-weight: 600;
   font-size: clamp(18px, 4.5vw, 21px);
   color: var(--app-ink);
   letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
 }
 
 .app-price--green { color: var(--app-price); }
 
-/* Total destacado: serif bold en verde oscuro */
+/* Precio principal destacado (detalle del comparador): serif, siempre ≥22px */
+.app-price--hero {
+  font-family: var(--app-font-serif);
+  font-weight: 600;
+  font-size: clamp(22px, 6vw, 28px);
+  color: var(--app-ink);
+  letter-spacing: -0.01em;
+}
+
+/* Total destacado (total de la lista): serif 600 en verde oscuro, ≥22px */
 .app-total {
   font-family: var(--app-font-serif);
-  font-weight: 700;
+  font-weight: 600;
   font-size: clamp(22px, 5.5vw, 26px);
   color: var(--app-price);
   letter-spacing: -0.01em;
@@ -605,9 +631,9 @@ ion-infinite-scroll-content {
 
 .text-danger { color: var(--app-danger); }
 
-/* Título de sección dentro de una página */
+/* Título de sección dentro de una página: Inter 600 (subtítulo) */
 .section-title {
-  font-family: var(--app-font-serif);
+  font-family: var(--app-font-sans);
   font-size: clamp(17px, 4.5vw, 19px);
   font-weight: 600;
   color: var(--app-ink);
@@ -782,7 +808,7 @@ ion-infinite-scroll-content {
   text-align: center;
   color: var(--app-ink-soft);
   padding: 40px 24px;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.5;
 }
 
@@ -865,6 +891,13 @@ ion-infinite-scroll-content {
   margin: 0 0 6px;
 }
 
+/* Logo grande de las pantallas de auth: isotipo arriba, nombre debajo */
+app-logo.auth-logo {
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0 0 10px;
+}
+
 .auth-sub {
   color: var(--app-ink-soft);
   font-size: 15px;
@@ -905,8 +938,9 @@ ion-infinite-scroll-content {
 .form-submit { margin-top: 24px; }
 
 .product-name {
+  font-family: var(--app-font-sans);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--app-ink);
   margin: 0;
 }
@@ -982,7 +1016,7 @@ ion-infinite-scroll-content {
 .detail-section { margin-bottom: 22px; }
 
 .detail-desc {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--app-ink);
   line-height: 1.6;
   margin: 0;
@@ -1128,7 +1162,7 @@ ion-infinite-scroll-content {
   margin: 4px 0 0;
 
   .app-price--green {
-    font-family: var(--app-font-serif);
+    font-family: var(--app-font-sans);
     font-weight: 600;
     font-size: 15px;
     color: var(--app-price);
@@ -1161,7 +1195,7 @@ ion-infinite-scroll-content {
 .result-head { margin-bottom: 12px; }
 
 .result-chain {
-  font-family: var(--app-font-serif);
+  font-family: var(--app-font-sans);
   font-weight: 600;
   font-size: 18px;
   color: var(--app-ink);
@@ -1324,9 +1358,9 @@ ion-infinite-scroll-content {
 
 .wallet-promo { margin: 0 0 4px; }
 
-/* Descuento en serif, estilo "*** 1234" de tarjeta */
+/* Descuento destacado de la tarjeta: Inter 600 */
 .wallet-pct {
-  font-family: var(--app-font-serif);
+  font-family: var(--app-font-sans);
   font-weight: 600;
   font-size: 22px;
   letter-spacing: -0.01em;
@@ -1344,9 +1378,10 @@ ion-infinite-scroll-content {
 .card-dark .wallet-savings { color: var(--ion-color-primary-tint); }
 .card-light .wallet-savings { color: var(--app-price); }
 
+/* Total destacado del combo bancario: serif, siempre ≥22px */
 .wallet-total {
   font-family: var(--app-font-serif);
-  font-weight: 700;
+  font-weight: 600;
   font-size: clamp(22px, 6vw, 26px);
 }
 
@@ -1386,8 +1421,9 @@ ion-infinite-scroll-content {
 .card-dark .wallet-name { color: #fff; }
 .card-light .wallet-name { color: var(--app-ink); }
 
+/* Nombre del banco en la tarjeta: Inter 600 (antes serif) */
 .wallet-bank-serif {
-  font-family: var(--app-font-serif);
+  font-family: var(--app-font-sans);
   font-weight: 600;
   font-size: 20px;
 }
@@ -1485,10 +1521,11 @@ ion-infinite-scroll-content {
 .stat-tile { text-align: center; }
 
 .stat-value {
-  font-family: var(--app-font-serif);
-  font-weight: 700;
+  font-family: var(--app-font-sans);
+  font-weight: 600;
   font-size: clamp(22px, 6vw, 26px);
   margin: 4px 0 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .stat-value--up { color: var(--app-danger); }

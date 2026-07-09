@@ -17,6 +17,7 @@ import { PromotionsService, CATEGORIES, Promotion } from '../core/services/promo
 import { AuthService } from '../core/services/auth';
 import { CardsService } from '../core/services/cards';
 import { ListaService } from '../core/services/lista';
+import { LogoComponent } from '../shared/components/logo/logo.component';
 
 @Component({
   selector: 'app-home',
@@ -28,6 +29,7 @@ import { ListaService } from '../core/services/lista';
     IonButton, IonIcon, IonRefresher,
     IonRefresherContent, IonInfiniteScroll,
     IonInfiniteScrollContent, IonModal,
+    LogoComponent,
   ],
   templateUrl: './home.page.html',
 })

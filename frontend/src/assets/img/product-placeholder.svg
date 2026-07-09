@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Placeholder de producto: silueta de botella + caja sobre --app-bg-soft (#FAFAF8) -->
+  <rect width="120" height="120" rx="10" fill="#FAFAF8"/>
+  <g fill="#DDDDD9">
+    <!-- botella -->
+    <path d="M47 30h10v10.5c0 2.5.8 4.9 2.3 6.9l2.4 3.2c2.1 2.8 3.3 6.3 3.3 9.8V86a6 6 0 0 1-6 6H45a6 6 0 0 1-6-6V60.4c0-3.5 1.2-7 3.3-9.8l2.4-3.2a11.4 11.4 0 0 0 2.3-6.9V30Z"/>
+    <rect x="45.5" y="24" width="13" height="6" rx="2"/>
+    <!-- caja -->
+    <rect x="70" y="52" width="30" height="40" rx="4"/>
+  </g>
+</svg>

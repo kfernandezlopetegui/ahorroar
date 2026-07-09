@@ -1,6 +1,8 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>Preciosos</ion-title>
+    <ion-title>
+      <app-logo [size]="28" [withText]="true" />
+    </ion-title>
     <ion-button slot="end" fill="clear" routerLink="/tabs/lista" class="toolbar-icon-btn">
       <ion-icon name="cart-outline" />
       @if (cartCount() > 0) {

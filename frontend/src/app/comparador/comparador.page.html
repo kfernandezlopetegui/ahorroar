@@ -119,8 +119,8 @@
   @for (p of productos(); track p.id) {
   <ion-card class="product-card" (click)="seleccionarProducto(p)">
     <ion-card-content class="row">
-      <img [src]="'https://imagenes.preciosclaros.gob.ar/imagenes/productos/' + p.id + '.png'"
-        class="thumb thumb--contain" onerror="this.style.display='none'" />
+      <img [src]="imgSrc(p)" [alt]="p.nombre" loading="lazy"
+        class="thumb thumb--contain" (error)="onImgError($event)" />
       <div class="grow">
         <p class="product-name">{{ p.nombre }}</p>
         <p class="text-soft">{{ p.marca }} · {{ p.presentacion }}</p>
@@ -152,11 +152,10 @@
           {{ productoSeleccionado()!.marca }} · {{ productoSeleccionado()!.presentacion }}
         </p>
       </div>
-      <img [src]="productoSeleccionado()!.imagen
-            || 'https://imagenes.preciosclaros.gob.ar/imagenes/productos/'
-            + productoSeleccionado()!.id + '.png'"
+      <img [src]="imgSrc(productoSeleccionado()!)"
+        [alt]="productoSeleccionado()!.nombre" loading="lazy"
         class="thumb thumb--contain"
-        onerror="this.style.display='none'" />
+        (error)="onImgError($event)" />
     </div>
 
     <!-- Ofertas scrapeadas del producto -->
@@ -185,7 +184,8 @@
       @for (p of onlinePrices(); track p.cadena) {
       <div class="row online-price-row soft-panel">
         @if (p.imagen) {
-        <img [src]="p.imagen" class="thumb-sm" onerror="this.style.display='none'" />
+        <img [src]="p.imagen" [alt]="p.nombre" loading="lazy" class="thumb-sm"
+          (error)="onImgError($event)" />
         }
         <div class="grow">
           <p class="product-name">{{ p.cadena }} — tienda online</p>
