@@ -7,7 +7,7 @@
  */
 import { test } from 'node:test';
 import * as assert from 'node:assert/strict';
-import { buildMeatCutMatcher, parsePricePerKg } from './meat-cut-matcher';
+import { buildMeatCutMatcher, parsePricePerKg, isMeatCutName } from './meat-cut-matcher';
 import { MEAT_CUTS } from './meat-cuts.data';
 
 const match = buildMeatCutMatcher(MEAT_CUTS);
@@ -160,4 +160,48 @@ test('parsePricePerKg: presentaciones típicas', () => {
   assert.deepEqual(parsePricePerKg('Peceto en trozo', 14000), {
     pricePerKg: null, weightKg: null, basis: null,
   });
+});
+
+test('parsePricePerKg: fracciones distintas de 1/2 (bug: "1/4 kg" se leía "4 kg")', () => {
+  assert.deepEqual(parsePricePerKg('Asado 1/4 kg', 2500), {
+    pricePerKg: 10000, weightKg: 0.25, basis: 'explicit-weight',
+  });
+  assert.deepEqual(parsePricePerKg('Peceto 3/4 kg', 9000), {
+    pricePerKg: 12000, weightKg: 0.75, basis: 'explicit-weight',
+  });
+  // la de siempre sigue funcionando
+  assert.deepEqual(parsePricePerKg('Matambre 1/2 kg', 5000), {
+    pricePerKg: 10000, weightKg: 0.5, basis: 'explicit-weight',
+  });
+});
+
+test('parsePricePerKg: multipacks "N x peso" suman el peso total', () => {
+  assert.deepEqual(parsePricePerKg('Carne picada 2 x 500 g', 7000), {
+    pricePerKg: 7000, weightKg: 1, basis: 'explicit-weight',
+  });
+  assert.deepEqual(parsePricePerKg('Picada comun 4x250g', 6000), {
+    pricePerKg: 6000, weightKg: 1, basis: 'explicit-weight',
+  });
+  assert.deepEqual(parsePricePerKg('Asado 2 x 1 kg', 18000), {
+    pricePerKg: 9000, weightKg: 2, basis: 'explicit-weight',
+  });
+  // "x 1 kg" como separador (sin número antes de la x) NO es multipack
+  assert.deepEqual(parsePricePerKg('Vacio x 1 kg', 8990), {
+    pricePerKg: 8990, weightKg: 1, basis: 'explicit-weight',
+  });
+});
+
+test('parsePricePerKg: pesos implausibles quedan fuera', () => {
+  // media res / cajas mayoristas: dividir daría un "$/kg" engañoso
+  assert.deepEqual(parsePricePerKg('Media res 90 kg', 500000), {
+    pricePerKg: null, weightKg: null, basis: null,
+  });
+});
+
+test('isMeatCutName: decide dentro de los scrapers sin DB', () => {
+  assert.equal(isMeatCutName('Vacío x kg'), true);
+  assert.equal(isMeatCutName('ASADO C/HUESO CORTE AMERICANO x kg'), true);
+  assert.equal(isMeatCutName('Salsa criolla para asado 250 g'), false);
+  assert.equal(isMeatCutName('Lomitos de atún al natural 170 g'), false);
+  assert.equal(isMeatCutName('Detergente 750 ml'), false);
 });

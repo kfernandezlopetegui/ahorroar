@@ -79,11 +79,15 @@ function deduplicateBatch(offers: SuperOffer[]): SuperOffer[] {
   const seen = new Map<string, SuperOffer>();
   for (const o of offers) {
     const key = `${o.chain}|${o.product_name.toLowerCase().trim()}|${o.valid_until}`;
-    // Si hay duplicado, quedarse con el que tenga mayor descuento
+    // Si hay duplicado: mayor descuento gana; a igual descuento gana el que
+    // trae price_per_kg estructurado (barrido de carnes) sobre el que no.
     const existing = seen.get(key);
-    if (!existing || (o.discount_pct ?? 0) > (existing.discount_pct ?? 0)) {
-      seen.set(key, o);
-    }
+    const better =
+      !existing ||
+      (o.discount_pct ?? 0) > (existing.discount_pct ?? 0) ||
+      ((o.discount_pct ?? 0) === (existing.discount_pct ?? 0) &&
+        o.price_per_kg != null && existing.price_per_kg == null);
+    if (better) seen.set(key, o);
   }
   return Array.from(seen.values());
 }

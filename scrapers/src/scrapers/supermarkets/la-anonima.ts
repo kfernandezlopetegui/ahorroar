@@ -8,6 +8,7 @@ import {
   SuperOffer, saveSuperOffers, createBrowser, createPage,
   detectSuperCategory, calcDiscount, today, endOfWeek,
 } from './base-super';
+import { isMeatCutName } from '../../meat/meat-cut-matcher';
 
 const CHAIN    = 'La Anónima';
 const BASE_WEB = 'https://www.laanonima.com.ar';
@@ -253,7 +254,9 @@ function mapProduct(p: any): SuperOffer | null {
   if (!offerPrice) return null;
 
   const discount = calcDiscount(originalPrice, offerPrice);
-  if (discount < 5 && !p.enOferta && !p.isOffer && !p.oferta) return null;
+  // Los cortes de carne pasan aunque no tengan descuento: alimentan el
+  // comparador por $/kg (el feed de ofertas los filtra por discount >= 5).
+  if (discount < 5 && !p.enOferta && !p.isOffer && !p.oferta && !isMeatCutName(name)) return null;
 
   return {
     chain:             CHAIN,

@@ -31,6 +31,14 @@ export interface ScraperStatus {
   lastRun: ScraperRun | null;
 }
 
+export interface QueueHealth {
+  /** false = el backend no llega a Redis: no se puede encolar ni procesar */
+  connected: boolean;
+  /** waiting alto con active 0 = hay jobs pero el worker no los consume */
+  counts: { waiting: number; active: number; failed: number; delayed: number } | null;
+  error?: string;
+}
+
 export interface MonitorStatus {
   healthy: boolean;
   totals: {
@@ -42,6 +50,7 @@ export interface MonitorStatus {
     itemsScraped: number;
   };
   lastRunAt: string | null;
+  queue: QueueHealth;
   scrapers: ScraperStatus[];
 }
 

@@ -29,6 +29,15 @@ export interface ScraperStatus extends ScraperDef {
   lastRun: ScraperRun | null;
 }
 
+/** Estado de la cola BullMQ compartida con el worker. */
+export interface QueueHealth {
+  /** false = el backend no llega a Redis: nada puede encolarse ni procesarse. */
+  connected: boolean;
+  /** Conteos de jobs; waiting alto con active 0 = el worker no está consumiendo. */
+  counts: { waiting: number; active: number; failed: number; delayed: number } | null;
+  error?: string;
+}
+
 /** Config de reintentos para los jobs (2 reintentos, backoff exponencial). */
 export const JOB_OPTS = {
   attempts: 3, // intento inicial + 2 reintentos
@@ -36,6 +45,16 @@ export const JOB_OPTS = {
   removeOnComplete: 50,
   removeOnFail: 50,
 };
+
+/**
+ * Una corrida que quedó en 'running' más de este tiempo está colgada: el
+ * timeout real del worker es de 10 min (SCRAPER_TIMEOUT_MS), así que pasado
+ * ese margen el proceso murió sin actualizar la fila (deploy, OOM, crash).
+ */
+const STALE_RUNNING_MS = 20 * 60_000;
+
+/** Timeout para consultar Redis: si no responde en 3s lo damos por caído. */
+const QUEUE_PING_TIMEOUT_MS = 3_000;
 
 @Injectable()
 export class AdminScrapersService {
@@ -52,19 +71,24 @@ export class AdminScrapersService {
    */
   async getStatus() {
     // Traemos las corridas recientes y nos quedamos con la última por scraper.
-    const { data, error } = await this.supabase.client
-      .from('scraper_runs')
-      .select(
-        'id, scraper, type, status, items_scraped, items_upserted, error_message, started_at, finished_at, duration_ms',
-      )
-      .order('started_at', { ascending: false })
-      .limit(500);
+    const [{ data, error }, queue] = await Promise.all([
+      this.supabase.client
+        .from('scraper_runs')
+        .select(
+          'id, scraper, type, status, items_scraped, items_upserted, error_message, started_at, finished_at, duration_ms',
+        )
+        .order('started_at', { ascending: false })
+        .limit(500),
+      this.getQueueHealth(),
+    ]);
 
     if (error) throw error;
 
     const latestByScraper = new Map<string, ScraperRun>();
     for (const row of (data ?? []) as ScraperRun[]) {
-      if (!latestByScraper.has(row.scraper)) latestByScraper.set(row.scraper, row);
+      if (!latestByScraper.has(row.scraper)) {
+        latestByScraper.set(row.scraper, this.markIfStale(row));
+      }
     }
 
     const scrapers: ScraperStatus[] = SCRAPERS.map((def) => {
@@ -94,10 +118,56 @@ export class AdminScrapersService {
         .at(-1) ?? null;
 
     return {
-      healthy: totals.error === 0,
+      healthy: totals.error === 0 && queue.connected,
       totals,
       lastRunAt,
+      queue,
       scrapers,
+    };
+  }
+
+  /**
+   * Salud de la cola: un ping real a Redis (getJobCounts hace roundtrip).
+   * Con Redis caído ioredis encola el comando y espera indefinidamente,
+   * por eso el race con timeout — un monitor que no distingue "Redis caído"
+   * de "todo verde" no sirve para diagnosticar por qué nada corre.
+   */
+  private async getQueueHealth(): Promise<QueueHealth> {
+    try {
+      const counts = await Promise.race([
+        this.queue.getJobCounts('waiting', 'active', 'failed', 'delayed'),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('Redis no respondió en 3s')), QUEUE_PING_TIMEOUT_MS),
+        ),
+      ]);
+      return {
+        connected: true,
+        counts: {
+          waiting: counts.waiting ?? 0,
+          active: counts.active ?? 0,
+          failed: counts.failed ?? 0,
+          delayed: counts.delayed ?? 0,
+        },
+      };
+    } catch (err) {
+      this.logger.warn(`Cola 'scrapers' inaccesible: ${(err as Error).message}`);
+      return { connected: false, counts: null, error: (err as Error).message };
+    }
+  }
+
+  /**
+   * Una fila que quedó en 'running' eterno (worker muerto a mitad de corrida)
+   * se presenta como error: mostrarla "Corriendo" para siempre esconde el
+   * problema y además deshabilita el botón "Ejecutar ahora" en la UI.
+   */
+  private markIfStale(run: ScraperRun): ScraperRun {
+    if (run.status !== 'running') return run;
+    const ageMs = Date.now() - new Date(run.started_at).getTime();
+    if (ageMs < STALE_RUNNING_MS) return run;
+    return {
+      ...run,
+      status: 'error',
+      error_message: `Corrida colgada: en 'running' hace ${Math.round(ageMs / 60_000)} min sin actualizarse (¿worker caído o redeployado?)`,
     };
   }
 
@@ -116,7 +186,10 @@ export class AdminScrapersService {
       .limit(Math.min(Math.max(limit, 1), 100));
 
     if (error) throw error;
-    return { scraper: def, runs: (data ?? []) as ScraperRun[] };
+    return {
+      scraper: def,
+      runs: ((data ?? []) as ScraperRun[]).map((r) => this.markIfStale(r)),
+    };
   }
 
   /** Encola una corrida manual de un scraper. */

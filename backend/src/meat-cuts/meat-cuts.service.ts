@@ -16,6 +16,22 @@ export interface MeatCutOfferRow {
 
 const DEFAULT_WINDOW_HOURS = 48;
 
+/**
+ * Piso absoluto de plausibilidad: ningún corte vacuno cuesta menos que esto
+ * por kg. Un valor por debajo es un parseo malo del nombre (peso mal leído,
+ * precio por 100 g tomado como por kg) y, como el comparador elige el
+ * MÍNIMO, un solo dato basura se convertía en "el mejor precio".
+ */
+const MIN_PLAUSIBLE_PRICE_PER_KG = 1000;
+
+/**
+ * Bandas relativas a la mediana del corte (cuando hay >= 3 datos): un $/kg
+ * a menos de la mitad de la mediana o a más del triple es un outlier.
+ */
+const OUTLIER_LOW_FACTOR = 0.45;
+const OUTLIER_HIGH_FACTOR = 3;
+const OUTLIER_MIN_SAMPLES = 3;
+
 export const MEAT_PRICE_DISCLAIMER =
   'Precios por kg estimados según publicaciones de cada cadena';
 
@@ -129,6 +145,39 @@ export class MeatCutsService {
       .eq('is_active', true)
       .gte('scraped_at', since);
     if (error) throw error;
-    return (data ?? []) as MeatCutOfferRow[];
+    return this.dropImplausiblePrices((data ?? []) as MeatCutOfferRow[]);
+  }
+
+  /**
+   * Filtra $/kg implausibles antes de comparar: piso absoluto + outliers
+   * contra la mediana de cada corte. Con menos de OUTLIER_MIN_SAMPLES datos
+   * no hay mediana confiable y sólo aplica el piso.
+   */
+  private dropImplausiblePrices(offers: MeatCutOfferRow[]): MeatCutOfferRow[] {
+    const plausible = offers.filter(o => o.price_per_kg >= MIN_PLAUSIBLE_PRICE_PER_KG);
+
+    const byCut = new Map<string, MeatCutOfferRow[]>();
+    for (const offer of plausible) {
+      if (!byCut.has(offer.meat_cut_id)) byCut.set(offer.meat_cut_id, []);
+      byCut.get(offer.meat_cut_id)!.push(offer);
+    }
+
+    const result: MeatCutOfferRow[] = [];
+    for (const rows of byCut.values()) {
+      if (rows.length < OUTLIER_MIN_SAMPLES) {
+        result.push(...rows);
+        continue;
+      }
+      const sorted = rows.map(r => r.price_per_kg).sort((a, b) => a - b);
+      const median = sorted[Math.floor(sorted.length / 2)];
+      result.push(
+        ...rows.filter(
+          r =>
+            r.price_per_kg >= median * OUTLIER_LOW_FACTOR &&
+            r.price_per_kg <= median * OUTLIER_HIGH_FACTOR,
+        ),
+      );
+    }
+    return result;
   }
 }

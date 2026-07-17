@@ -3,6 +3,7 @@ import {
   SuperOffer, saveSuperOffers,
   detectSuperCategory, calcDiscount, today, endOfWeek,
 } from './base-super';
+import { vtexMeatSweep } from './vtex-meat';
 
 const CHAIN    = 'Changomás';
 const BASE     = 'https://www.masonline.com.ar';
@@ -38,6 +39,13 @@ export async function scrapeChangomas(): Promise<SuperOffer[]> {
   if (offers.length < 50) {
     await scrapeByClusters(offers);
   }
+
+  // Cortes de carne a precio regular para el comparador por $/kg
+  offers.push(...await vtexMeatSweep({
+    chain: CHAIN,
+    baseUrl: `${BASE}/api/catalog_system/pub/products/search`,
+    headers: HEADERS,
+  }));
 
   return offers;
 }

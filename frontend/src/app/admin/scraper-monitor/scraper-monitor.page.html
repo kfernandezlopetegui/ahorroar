@@ -37,7 +37,7 @@
             [color]="st.healthy ? 'primary' : 'danger'" class="health-icon" />
           <div class="grow">
             <p class="health-title">
-              {{ st.healthy ? 'Todos los scrapers OK' : st.totals.error + ' con problemas' }}
+              {{ healthTitle(st) }}
             </p>
             <p class="text-soft">
               {{ st.totals.ok }} ok · {{ st.totals.error }} error · {{ st.totals.running }} corriendo
@@ -49,6 +49,19 @@
           </div>
         </ion-card-content>
       </ion-card>
+
+      <!-- Diagnóstico de la cola: Redis caído o worker sin consumir -->
+      @if (queueWarning(st); as warning) {
+      <ion-card class="health-card health-card--broken">
+        <ion-card-content class="row">
+          <ion-icon name="alert-circle-outline" color="danger" class="health-icon" />
+          <div class="grow">
+            <p class="health-title">{{ warning.title }}</p>
+            <p class="text-soft">{{ warning.detail }}</p>
+          </div>
+        </ion-card-content>
+      </ion-card>
+      }
 
       <!-- Bancos -->
       @if (banks().length) {

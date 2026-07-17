@@ -7,6 +7,7 @@ import {
   SuperOffer, saveSuperOffers,
   detectSuperCategory, calcDiscount, today, endOfWeek,
 } from './base-super';
+import { vtexMeatSweep } from './vtex-meat';
 
 interface CencosudConfig {
   chain:   string;
@@ -95,6 +96,14 @@ async function scrapeCencosud(config: CencosudConfig): Promise<SuperOffer[]> {
       }
     }
   }
+
+  // Cortes de carne a precio regular. Van PRIMERO: deduplicate se queda
+  // con la primera aparición y la del barrido trae price_per_kg estructurado.
+  offers.unshift(...await vtexMeatSweep({
+    chain: config.chain,
+    baseUrl: config.baseUrl,
+    headers: HEADERS,
+  }));
 
   return deduplicate(offers);
 }

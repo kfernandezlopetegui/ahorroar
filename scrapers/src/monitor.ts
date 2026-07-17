@@ -18,12 +18,28 @@ export interface ScraperRunLog {
   durationMs: number;
 }
 
+/**
+ * "La Anónima" → "la-anonima", "Naranja X" → "naranja-x", "Changomás" →
+ * "changomas". Mismo slug que registry.ts y que el monitor del backend
+ * (scrapers.registry.ts) usan como clave: si acá se guardara sólo
+ * .toLowerCase(), esas corridas quedarían huérfanas y el monitor mostraría
+ * "Nunca corrió" aunque el scraper haya corrido.
+ */
+function toSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
 export async function logScraperRun(run: ScraperRunLog): Promise<void> {
   try {
     const now = new Date();
     const startedAt = new Date(now.getTime() - run.durationMs);
     const { error } = await supabase.from('scraper_runs').insert({
-      scraper: run.scraper.toLowerCase(),
+      scraper: toSlug(run.scraper),
       type: run.kind === 'bank' ? 'bank' : 'supermarket',
       status: run.ok ? 'success' : 'error',
       items_scraped: run.count,
