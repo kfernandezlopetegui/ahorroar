@@ -83,7 +83,15 @@ async function getEndecaNavStates(page: any): Promise<{ navState: string; label:
     }, BASE);
     for (const top of data?.output ?? []) {
       const cat = top.topLevelCategory ?? top;
-      if (!cat.displayName?.toLowerCase().includes('oferta')) continue;
+      const dn  = (cat.displayName ?? '').toLowerCase();
+      // Ofertas (histórico) + carnicería: la carne fresca se vende a precio
+      // de lista y no aparece en "Ofertas", pero la necesita el comparador
+      // de cortes por $/kg. mapEndecaProduct ya acepta descuento 0.
+      if (!/oferta|carnicer|carne/.test(dn)) continue;
+      const topNs = cat.navigationState ?? '';
+      if (topNs && topNs.includes('N-') && !result.some(r => r.navState === topNs)) {
+        result.push({ navState: topNs, label: cat.displayName ?? topNs });
+      }
       for (const sub of cat.subCategories ?? []) {
         const ns = sub.navigationState ?? '';
         if (!ns || !ns.includes('N-')) continue;

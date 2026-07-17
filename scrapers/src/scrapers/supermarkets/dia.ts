@@ -3,6 +3,7 @@ import {
   SuperOffer, saveSuperOffers,
   detectSuperCategory, calcDiscount, today, endOfWeek,
 } from './base-super';
+import { vtexMeatSweep } from './vtex-meat';
 
 const CHAIN    = 'DIA';
 const BASE     = 'https://diaonline.supermercadosdia.com.ar';
@@ -33,6 +34,13 @@ export async function scrapeDIA(): Promise<SuperOffer[]> {
     console.log(`[${CHAIN}] Pocas ofertas, probando por clusters...`);
     await scrapeByClusters(offers);
   }
+
+  // Cortes de carne a precio regular para el comparador por $/kg
+  offers.push(...await vtexMeatSweep({
+    chain: CHAIN,
+    baseUrl: `${BASE}/api/catalog_system/pub/products/search`,
+    headers: HEADERS,
+  }));
 
   console.log(`[${CHAIN}] Total crudo: ${offers.length}`);
   return offers;

@@ -11,7 +11,7 @@
  *
  * Lógica pura, sin I/O — testeable sin DB.
  */
-import { MeatCutDef, GLOBAL_MEAT_EXCLUDES } from './meat-cuts.data';
+import { MeatCutDef, GLOBAL_MEAT_EXCLUDES, MEAT_CUTS } from './meat-cuts.data';
 
 export type MeatCutMatch = Pick<MeatCutDef, 'id' | 'slug'>;
 export type MeatCutMatcher = (productName: string) => MeatCutMatch | null;
@@ -89,6 +89,22 @@ export function buildMeatCutMatcher(
   };
 }
 
+// ── Matcher estático (seed local, sin DB) ────────────────────────────────────
+
+let staticMatcher: MeatCutMatcher | null = null;
+
+/**
+ * ¿El nombre corresponde a un corte de carne del comparador? Usa el seed
+ * local (MEAT_CUTS) para poder decidir DENTRO de los scrapers — p. ej.
+ * "no descartes este producto aunque no tenga descuento" — sin tocar la DB.
+ * El etiquetado final (meat_cut_id) lo sigue haciendo el annotator contra
+ * la tabla meat_cuts.
+ */
+export function isMeatCutName(productName: string): boolean {
+  if (!staticMatcher) staticMatcher = buildMeatCutMatcher(MEAT_CUTS);
+  return staticMatcher(productName) !== null;
+}
+
 // ── Normalización a $/kg ─────────────────────────────────────────────────────
 
 export interface PricePerKgResult {
@@ -99,10 +115,22 @@ export interface PricePerKgResult {
   basis: 'explicit-weight' | 'per-kg' | null;
 }
 
-const HALF_KG_RE = /\b1\s*\/\s*2\s*(?:kg|kgs|kilo|kilos)\b/;
+// "1/2 kg", "1/4 kilo", "3/4 kg" — ANTES que KG_RE: si no, "1/4 kg"
+// matchearía como "4 kg" y el $/kg daría 16 veces más barato.
+const FRACTION_KG_RE = /(\d+)\s*\/\s*(\d+)\s*(?:kg|kgs|kilo|kilos)\b/;
+// "2 x 500 g", "4x250g", "2 x 1 kg" — multipack: peso total = unidades × peso.
+// Sin esto, GRAMS_RE tomaría sólo "500 g" y el $/kg saldría el doble.
+const MULTIPACK_RE = /(\d+)\s*x\s*(\d+(?:[.,]\d+)?)\s*(kg|kgs|kilo|kilos|g|gr|grs|gramos)\b/;
 const KG_RE = /(\d+(?:[.,]\d+)?)\s*(?:kg|kgs|kilo|kilos)\b/;
 const GRAMS_RE = /(\d+(?:[.,]\d+)?)\s*(?:g|gr|grs|gramos)\b/;
 const PER_KG_RE = /\b(?:kg|kgs|kilo|kilos)\b/;
+
+/**
+ * Peso máximo creíble para un corte minorista. Por encima es casi seguro
+ * un parseo malo o un producto no comparable (media res, cajas mayoristas):
+ * mejor null que publicar un $/kg ridículamente bajo como "mejor precio".
+ */
+const MAX_PLAUSIBLE_WEIGHT_KG = 30;
 
 function toNumber(raw: string): number {
   return parseFloat(raw.replace(',', '.'));
@@ -111,11 +139,11 @@ function toNumber(raw: string): number {
 /**
  * Reglas (en orden):
  *  1. Peso explícito en el nombre ("x 1 kg", "500 g", "bandeja 1kg",
- *     "1/2 kg") → precio / peso.
+ *     "1/4 kg", "2 x 500 g") → precio / peso total.
  *  2. Sin peso pero el nombre menciona kg/kilo ("x kg", "por kilo") →
  *     se asume que el precio publicado ya es por kg.
- *  3. Nada de lo anterior → null: no se puede normalizar y el producto
- *     queda fuera del comparador.
+ *  3. Nada de lo anterior (o peso implausible) → null: no se puede
+ *     normalizar y el producto queda fuera del comparador.
  */
 export function parsePricePerKg(productName: string, price: number): PricePerKgResult {
   const none: PricePerKgResult = { pricePerKg: null, weightKg: null, basis: null };
@@ -124,8 +152,17 @@ export function parsePricePerKg(productName: string, price: number): PricePerKgR
   const text = normalizeText(productName);
 
   let weightKg: number | null = null;
-  if (HALF_KG_RE.test(text)) {
-    weightKg = 0.5;
+  const fraction = text.match(FRACTION_KG_RE);
+  const pack = fraction ? null : text.match(MULTIPACK_RE);
+  if (fraction) {
+    const num = toNumber(fraction[1]);
+    const den = toNumber(fraction[2]);
+    if (den > 0) weightKg = num / den;
+  } else if (pack) {
+    const units = toNumber(pack[1]);
+    const unitWeight = toNumber(pack[2]);
+    const inKg = /^k/.test(pack[3]) ? unitWeight : unitWeight / 1000;
+    weightKg = units * inKg;
   } else {
     const kg = text.match(KG_RE);
     if (kg) {
@@ -137,7 +174,7 @@ export function parsePricePerKg(productName: string, price: number): PricePerKgR
   }
 
   if (weightKg !== null) {
-    if (weightKg <= 0) return none;
+    if (weightKg <= 0 || weightKg > MAX_PLAUSIBLE_WEIGHT_KG) return none;
     return {
       pricePerKg: Math.round((price / weightKg) * 100) / 100,
       weightKg,

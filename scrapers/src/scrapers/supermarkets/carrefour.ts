@@ -8,6 +8,7 @@ import {
   SuperOffer, saveSuperOffers,
   detectSuperCategory, calcDiscount, today, endOfWeek,
 } from './base-super';
+import { vtexMeatSweep } from './vtex-meat';
 
 const CHAIN    = 'Carrefour';
 const BASE_URL = 'https://www.carrefour.com.ar/api/catalog_system/pub/products/search';
@@ -70,6 +71,12 @@ export async function scrapeCarrefour(): Promise<SuperOffer[]> {
       }
     }
   }
+
+  // Cortes de carne a precio regular (la carne casi nunca tiene % de
+  // descuento y el filtro de arriba la dejaría afuera del comparador).
+  // Van PRIMERO: deduplicate se queda con la primera aparición y la del
+  // barrido trae price_per_kg estructurado.
+  offers.unshift(...await vtexMeatSweep({ chain: CHAIN, baseUrl: BASE_URL, headers: HEADERS }));
 
   // Deduplicar por EAN o por nombre
   return deduplicate(offers);

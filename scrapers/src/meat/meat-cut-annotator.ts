@@ -56,7 +56,12 @@ export async function annotateMeatCuts(offers: SuperOffer[]): Promise<number> {
     const cut = match(offer.product_name);
     if (!cut) continue;
     offer.meat_cut_id = cut.id;
-    offer.price_per_kg = parsePricePerKg(offer.product_name, offer.offer_price).pricePerKg;
+    // Si el scraper ya calculó el $/kg desde datos estructurados de la
+    // fuente (p. ej. unitMultiplier/measurementUnit de Vtex), es más
+    // confiable que inferirlo del nombre — no lo pisamos.
+    if (offer.price_per_kg == null) {
+      offer.price_per_kg = parsePricePerKg(offer.product_name, offer.offer_price).pricePerKg;
+    }
     tagged++;
   }
   return tagged;

@@ -146,6 +146,40 @@ export class ScraperMonitorPage implements ViewWillEnter, ViewWillLeave, OnDestr
 
   // ── Helpers de presentación ────────────────────────────────────────────────
 
+  healthTitle(st: MonitorStatus): string {
+    if (!st.queue?.connected) return 'Cola de scrapers sin conexión';
+    if (st.totals.error > 0) return `${st.totals.error} con problemas`;
+    return 'Todos los scrapers OK';
+  }
+
+  /**
+   * Diagnóstico de conectividad: distingue "el backend no llega a Redis"
+   * (no se puede encolar nada) de "hay jobs encolados pero el worker no
+   * los consume" (worker caído o sin las mismas credenciales de Redis).
+   */
+  queueWarning(st: MonitorStatus): { title: string; detail: string } | null {
+    const q = st.queue;
+    if (!q) return null;
+    if (!q.connected) {
+      return {
+        title: 'Redis desconectado',
+        detail:
+          'El backend no llega a la cola de scrapers: no se pueden encolar ni ' +
+          'procesar corridas. Revisá las variables REDIS_* del backend.' +
+          (q.error ? ` (${q.error})` : ''),
+      };
+    }
+    if (q.counts && q.counts.waiting > 0 && q.counts.active === 0) {
+      return {
+        title: 'El worker no está consumiendo la cola',
+        detail:
+          `Hay ${q.counts.waiting} corridas esperando y ninguna activa. ` +
+          'El worker de scrapers parece caído o apunta a otra instancia de Redis.',
+      };
+    }
+    return null;
+  }
+
   chipClass(status: string): string {
     switch (status) {
       case 'success': return 'chip chip--ok';
